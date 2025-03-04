@@ -3,10 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <link rel="stylesheet" href="login.css">
+    <title>Login & Sign Up</title>
+    <link rel="stylesheet" href="/login.css">
 </head>
 <body>
-    
+    <div class="container">
+        <!-- Left Section -->
+        <div class="left">
+            <h2>Welcome!</h2>
+            <p>Log in or sign up to continue.</p>
+        </div>
+
+        <!-- Right Section -->
+        <div class="right">
+            <!-- Login Form -->
+            <div class="form-container login-form">
+                <h2>Login</h2>
+                <div class="input-container">
+                    <input type="text" placeholder="Username" required>
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <br>
+                <button>Login</button>
+                <p class="forgot-password" onclick="toggleForgotPassword()">Forgot your password?</p>
+                <p class="toggle" onclick="toggleForm()">Don't have an account? Sign up</p>
+            </div>
+
+            <!-- Sign Up Form -->
+            <div class="form-container sign-up-form">
+                <h2>Sign Up</h2>
+                <div class="input-container">
+                    <input type="text" placeholder="Full Name" required>
+                    <input type="email" placeholder="Email" required>
+                    <input type="password" placeholder="Password" required>
+                </div>
+                <br>
+                <button>Sign Up</button>
+                <p class="toggle" onclick="toggleForm()">Already have an account? Login</p>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <div class="form-container forgot-password-form">
+                <h2>Reset Password</h2>
+                <div class="input-container">
+                    <input type="email" placeholder="Enter your email" required>
+                </div>
+                <br>
+                <button>Reset Password</button>
+                <p class="toggle" onclick="toggleLogin()">Back to login</p>
+            </div>
+        </div>
+    </div>
+    <script src="/login.js"></script>
 </body>
 </html>

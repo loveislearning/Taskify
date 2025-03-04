@@ -1,0 +1,156 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background:  #0d0d0d;
+    padding: 20px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 750px;
+    height: 500px;
+    background-color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+/* Left Side - Welcome Message */
+.left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background:  #757778;
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.left h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.left p {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* Right Side - Forms */
+.right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    width: 100%;
+    position: relative;
+}
+
+.form-container {
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    transition: all 0.5s ease-in-out;
+}
+
+.form-container h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #3d4043;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: #373838;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #424345;
+}
+
+.toggle, .forgot-password {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #fffcfc;
+    cursor: pointer;
+}
+
+.toggle:hover, .forgot-password:hover {
+    color: #515355;
+}
+
+/* Hide sign-up and forgot-password initially */
+.sign-up-form, .forgot-password-form {
+    display: none;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        width: 90%;
+        height: auto;
+        padding: 20px;
+    }
+
+    .left {
+        display: none;
+    }
+
+    .right {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-container {
+        max-width: 100%;
+    }
+
+    input, button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
