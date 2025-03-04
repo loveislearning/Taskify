@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Manager</title>
+    <title>To do-List</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; background: #f8f9fa; }
-        .container { width: 350px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        input { width: 70%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        button { padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
-        .add-btn { background: #28a745; color: white; }
-        ul { list-style: none; padding: 0; margin-top: 20px; }
-        li { background: #f4f4f4; margin: 5px 0; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-radius: 5px; }
-        .completed { text-decoration: line-through; color: gray; }
-        .btn-group { display: flex; gap: 5px; }
-        .edit-btn { background: #ffc107; color: white; }
+        .container { width: 90%; max-width: 400px; margin: 50px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
+        h2 { display: flex; justify-content: center; align-items: center; gap: 5px; color: #333; }
+        input { width: 75%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 15px; }
+        .add-btn { padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px; }
+        .task-list { list-style: none; padding: 0; margin-top: 20px; }
+        .task-item { background: white; display: flex; justify-content: space-between; align-items: center; padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); border-left: 4px solid #007bff; overflow: hidden; white-space: nowrap; }
+        .task-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .completed .task-text { text-decoration: line-through; color: gray; border-left: 4px solid #28a745; }
+        .btn-group { display: flex; align-items: center; gap: 10px; }
+        .done-btn, .remove-btn { border: none; cursor: pointer; padding: 8px 12px; border-radius: 5px; }
+        .done-btn { background: #28a745; color: white; }
         .remove-btn { background: #dc3545; color: white; }
-        .done-btn { background: #007bff; color: white; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Task Manager</h2>
-        <input type="text" id="taskInput" placeholder="Enter task" onkeypress="handleKeyPress(event)">
-        <button class="add-btn" onclick="addTask()">✔</button>
-        <ul id="taskList"></ul>
+        <h2>To-do List 📝</h2>
+        <input type="text" id="taskInput" placeholder="Enter new To-do item" onkeypress="handleKeyPress(event)">
+        <button class="add-btn" onclick="addTask()">Add</button>
+        <ul id="taskList" class="task-list"></ul>
     </div>
-
     <script>
         function handleKeyPress(event) {
             if (event.key === "Enter") {
@@ -41,12 +41,12 @@
             if (taskText === "") return;
 
             let li = document.createElement("li");
+            li.className = "task-item";
             li.innerHTML = `
                 <span class="task-text">${taskText}</span>
                 <div class="btn-group">
-                    <button class="done-btn" onclick="markDone(this)">✔ Done</button>
-                    <button class="edit-btn" onclick="editTask(this)">✏</button>
-                    <button class="remove-btn" onclick="removeTask(this)">❌</button>
+                    <button class="done-btn" onclick="markDone(this)">✔</button>
+                    <button class="remove-btn" onclick="removeTask(this)">Delete</button>
                 </div>
             `;
             taskList.appendChild(li);
@@ -55,15 +55,6 @@
 
         function removeTask(btn) {
             btn.parentElement.parentElement.remove();
-        }
-
-        function editTask(btn) {
-            let li = btn.parentElement.parentElement;
-            let taskText = li.querySelector(".task-text");
-            let newText = prompt("Edit your task:", taskText.textContent);
-            if (newText !== null) {
-                taskText.textContent = newText;
-            }
         }
 
         function markDone(btn) {
