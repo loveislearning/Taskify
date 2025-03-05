@@ -6,7 +6,7 @@
     <title>Organized Notes</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif, sans-serif;
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
@@ -115,6 +115,7 @@
             padding: 10px;
             border-radius: 5px;
         }
+       
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
@@ -130,68 +131,97 @@
     <div class="container">
         <h2 id="currentChapter">Select a Chapter</h2>
         <textarea id="noteInput" placeholder="Write your notes here..."></textarea>
-    </div>
-    
+    </div>   
     <script>
         function addSubject() {
             let subjectName = document.getElementById("newSubject").value;
-            if (subjectName === "") return;
-            
+            if (subjectName === "") return;    
             let subjectList = document.getElementById("subjectList");
             let subjectDiv = document.createElement("div");
-            subjectDiv.classList.add("subject");
-            
+            subjectDiv.classList.add("subject");    
             let subjectText = document.createElement("span");
-            subjectText.innerText = subjectName;
-            
+            subjectText.innerText = subjectName;           
+            subjectText.oncontextmenu = function (event) {
+                event.preventDefault();
+                let newName = prompt("Rename Subject:", subjectText.innerText);
+                if (newName) {
+                    subjectText.innerText = newName;
+                }
+            };    
             let chapterList = document.createElement("div");
             chapterList.classList.add("chapter-list");
-            
+    
             let chapterContainer = document.createElement("div");
             chapterContainer.classList.add("chapter-container");
-            
+    
             let addChapterBtn = document.createElement("button");
             addChapterBtn.innerText = "+";
             addChapterBtn.classList.add("add-chapter");
-            addChapterBtn.onclick = function(event) {
+    
+            addChapterBtn.onclick = function (event) {
                 event.stopPropagation();
                 let chapterName = prompt("Enter Chapter Name:");
                 if (chapterName) {
                     let chapterItem = document.createElement("div");
                     chapterItem.classList.add("chapter");
                     chapterItem.innerText = chapterName;
-                    chapterItem.onclick = function() {
-                        document.getElementById("currentChapter").innerText = chapterName;
-                        document.getElementById("noteInput").value = localStorage.getItem(chapterName) || "";
-                    };
+                    chapterItem.dataset.name = chapterName;              
+                    chapterItem.onclick = function () {
+                        document.getElementById("currentChapter").innerText = chapterItem.innerText;
+                        document.getElementById("noteInput").value = localStorage.getItem(chapterItem.dataset.name) || "";
+                    };              
+                    chapterItem.oncontextmenu = function (event) {
+                        event.preventDefault();
+                        let newName = prompt("Rename Chapter:", chapterItem.innerText);
+                        if (newName) {
+                            let oldName = chapterItem.dataset.name; 
+                            let savedData = localStorage.getItem(oldName);     
+                            chapterItem.innerText = newName;
+                            chapterItem.dataset.name = newName;                       
+                            if (savedData) {
+                                localStorage.setItem(newName, savedData);
+                                localStorage.removeItem(oldName);
+                            }                  
+                            let currentChapter = document.getElementById("currentChapter");
+                            if (currentChapter.innerText === oldName) {
+                                currentChapter.innerText = newName;
+                            }
+                        }
+                    };    
                     chapterList.appendChild(chapterItem);
                 }
-            };
-            
+            };    
             chapterContainer.appendChild(subjectText);
             chapterContainer.appendChild(addChapterBtn);
             subjectDiv.appendChild(chapterContainer);
             subjectDiv.appendChild(chapterList);
-            subjectDiv.onclick = function() {
-                chapterList.style.display = (chapterList.style.display === "block") ? "none" : "block";
-            };
-            
+            subjectDiv.onclick = function () {
+                chapterList.style.display = chapterList.style.display === "block" ? "none" : "block";
+            };    
             subjectList.appendChild(subjectDiv);
             document.getElementById("newSubject").value = "";
-        }
-        
+        }    
         function handleKeyPress(event) {
             if (event.key === "Enter") {
                 addSubject();
             }
-        }
-        
-        document.getElementById("noteInput").addEventListener("input", function() {
+        }    
+        function saveNotes() {
+            let chapterName = document.getElementById("currentChapter").innerText;
+            if (chapterName !== "Select a Chapter") {
+                let notes = document.getElementById("noteInput").value;
+                localStorage.setItem(chapterName, notes);
+                alert("Notes saved successfully!");
+            } else {
+                alert("Please select a chapter before saving notes.");
+            }
+        }    
+        document.getElementById("noteInput").addEventListener("input", function () {
             let chapterName = document.getElementById("currentChapter").innerText;
             if (chapterName !== "Select a Chapter") {
                 localStorage.setItem(chapterName, this.value);
             }
         });
-    </script>
+    </script>  
 </body>
 </html>
