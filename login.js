@@ -1,3 +1,4 @@
+
 function toggleForm() {
     document.querySelector(".login-form").style.display = "none";
     document.querySelector(".sign-up-form").style.display = "block";
