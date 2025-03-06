@@ -13,8 +13,10 @@
         }
         body {
             display: flex;
+            flex-direction: column;
             background-color: #1e1e1e;
             color: white;
+            min-height: 100vh;
         }
         .sidebar {
             width: 280px;
@@ -24,6 +26,10 @@
             display: flex;
             flex-direction: column;
             overflow-y: auto;
+            position: fixed;
+            left: 0;
+            top: 0;
+            transition: transform 0.3s ease-in-out;
         }
         .sidebar h2 {
             margin-bottom: 20px;
@@ -48,8 +54,10 @@
         .main-content {
             flex: 1;
             padding: 20px;
+            margin-left: 280px;
             overflow-y: auto;
             position: relative;
+            transition: margin-left 0.3s ease-in-out;
         }
         .top-right-menu {
             position: absolute;
@@ -71,30 +79,69 @@
         .top-right-menu button:hover {
             background: #444;
         }
+        .hamburger {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 10px;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 250px;
+                height: 100vh;
+                position: fixed;
+                top: 0;
+                left: 0;
+                transition: transform 0.3s ease-in-out;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .hamburger {
+                display: block;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
     </style>
+    <script>
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+    </script>
 </head>
 <body>
+    <button class="hamburger" onclick="toggleSidebar()">☰</button>
     <div class="sidebar">
         <h2>Student Planner</h2>
         <ul>
             <li>🔍 Search</li>
-            <li>🤖 Notion AI</li>
+            <li>🤖 Taskify AI</li>
             <li>🏠 Home</li>
             <li>📥 Inbox</li>
             <li>📚 Class Notes</li>
             <li>🚀 Getting Started</li>
             <li>📝 Lesson Plans</li>
             <li>📅 Student Planner</li>
-            <li>⚙️ Settings</li>
+            <li>⚙ Settings</li>
             <li>📂 Templates</li>
-            <li>🗑️ Trash</li>
+            <li>🗑 Trash</li>
         </ul>
     </div>
     <div class="main-content">
         <div class="top-right-menu">
             <button>🔄 Change Cover</button>
             <button>🔧 Reposition</button>
-            <button>✏️ Edit</button>
+            <button>✏ Edit</button>
             <button>📤 Share</button>
         </div>
     </div>
