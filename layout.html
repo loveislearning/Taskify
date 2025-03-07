@@ -12,15 +12,52 @@
             font-family: 'Inter', sans-serif;
         }
         body {
-            display: flex;
-            flex-direction: column;
             background-color: #1e1e1e;
             color: white;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+
+        /* Top Layer */
+        .top-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 55px;
+            background: linear-gradient(135deg, #2a2a2a, #1e1e1e);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            z-index: 1000;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+        }
+        .top-layer h1 {
+            font-size: 20px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .top-layer button {
+            background: #3a3a3a;
+            border: 1px solid #555;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .top-layer button:hover {
+            background: #555;
+            border-color: #777;
+        }
+
+        /* Sidebar */
         .sidebar {
-            width: 280px;
-            background: #2c2c2c;
+            width: 260px;
+            background: #272727;
             padding: 20px;
             height: 100vh;
             display: flex;
@@ -28,12 +65,14 @@
             overflow-y: auto;
             position: fixed;
             left: 0;
-            top: 0;
+            top: 55px;
             transition: transform 0.3s ease-in-out;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
         }
         .sidebar h2 {
-            margin-bottom: 20px;
-            font-size: 20px;
+            margin-bottom: 18px;
+            font-size: 18px;
+            font-weight: 500;
         }
         .sidebar ul {
             list-style: none;
@@ -46,39 +85,46 @@
             align-items: center;
             gap: 10px;
             font-size: 14px;
-            border-radius: 5px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
         }
         .sidebar ul li:hover {
-            background: #444;
+            background: #393939;
         }
+
+        /* Main Content */
         .main-content {
             flex: 1;
             padding: 20px;
-            margin-left: 280px;
+            margin-left: 260px;
+            margin-top: 55px;
             overflow-y: auto;
-            position: relative;
             transition: margin-left 0.3s ease-in-out;
         }
+
+        /* Top-right action menu */
         .top-right-menu {
             position: absolute;
             top: 20px;
             right: 20px;
             display: flex;
-            gap: 15px;
-            align-items: center;
+            gap: 12px;
         }
         .top-right-menu button {
-            background: #2c2c2c;
+            background: #333;
             border: none;
             color: white;
-            padding: 8px 12px;
-            border-radius: 5px;
+            padding: 8px 14px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
+            transition: background 0.3s ease;
         }
         .top-right-menu button:hover {
-            background: #444;
+            background: #555;
         }
+
+        /* Hamburger Menu */
         .hamburger {
             display: none;
             font-size: 24px;
@@ -88,17 +134,17 @@
             cursor: pointer;
             padding: 10px;
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 65px;
+            left: 15px;
         }
-        
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
-                width: 250px;
+                width: 240px;
                 height: 100vh;
                 position: fixed;
-                top: 0;
+                top: 55px;
                 left: 0;
                 transition: transform 0.3s ease-in-out;
             }
@@ -117,9 +163,20 @@
         function toggleSidebar() {
             document.querySelector('.sidebar').classList.toggle('active');
         }
+
+        function showLoginPopup() {
+            alert("Login button clicked! (Popup will be added later)");
+        }
     </script>
 </head>
 <body>
+    <!-- Top Layer -->
+    <div class="top-layer">
+        <h1>Taskify</h1>
+        <button onclick="showLoginPopup()">Login</button>
+    </div>
+
+    <!-- Sidebar -->
     <button class="hamburger" onclick="toggleSidebar()">☰</button>
     <div class="sidebar">
         <h2>Student Planner</h2>
@@ -137,6 +194,8 @@
             <li>🗑 Trash</li>
         </ul>
     </div>
+
+    <!-- Main Content -->
     <div class="main-content">
         <div class="top-right-menu">
             <button>🔄 Change Cover</button>
