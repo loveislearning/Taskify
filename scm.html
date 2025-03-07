@@ -5,16 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To-Do List</title>
     <style>
-        body { font-family: Arial, sans-serif; display: flex; height: 100vh; margin: 0; background: #121212; color: white; }
-        .container { flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        input, select { width: 80%; padding: 10px; border: 1px solid #444; border-radius: 5px; margin-bottom: 15px; background: #222; color: white; }
-        .add-btn { padding: 10px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        .task-list { list-style: none; padding: 0; width: 80%; }
-        .task-item { background: #1e1e1e; display: flex; justify-content: space-between; align-items: center; padding: 15px; margin-bottom: 15px; border-radius: 5px; border-left: 4px solid white; }
-        .completed { text-decoration: line-through; color: gray; border-left: 4px solid #28a745; }
+        body { 
+            font-family: Arial, sans-serif; 
+            display: flex; 
+            height: 100vh; 
+            margin: 0; 
+            background: #121212; 
+            color: white; 
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .container { 
+            width: 90%; 
+            max-width: 400px;
+            padding: 20px; 
+            background: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            overflow: hidden;
+        }
+        .task-list-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+        input, select, button { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        input, select {
+            background: #222;
+            color: white;
+            outline: none;
+        }
+        button { 
+            background: #007bff; 
+            color: white; 
+            cursor: pointer; 
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .task-list { 
+            list-style: none; 
+            padding: 0; 
+            margin-top: 20px;
+        }
+        .task-item { 
+            background: #282828; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px; 
+            margin-bottom: 10px; 
+            border-radius: 5px;
+            border-left: 4px solid white; 
+        }
+        .completed { 
+            text-decoration: line-through; 
+            color: gray; 
+            border-left: 4px solid #28a745; 
+        }
         .priority-high { border-left: 4px solid red; }
         .priority-medium { border-left: 4px solid orange; }
         .priority-low { border-left: 4px solid green; }
+        .task-buttons button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -27,8 +97,10 @@
             <option value="high">High Priority</option>
         </select>
         <input type="date" id="dueDate">
-        <button class="add-btn" onclick="addTask()">Add Task</button>
-        <ul id="taskList" class="task-list"></ul>
+        <button onclick="addTask()">Add Task</button>
+        <div class="task-list-container">
+            <ul id="taskList" class="task-list"></ul>
+        </div>
     </div>
     
     <script>
@@ -39,11 +111,11 @@
             const priority = document.getElementById("prioritySelect").value;
             const dueDate = document.getElementById("dueDate").value || "No due date";
 
-            if (taskText === "") return;  // Prevent empty tasks
+            if (taskText === "") return;
 
             const task = { text: taskText, priority, dueDate, completed: false };
             saveTask(task);
-            renderTask(task);
+            loadTasks();
 
             document.getElementById("taskInput").value = "";
             document.getElementById("dueDate").value = "";
@@ -56,9 +128,9 @@
 
             li.innerHTML = `
                 <span class="task-text">${task.text} (Due: ${task.dueDate})</span>
-                <div>
-                    <button class="done-btn" onclick="markDone(this)">Done</button>
-                    <button class="remove-btn" onclick="removeTask(this)">Remove</button>
+                <div class="task-buttons">
+                    <button onclick="markDone(this)">Done</button>
+                    <button onclick="removeTask(this)">Remove</button>
                 </div>`;
 
             document.getElementById("taskList").appendChild(li);
@@ -67,25 +139,12 @@
         function markDone(button) {
             const taskItem = button.parentElement.parentElement;
             taskItem.classList.toggle("completed");
-
-            const text = taskItem.querySelector(".task-text").textContent.split(" (Due: ")[0];
-            let tasks = getSavedTasks();
-            tasks = tasks.map(task => {
-                if (task.text === text) task.completed = !task.completed;
-                return task;
-            });
-            localStorage.setItem("tasks", JSON.stringify(tasks));
+            saveAllTasks();
         }
 
         function removeTask(button) {
-            const taskItem = button.parentElement.parentElement;
-            const text = taskItem.querySelector(".task-text").textContent.split(" (Due: ")[0];
-
-            taskItem.remove();
-
-            let tasks = getSavedTasks();
-            tasks = tasks.filter(task => task.text !== text);
-            localStorage.setItem("tasks", JSON.stringify(tasks));
+            button.parentElement.parentElement.remove();
+            saveAllTasks();
         }
 
         function handleKeyPress(event) {
@@ -95,6 +154,19 @@
         function saveTask(task) {
             let tasks = getSavedTasks();
             tasks.push(task);
+            tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function saveAllTasks() {
+            let tasks = [...document.querySelectorAll(".task-item")].map(item => {
+                return { 
+                    text: item.querySelector(".task-text").textContent.split(" (Due: ")[0],
+                    priority: item.classList[1].split("-")[1],
+                    dueDate: item.querySelector(".task-text").textContent.split(" (Due: ")[1].replace(")", ""),
+                    completed: item.classList.contains("completed")
+                };
+            });
             localStorage.setItem("tasks", JSON.stringify(tasks));
         }
 
@@ -103,6 +175,7 @@
         }
 
         function loadTasks() {
+            document.getElementById("taskList").innerHTML = "";
             let tasks = getSavedTasks();
             tasks.forEach(renderTask);
         }
