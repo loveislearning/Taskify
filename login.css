@@ -6,71 +6,73 @@
 }
 
 body {
+    background: black;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background:  #0d0d0d;
     padding: 20px;
 }
 
 .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    width: 750px;
-    height: 500px;
-    background-color: white;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
+    display: flex;
+    flex-direction: row;
+    width: 90%;
+    max-width: 900px;
+    background: rgba(34, 34, 34, 0.8);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+    border-radius: 15px;
     overflow: hidden;
     position: relative;
-    transition: all 0.3s ease-in-out;
+    backdrop-filter: blur(12px);
+    height: 700px;
 }
 
-/* Left Side - Welcome Message */
 .left {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background:  #757778;
-    color: white;
-    padding: 30px;
-    text-align: center;
-}
-
-.left h2 {
-    font-size: 28px;
-    margin-bottom: 10px;
-}
-
-.left p {
-    font-size: 14px;
-    opacity: 0.8;
-}
-
-/* Right Side - Forms */
-.right {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 30px;
-    width: 100%;
     position: relative;
+    flex: 1.5;
+    padding: 50px;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    align-items: flex-start; 
+    color: white;
 }
+.corner-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 20px; 
+    font-weight: bold;
+    color: white;
+}
+
+
+.right {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    background: rgba(51, 51, 51, 0.6);
+    color: #fff;
+    backdrop-filter: blur(20px);
+}
+
 
 .form-container {
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
     text-align: center;
-    transition: all 0.5s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
 }
 
-.form-container h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #333;
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
 }
 
 .input-container {
@@ -83,21 +85,26 @@ body {
 input {
     width: 100%;
     padding: 12px;
-    border: 2px solid #ddd;
+    border: 2px solid #555;
+    background: rgba(68, 68, 68, 0.5);
     border-radius: 8px;
     font-size: 16px;
-    transition: 0.3s;
+    color: white;
+}
+
+input::placeholder {
+    color: #bbb;
 }
 
 input:focus {
-    border-color: #3d4043;
+    border-color: #888;
     outline: none;
 }
 
 button {
     width: 100%;
     padding: 12px;
-    background: #373838;
+    background: #444;
     color: white;
     border: none;
     border-radius: 8px;
@@ -107,32 +114,29 @@ button {
 }
 
 button:hover {
-    background: #424345;
+    background: #666;
 }
 
 .toggle, .forgot-password {
     margin-top: 15px;
     font-size: 14px;
-    color: #fffcfc;
+    color: #ddd;
     cursor: pointer;
 }
 
 .toggle:hover, .forgot-password:hover {
-    color: #515355;
+    color: #bbb;
 }
 
-/* Hide sign-up and forgot-password initially */
 .sign-up-form, .forgot-password-form {
     display: none;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .container {
-        grid-template-columns: 1fr;
-        width: 90%;
+        flex-direction: column;
+        width: 100%;
         height: auto;
-        padding: 20px;
     }
 
     .left {
@@ -144,13 +148,106 @@ button:hover {
     }
 }
 
-@media (max-width: 480px) {
-    .form-container {
-        max-width: 100%;
-    }
+#Tagline {
+    font-size: 25px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    margin-right: 0;
+}
 
-    input, button {
-        font-size: 14px;
-        padding: 10px;
+#Everyday {
+    font-size: 70px;
+    font-weight: bold;
+    display: block;
+    margin-right: 0;
+}
+
+#Tagline, #Everyday {
+    position: relative;
+    left: 10%;  
+    top: 10%;   
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
+
+.container {
+    animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translate(30px, 30px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
+
+#Tagline, #Everyday {
+    position: relative;
+    animation: slideIn 1s ease-in-out;
+}
+
+button {
+    transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+    background: #888;
+    transform: scale(1.05);
+}
+
+input:focus {
+    border-color: #fff;
+    transition: border-color 0.3s ease-in-out;
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.form-container {
+    animation: popIn 0.6s ease-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+}
+
+.shake {
+    animation: shake 0.4s ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+button:hover {
+    background: #888;
+    animation: pulse 0.5s ease-in-out;
+}
+
