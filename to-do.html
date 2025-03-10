@@ -41,6 +41,7 @@
             border: none;
             border-radius: 5px;
             font-size: 16px;
+            transition: all 0.3s ease-in-out;
         }
         input, select {
             background: #222;
@@ -52,10 +53,11 @@
             color: white; 
             cursor: pointer; 
             font-weight: bold;
-            transition: background 0.3s;
+            transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
         }
         button:hover {
             background: #0056b3;
+            transform: scale(1.05);
         }
         .task-list { 
             list-style: none; 
@@ -71,11 +73,19 @@
             margin-bottom: 10px; 
             border-radius: 5px;
             border-left: 4px solid white; 
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.5s ease-in-out forwards;
         }
         .completed { 
             text-decoration: line-through; 
             color: gray; 
             border-left: 4px solid #28a745; 
+            transform: scale(0.95);
+            transition: transform 0.3s ease-in-out;
+        }
+        .completed:hover {
+            transform: scale(1);
         }
         .priority-high { border-left: 4px solid red; }
         .priority-medium { border-left: 4px solid orange; }
@@ -84,6 +94,20 @@
             margin-left: 5px;
             padding: 5px 10px;
             font-size: 14px;
+            transition: transform 0.2s ease-in-out;
+        }
+        .task-buttons button:hover {
+            transform: scale(1.1);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
