@@ -3,52 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Sign Up</title>
-    <link rel="stylesheet" href="/login.css">
+    <title>Student Planner</title>
+    <style>
+        /* Your existing styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        body {
+            background-color: #1e1e1e;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Layer */
+        .top-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(135deg, #1e1e1e,#2a2a2a);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 25px;
+            z-index: 1000;
+        }
+        .top-layer h1 {
+            font-size: 50px;
+            font-weight: 600;
+        }
+        .auth-buttons {
+            display: flex;
+            gap: 12px;
+        }
+        .auth-buttons button {
+            background: transparent;
+            color: white;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .auth-buttons button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+
+        /* Container for Sidebar & Main Content */
+        .container {
+            display: flex;
+            flex-direction: row;
+            margin-top: 100px;
+            height: calc(100vh - 100px);
+            width: 100%;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 260px;
+            background: #272727;
+            padding: 20px;
+            height: 100%;
+            overflow-y: auto;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+        }
+        .sidebar h2 {
+            margin-bottom: 18px;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            padding: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .sidebar ul li:hover {
+            background: #393939;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            gap: 20px;
+        }
+        .content-box {
+            background: #333;
+            padding: 20px;
+            border-radius: 8px;
+            width: 30%;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+            }
+            .content-box {
+                width: 90%;
+            }
+        }
+
+        /* To-Do List Styles (Integrated) */
+        .task-list-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            max-height: 60vh;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease-in-out;
+        }
+        input, select {
+            background: #222;
+            color: white;
+            outline: none;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+        button:hover {
+            background: #0056b3;
+            transform: scale(1.05);
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .task-item {
+            background: #282828;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid white;
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: gray;
+            border-left: 4px solid #28a745;
+            transform: scale(0.95);
+            transition: transform 0.3s ease-in-out;
+        }
+        .completed:hover {
+            transform: scale(1);
+        }
+        .priority-high { border-left: 4px solid red; }
+        .priority-medium { border-left: 4px solid orange; }
+        .priority-low { border-left: 4px solid green; }
+        .task-buttons button {
+            margin-left: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            transition: transform 0.2s ease-in-out;
+        }
+        .task-buttons button:hover {
+            transform: scale(1.1);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <div class="left">
-            <h2 id="Tagline" style="color: #fff;">Simplify Your Day,<h2>
-            <h2 id="Everyday" style="color: #fff;">Everyday</h2>
-        </div>
-
-        <div class="right">
-            <div class="form-container login-form">
-                <h2>Login</h2>
-                <div class="input-container">
-                    <input type="text" placeholder="Username" required>
-                    <input type="password" placeholder="Password" required>
-                </div>
-                <br>
-                <button>Login</button>
-                <p class="forgot-password" onclick="toggleForgotPassword()">Forgot your password?</p>
-                <p class="toggle" onclick="toggleForm()">Don't have an account? Sign up</p>
-            </div>
-
-            <div class="form-container sign-up-form">
-                <h2>Sign Up</h2>
-                <div class="input-container">
-                    <input type="text" placeholder="Full Name" required>
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Password" required>
-                </div>
-                <br>
-                <button>Sign Up</button>
-                <p class="toggle" onclick="toggleLogin()">Already have an account? Login</p>
-            </div>
-
-            <div class="form-container forgot-password-form">
-                <h2>Reset Password</h2>
-                <div class="input-container">
-                    <input type="email" placeholder="Enter your email" required>
-                </div>
-                <br>
-                <button>Reset Password</button>
-                <p class="toggle" onclick="toggleLogin()">Back to login</p>
-            </div>
+    <div class="top-layer">
+        <h1>Taskify</h1>
+        <div class="auth-buttons">
+            <button onclick="alert('Login button clicked!')">Login</button>
+            <button onclick="alert('Signup button clicked!')">Sign Up</button>
         </div>
     </div>
-    <script src="/login.js"></script>
+
+    <div class="container">
+        <div class="sidebar">
+            <h2>Student Planner</h2>
+            <ul>
+                <li>🔍 Search</li>
+                <li>🤖 Taskify AI</li>
+                <li>🏠 Home</li>
+                <li>📥 Inbox</li>
+                <li>📚 Class Notes</li>
+                <li>🚀 Getting Started</li>
+                <li>📝 Lesson Plans</li>
+                <li>📅 Student Planner</li>
+                <li>⚙ Settings</li>
+                <li>📂 Templates</li>
+                <li>🗑 Trash</li>
+            </ul>
+        </div>
+
+        <div class="main-content">
+            <div class="content-box">
+                <h2>📅 Today's Tasks ✅</h2>
+                <input type="text" id="taskInput" placeholder="Enter new task" onkeypress="handleKeyPress(event)">
+                <select id="prioritySelect">
+                    <option value="low">Low Priority</option>
+                    <option value="medium">Medium Priority</option>
+                    <option value="high">High Priority</option>
+                </select>
+                <input type="date" id="dueDate">
+                <button onclick="addTask()">Add Task</button>
+                <div class="task-list-container">
+                    <ul id="taskList" class="task-list"></ul>
+                </div>
+            </div>
+            <div class="content-box">📚 Study Plan</div>
+            <div class="content-box">📊 Progress Tracker</div>
+        </div>
+    </div>
+
+    <script>
+        /* To-Do List JavaScript (Integrated) */
+        document.addEventListener("DOMContentLoaded", loadTasks);
+
+        function addTask() {
+            const taskText = document.getElementById("taskInput").value.trim();
+            const priority = document.getElementById("prioritySelect").value;
+            const dueDate = document.getElementById("dueDate").value || "No due date";
+
+            if (taskText === "") return;
+
+            const task = { text: taskText, priority, dueDate, completed: false };
+            saveTask(task);
+            loadTasks();
+
+            document.getElementById("taskInput").value = "";
+            document.getElementById("dueDate").value = "";
+        }
+
+        function renderTask(task) {
+            const li = document.createElement("li");
+            li.classList.add("task-item", `priority-${task.priority}`);
+            if (task.completed) li.classList.add("completed");
+
+            li.innerHTML = `
+                <span class="task-text">${task.text} (Due: ${task.dueDate})</span>
+                <div class="task-buttons">
+                    <button onclick="markDone(this)">Done</button>
+                    <button onclick="removeTask(this)">Remove</button>
+                </div>`;
+
+            document.getElementById("taskList").appendChild(li);
+        }
+
+        function markDone(button) {
+            const taskItem = button.parentElement.parentElement;
+            taskItem.classList.toggle("completed");
+            saveAllTasks();
+        }
+
+        function removeTask(button) {
+            button.parentElement.parentElement.remove();
+            saveAllTasks();
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") addTask();
+        }
+
+        function saveTask(task) {
+            let tasks = getSavedTasks();
+            tasks.push(task);
+            tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function saveAllTasks() {
+            let tasks = [...document.querySelectorAll(".task-item")].map(item => {
+                return { 
+                    text: item.querySelector(".task-text").textContent.split(" (Due: ")[0],
+                    priority: item.classList[1].split("-")[1],
+                    dueDate: item.querySelector(".task-text").textContent.split(" (Due: ")[1].replace(")", ""),
+                    completed: item.classList.contains("completed")
+                };
+            });
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+
+        function getSavedTasks() {
+            return JSON.parse(localStorage.getItem("tasks")) ||;
+        }
+
+        function loadTasks() {
+            document.getElementById("taskList").innerHTML = "";
+            let tasks = getSavedTasks();
+            tasks.forEach(renderTask);
+        }
+    </script>
 </body>
 </html>
