@@ -78,7 +78,9 @@
             width: 100%;
         }
         .chapter {
-            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             padding: 5px;
             background: #3b5998;
             margin-bottom: 5px;
@@ -89,16 +91,16 @@
         .chapter:hover {
             background: #2d4373;
         }
-        .pin, .add-chapter {
+        .pin, .add-chapter, .delete-chapter {
             background: none;
             border: none;
-            color: white;
+            color: rgb(245, 243, 243);
             cursor: pointer;
             padding: 5px;
             font-size: 18px;
         }
-        .pin:hover, .add-chapter:hover {
-            color: #ddd;
+        .pin:hover, .add-chapter:hover, .delete-chapter:hover {
+            color: #dddddd;
         }
         .container {
             flex: 1;
@@ -120,7 +122,6 @@
             border-radius: 5px;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="sidebar">
@@ -164,6 +165,25 @@
             pinButton.onclick = function () {
                 subjectList.prepend(subjectDiv);
             };
+            let deleteSubjectBtn = document.createElement("button");
+            deleteSubjectBtn.innerText = "🗑️";
+            deleteSubjectBtn.classList.add("delete-subject");
+            deleteSubjectBtn.onclick = function () {
+                if (confirm("Are you sure you want to delete this subject?")) {
+                    subjectDiv.remove();
+                }
+            };
+            let chapter_Actions = document.createElement("div");
+            chapterActions.classList.add("chapter-actions");
+            chapterActions.appendChild(deleteSubjectBtn);
+
+            chapterContainer.appendChild(subjectText);
+            chapterContainer.appendChild(chapterActions);
+
+            subjectDiv.appendChild(chapterContainer);
+            subjectList.appendChild(subjectDiv);
+            document.getElementById("newSubject").value = "";
+        
 
             let addChapterBtn = document.createElement("button");
             addChapterBtn.innerText = "+";
@@ -174,12 +194,19 @@
                 if (chapterName) {
                     let chapterItem = document.createElement("div");
                     chapterItem.classList.add("chapter");
-                    chapterItem.innerText = chapterName;
+                    chapterItem.innerHTML = `<span>${chapterName}</span> <button class='delete-chapter'>🗑️</button>`;
                     chapterItem.dataset.name = chapterName;
-                    chapterItem.onclick = function () {
-                        document.getElementById("currentChapter").innerText = chapterItem.innerText;
-                        document.getElementById("noteInput").value = localStorage.getItem(chapterItem.dataset.name) || "";
+                    chapterItem.querySelector(".delete-chapter").onclick = function () {
+                        if (confirm("Are you sure you want to delete this chapter?")) {
+                            chapterItem.remove();
+                            localStorage.removeItem(chapterName);
+                        }
                     };
+                    chapterItem.onclick = function () {
+                        document.getElementById("currentChapter").innerText = chapterName;
+                        document.getElementById("noteInput").value = localStorage.getItem(chapterName) || "";
+                    };
+                    chapterList.appendChild(chapterItem);
                     chapterItem.oncontextmenu = function (event) {
                         event.preventDefault();
                         let newName = prompt("Rename Chapter:", chapterItem.innerText);
@@ -187,15 +214,17 @@
                             localStorage.setItem(newName, localStorage.getItem(chapterItem.dataset.name) || "");
                             localStorage.removeItem(chapterItem.dataset.name);
                             chapterItem.dataset.name = newName;
-                            chapterItem.innerText = newName;
+                            chapterItem.querySelector("span").innerText = newName;
                         }
                     };
                     chapterList.appendChild(chapterItem);
                 }
             };
+            
 
             let chapterList = document.createElement("div");
             chapterList.classList.add("chapter-list");
+            
 
             chapterActions.appendChild(pinButton);
             chapterActions.appendChild(addChapterBtn);
