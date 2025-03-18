@@ -1,208 +1,208 @@
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>To-Do List</title>
-        <style>
-            body { 
-                font-family: Arial, sans-serif; 
-                display: flex; 
-                height: 100vh; 
-                margin: 0; 
-                background: #121212; 
-                color: white; 
-                justify-content: center;
-                align-items: center;
-                overflow: hidden;
-            }
-            .container { 
-                width: 90%; 
-                max-width: 400px;
-                padding: 20px; 
-                background: #1e1e1e;
-                border-radius: 10px;
-                box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
-                text-align: center;
-                display: flex;
-                flex-direction: column;
-                height: 90vh;
-                overflow: hidden;
-            }
-            .task-list-container {
-                flex-grow: 1;
-                overflow-y: auto;
-                max-height: 60vh;
-            }
-            input, select, button { 
-                width: 100%; 
-                padding: 12px; 
-                margin: 10px 0; 
-                border: none;
-                border-radius: 5px;
-                font-size: 16px;
-                transition: all 0.3s ease-in-out;
-            }
-            input, select {
-                background: #222;
-                color: white;
-                outline: none;
-            }
-            button { 
-                background: #007bff; 
-                color: white; 
-                cursor: pointer; 
-                font-weight: bold;
-                transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
-            }
-            button:hover {
-                background: #0056b3;
-                transform: scale(1.05);
-            }
-            .task-list { 
-                list-style: none; 
-                padding: 0; 
-                margin-top: 20px;
-            }
-            .task-item { 
-                background: #282828; 
-                display: flex; 
-                justify-content: space-between; 
-                align-items: center; 
-                padding: 15px; 
-                margin-bottom: 10px; 
-                border-radius: 5px;
-                border-left: 4px solid white; 
-                opacity: 0;
-                transform: translateY(10px);
-                animation: fadeIn 0.5s ease-in-out forwards;
-            }
-            .completed { 
-                text-decoration: line-through; 
-                color: gray; 
-                border-left: 4px solid #28a745; 
-                transform: scale(0.95);
-                transition: transform 0.3s ease-in-out;
-            }
-            .completed:hover {
-                transform: scale(1);
-            }
-            .priority-high { border-left: 4px solid red; }
-            .priority-medium { border-left: 4px solid orange; }
-            .priority-low { border-left: 4px solid green; }
-            .task-buttons button {
-                margin-left: 5px;
-                padding: 5px 10px;
-                font-size: 14px;
-                transition: transform 0.2s ease-in-out;
-            }
-            .task-buttons button:hover {
-                transform: scale(1.1);
-            }
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h2>To-Do List ✅</h2>
-            <input type="text" id="taskInput" placeholder="Enter new task" onkeypress="handleKeyPress(event)">
-            <select id="prioritySelect">
-                <option value="low">Low Priority</option>
-                <option value="medium">Medium Priority</option>
-                <option value="high">High Priority</option>
-            </select>
-            <input type="date" id="dueDate">
-            <button onclick="addTask()">Add Task</button>
-            <div class="task-list-container">
-                <ul id="taskList" class="task-list"></ul>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar Taskify</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            display: flex; 
+            height: 100vh; 
+            margin: 0; 
+            background: #121212; 
+            color: white; 
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .container {
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .calendar-container, .task-container {
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .day {
+            padding: 10px;
+            background: #282828;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .today {
+            background: #007bff;
+            font-weight: bold;
+        }
+        .selected {
+            background: #ff9800 !important;
+        }
+        input, button { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 5px 0; 
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button { 
+            background: #007bff; 
+            color: white; 
+            cursor: pointer; 
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .task-list { 
+            list-style: none; 
+            padding: 0; 
+        }
+        .task-item { 
+            background: #282828; 
+            padding: 10px; 
+            margin-bottom: 5px; 
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .completed { 
+            text-decoration: line-through; 
+            color: gray; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="calendar-container">
+            <h2 id="monthYear"></h2>
+            <div class="calendar" id="calendar"></div>
         </div>
-        
-        <script>
-            document.addEventListener("DOMContentLoaded", loadTasks);
+        <div class="task-container">
+            <h2>Task Manager</h2>
+            <input type="text" id="taskInput" placeholder="Enter new task">
+            <button onclick="addTask()">Add Task</button>
+            <ul id="taskList" class="task-list"></ul>
+        </div>
+    </div>
+    <script>
+        let selectedDate = null;
 
-            function addTask() {
-                const taskText = document.getElementById("taskInput").value.trim();
-                const priority = document.getElementById("prioritySelect").value;
-                const dueDate = document.getElementById("dueDate").value || "No due date";
+        document.addEventListener("DOMContentLoaded", () => {
+            generateCalendar();
+        });
 
-                if (taskText === "") return;
+        function generateCalendar() {
+            const calendar = document.getElementById("calendar");
+            const monthYear = document.getElementById("monthYear");
+            const today = new Date();
+            const month = today.toLocaleString('default', { month: 'long' });
+            const year = today.getFullYear();
+            monthYear.innerText = `${month} ${year}`;
 
-                const task = { text: taskText, priority, dueDate, completed: false };
-                saveTask(task);
-                loadTasks();
+            const firstDay = new Date(year, today.getMonth(), 1).getDay();
+            const daysInMonth = new Date(year, today.getMonth() + 1, 0).getDate();
 
-                document.getElementById("taskInput").value = "";
-                document.getElementById("dueDate").value = "";
+            calendar.innerHTML = "";
+            for (let i = 0; i < firstDay; i++) {
+                calendar.innerHTML += '<div></div>';
+            }
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayElement = document.createElement("div");
+                dayElement.classList.add("day");
+                dayElement.innerText = i;
+                dayElement.dataset.date = `${year}-${today.getMonth() + 1}-${i}`;
+                dayElement.addEventListener("click", () => selectDate(dayElement));
+
+                if (i === today.getDate()) {
+                    dayElement.classList.add("today");
+                }
+                calendar.appendChild(dayElement);
+            }
+        }
+
+        function selectDate(element) {
+            if (selectedDate) {
+                selectedDate.classList.remove("selected");
+            }
+            selectedDate = element;
+            selectedDate.classList.add("selected");
+
+            loadTasks(selectedDate.dataset.date);
+        }
+
+        function addTask() {
+            const taskText = document.getElementById("taskInput").value.trim();
+            if (!taskText || !selectedDate) {
+                return alert("Please select a date and enter a task.");
             }
 
-            function renderTask(task) {
-                const li = document.createElement("li");
-                li.classList.add("task-item", `priority-${task.priority}`);
-                if (task.completed) li.classList.add("completed");
+            const task = { date: selectedDate.dataset.date, text: taskText, completed: false };
+            saveTask(task);
+            document.getElementById("taskInput").value = "";
+            loadTasks(selectedDate.dataset.date);
+        }
 
-                li.innerHTML = `
-                    <span class="task-text">${task.text} (Due: ${task.dueDate})</span>
-                    <div class="task-buttons">
-                        <button onclick="markDone(this)">Done</button>
-                        <button onclick="removeTask(this)">Remove</button>
-                    </div>`;
+        function saveTask(task) {
+            let tasks = getSavedTasks();
+            tasks.push(task);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
 
-                document.getElementById("taskList").appendChild(li);
+        function getSavedTasks() {
+            return JSON.parse(localStorage.getItem("tasks")) || [];
+        }
+
+        function loadTasks(date) {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+
+            const tasks = getSavedTasks().filter(task => task.date === date);
+            tasks.forEach((task, index) => {
+                renderTask(task, index);
+            });
+        }
+
+        function renderTask(task, index) {
+            const taskList = document.getElementById("taskList");
+            const li = document.createElement("li");
+            li.classList.add("task-item");
+            if (task.completed) {
+                li.classList.add("completed");
             }
+            li.innerHTML = `
+                <span onclick="toggleTask(${index})">${task.text}</span>
+                <button onclick="removeTask(${index})">❌</button>
+            `;
+            taskList.appendChild(li);
+        }
 
-            function markDone(button) {
-                const taskItem = button.parentElement.parentElement;
-                taskItem.classList.toggle("completed");
-                saveAllTasks();
-            }
+        function toggleTask(index) {
+            let tasks = getSavedTasks();
+            tasks[index].completed = !tasks[index].completed;
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            loadTasks(selectedDate.dataset.date);
+        }
 
-            function removeTask(button) {
-                button.parentElement.parentElement.remove();
-                saveAllTasks();
-            }
-
-            function handleKeyPress(event) {
-                if (event.key === "Enter") addTask();
-            }
-
-            function saveTask(task) {
-                let tasks = getSavedTasks();
-                tasks.push(task);
-                tasks.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-                localStorage.setItem("tasks", JSON.stringify(tasks));
-            }
-
-            function saveAllTasks() {
-                let tasks = [...document.querySelectorAll(".task-item")].map(item => {
-                    return { 
-                        text: item.querySelector(".task-text").textContent.split(" (Due: ")[0],
-                        priority: item.classList[1].split("-")[1],
-                        dueDate: item.querySelector(".task-text").textContent.split(" (Due: ")[1].replace(")", ""),
-                        completed: item.classList.contains("completed")
-                    };
-                });
-                localStorage.setItem("tasks", JSON.stringify(tasks));
-            }
-
-            function getSavedTasks() {
-                return JSON.parse(localStorage.getItem("tasks")) || [];
-            }
-
-            function loadTasks() {
-                document.getElementById("taskList").innerHTML = "";
-                let tasks = getSavedTasks();
-                tasks.forEach(renderTask);
-            }
-        </script>
-    </body>
-    </html>
+        function removeTask(index) {
+            let tasks = getSavedTasks();
+            tasks.splice(index, 1);
+            localStorage.setItem("tasks", JSON.stringify(tasks));
+            loadTasks(selectedDate.dataset.date);
+        }
+    </script>
+</body>
+</html>

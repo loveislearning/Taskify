@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background: radial-gradient(circle at top, #2a2a2a, #1e1e1e);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .settings-container {
+            background: rgba(51, 51, 51, 0.5);
+            backdrop-filter: blur(15px);
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
+            max-height: 85vh;
+            overflow-y: auto;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeIn 0.5s ease-out forwards;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        h2 {
+            margin-bottom: 15px;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        .settings-group {
+            margin: 12px 0;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        select, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            outline: none;
+            transition: all 0.3s, transform 0.2s;
+            appearance: none;
+            font-size: 14px;
+        }
+        select:hover, input[type="text"]:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02);
+        }
+        select:focus, input[type="text"]:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+        select option {
+            background: #333;
+            color: white;
+        }
+        button {
+            margin-top: 15px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+            width: 100%;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #0056b3, #004499);
+            transform: scale(1.05);
+        }
+        .gmail-info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #ddd;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 8px;
+            display: inline-block;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* RESPONSIVE DESIGN */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            .settings-container {
+                padding: 20px;
+                max-width: 90%;
+            }
+            h2 {
+                font-size: 22px;
+            }
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .settings-container {
+                padding: 18px;
+                max-width: 100%;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            select, input[type="text"] {
+                padding: 10px;
+                font-size: 13px;
+            }
+            button {
+                font-size: 14px;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <h2>⚙ Settings</h2>
+        <div class="settings-group">
+            <label for="theme">Theme:</label>
+            <select id="theme">
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+            </select>
+        </div>
+        <div class="settings-group">
+            <label for="notifications">Enable Notifications:</label>
+            <select id="notifications">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+        <div class="settings-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" placeholder="Enter your full name">
+        </div>
+        <div class="settings-group">
+            <label for="task-sort">Sort Tasks By:</label>
+            <select id="task-sort">
+                <option value="date">Due Date</option>
+                <option value="priority">Priority</option>
+                <option value="status">Completion Status</option>
+            </select>
+        </div>
+        <div class="settings-group">
+            <label for="preferences">Preferences:</label>
+            <select id="preferences">
+                <option value="default">Default</option>
+                <option value="compact">Compact View</option>
+                <option value="detailed">Detailed View</option>
+            </select>
+        </div>
+        <div class="settings-group">
+            <label for="start-week">Start Week On:</label>
+            <select id="start-week">
+                <option value="sunday">Sunday</option>
+                <option value="monday">Monday</option>
+            </select>
+        </div>
+        <div class="settings-group">
+            <label for="app-language">App Language:</label>
+            <select id="app-language">
+                <option value="english">English</option>
+                <option value="spanish">Spanish</option>
+                <option value="french">French</option>
+                <option value="german">German</option>
+            </select>
+        </div>
+        <button onclick="saveSettings()">Save Settings</button>
+        <div class="gmail-info" id="gmail-info">Logged in as: user@example.com</div>
+        <button onclick="switchEmail()">Switch Email</button>
+    </div>
+    <script>
+        function saveSettings() {
+            const settings = {
+                theme: document.getElementById("theme").value,
+                notifications: document.getElementById("notifications").value,
+                username: document.getElementById("username").value.trim(),
+                taskSort: document.getElementById("task-sort").value,
+                preferences: document.getElementById("preferences").value,
+                startWeek: document.getElementById("start-week").value,
+                appLanguage: document.getElementById("app-language").value,
+            };
+            localStorage.setItem("settings", JSON.stringify(settings));
+            alert("Settings Saved Successfully!");
+        }
+    </script>
+</body>
+</html>
