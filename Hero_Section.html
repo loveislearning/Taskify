@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskify - Task Manager</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body {
+            background-color: #000;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            overflow-x: hidden;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: rgba(17, 17, 17, 0.9);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease-in-out;
+        }
+        .logo {
+            font-size: 30px;
+            font-weight: bold;
+            transition: transform 0.3s ease-in-out;
+            margin-left: 5%; /* Move Taskify slightly right */
+        }
+        .logo:hover {
+            transform: scale(1.1);
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        .btn-auth {
+            display: flex;
+            gap: 15px;
+            margin-right: 5%; /* Move Sign In button slightly left */
+        }
+        .btn-signin {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            font-weight: bold;
+        }
+        .btn-signin:hover {
+            background: linear-gradient(135deg, #0056b3, #004494);
+            transform: scale(1.05);
+        }
+        .hero {
+            padding: 120px 20px 40px;
+            font-size: 1000px;
+            padding-top: 60px; 
+        }
+        .hero h1 {
+            font-size: 150px;
+            font-weight: bold;
+            line-height: 1.3;
+            margin-bottom: 0;
+            position: relative;
+            top: 1px;
+        }
+        .highlight {
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 20px;
+            color: #aaa;
+            max-width: 600px;
+            margin: 10px auto;
+            margin-bottom: 10px;
+            margin-top: 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 15px; 
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            color: white;
+            font-weight: bold;
+            margin-top: 0px;
+            margin-bottom: 0;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0056b3, #007bff);
+            transform: scale(1.05);
+        }
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+            margin-top: 0px;
+            margin-bottom: 0;
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">&#128221; Taskify</div>
+        <div class="btn-auth">
+            <a href="/login.html" class="btn btn-signin">Sign In</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Organize Tasks <span class="highlight">Effortlessly</span></h1>
+        <p>Taskify helps you track progress, collaborate, and manage your workload efficiently.</p>
+        <div class="buttons">
+            <a href="/login.html" class="btn btn-primary">Get Started</a>
+            <button class="btn btn-secondary">Learn More</button>
+        </div>
+    </section>
+
+    <script>
+        gsap.from(".navbar", { opacity: 0, y: -50, duration: 1, ease: "power2.out" });
+        gsap.from(".logo", { opacity: 0, x: -50, duration: 1, delay: 0.2, ease: "power2.out" });
+        gsap.from(".btn-auth", { opacity: 0, x: 50, duration: 1, delay: 0.2, ease: "power2.out" });
+        gsap.from(".hero h1", { opacity: 0, y: 20, duration: 1, delay: 0.5, ease: "power2.out" });
+        gsap.from(".hero p", { opacity: 0, duration: 1.2, delay: 0.7, ease: "power2.out" });
+        gsap.from(".buttons", { opacity: 0, scale: 0.9, duration: 1, delay: 0.9, ease: "power2.out" });
+    </script>
+</body>
+</html>
