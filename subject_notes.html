@@ -25,6 +25,77 @@
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
             font-family: 'Poppins', sans-serif;
         }
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            height: 100vh;
+            overflow: hidden; 
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            background: #2c3e50;
+            padding: 10px;
+            color: white;
+            align-items: center;
+        }
+        .toolbar button {
+            background: #34495e;
+            color: white;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .toolbar button:hover {
+            background: #1f2c3b;
+        }
+        .bullet-dropdown {
+            display: none;
+            position: absolute;
+            background: white;
+            border: 1px solid #ccc;
+            flex-direction: column;
+            z-index: 1000;
+            width: 150px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 5px;
+            left: 0;
+        }
+
+
+        .bullet-dropdown button {
+            padding: 5px;
+            border: none;
+            background: black;
+            color: white;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+        }
+        .bullet-dropdown button:hover {
+            background: #444;
+        }
+        .container {
+            flex: 1;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+            height: calc(100vh - 50px); 
+        }
+
+        #noteInput {
+            width: 100%;
+            min-height: 80vh;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+            resize: none;
+        }
         .sidebar h3 {
             margin: 0 0 15px;
             text-align: center;
@@ -132,10 +203,34 @@
         </div>
         <div id="subjectList"></div>
     </div>
-    <div class="container">
-        <h2 id="currentChapter">Select a Chapter</h2>
-        <textarea id="noteInput" placeholder="Write your notes here..."></textarea>
-    </div>   
+
+    <div class="main-content">
+        <div class="toolbar">
+            <div style="position: relative;">
+                <button onclick="toggleBulletDropdown()">➤ Add Bullet ▼</button>
+                <div class="bullet-dropdown" id="bulletDropdown">
+                    <button onclick="setBulletType('disc')">• Disc</button>
+                    <button onclick="setBulletType('circle')">◦ Circle</button>
+                    <button onclick="setBulletType('square')">▪ Square</button>
+                    <button onclick="setBulletType('decimal')">1. Decimal</button>
+                    <button onclick="setBulletType('lower-alpha')">a. Lower Alpha</button>
+                    <button onclick="setBulletType('upper-alpha')">A. Upper Alpha</button>
+                    <button onclick="setBulletType('lower-roman')">i. Lower Roman</button>
+                    <button onclick="setBulletType('upper-roman')">I. Upper Roman</button>
+                </div>
+            </div>
+            <button onclick="pasteText()">📋 Paste</button>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="insertImage(event)">
+            <button onclick="document.getElementById('imageUpload').click()">🖼 Insert Image</button>
+        </div>
+
+        <div class="container">
+            <h2 id="currentChapter">Select a Chapter</h2>
+            <div id="noteInput" contenteditable="true" style="border: 1px solid #ccc; padding: 10px;"></div>
+        </div>
+    </div>
+
+
     <script>
         function addSubject() {
             let subjectName = document.getElementById("newSubject").value;
@@ -166,7 +261,7 @@
                 subjectList.prepend(subjectDiv);
             };
             let deleteSubjectBtn = document.createElement("button");
-            deleteSubjectBtn.innerText = "🗑️";
+            deleteSubjectBtn.innerText = "🗑";
             deleteSubjectBtn.classList.add("delete-subject");
             deleteSubjectBtn.onclick = function () {
                 if (confirm("Are you sure you want to delete this subject?")) {
@@ -194,7 +289,7 @@
                 if (chapterName) {
                     let chapterItem = document.createElement("div");
                     chapterItem.classList.add("chapter");
-                    chapterItem.innerHTML = `<span>${chapterName}</span> <button class='delete-chapter'>🗑️</button>`;
+                    chapterItem.innerHTML = `<span>${chapterName}</span> <button class='delete-chapter'>🗑</button>`;
                     chapterItem.dataset.name = chapterName;
                     chapterItem.querySelector(".delete-chapter").onclick = function () {
                         if (confirm("Are you sure you want to delete this chapter?")) {
@@ -204,7 +299,7 @@
                     };
                     chapterItem.onclick = function () {
                         document.getElementById("currentChapter").innerText = chapterName;
-                        document.getElementById("noteInput").value = localStorage.getItem(chapterName) || "";
+                        localStorage.setItem(chapterName, document.getElementById("noteInput").innerHTML);
                     };
                     chapterList.appendChild(chapterItem);
                     chapterItem.oncontextmenu = function (event) {
@@ -243,6 +338,66 @@
         function handleKeyPress(event) {
             if (event.key === "Enter") {
                 addSubject();
+            }
+        }
+        let bulletType = 'disc';
+        
+        function toggleBulletDropdown() {
+            let dropdown = document.getElementById('bulletDropdown');
+            let button = document.querySelector('.toolbar button');
+            if (dropdown.style.display === 'flex') {
+                dropdown.style.display = 'none';
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+                } else {
+                    dropdown.style.display = 'flex';
+                    let rect = button.getBoundingClientRect();
+                    dropdown.style.top = rect.bottom + window.scrollY + "px";
+                    dropdown.style.left = rect.left + "px";
+                    setTimeout(() => document.addEventListener('click', closeDropdownOnClickOutside));
+                }
+        }
+
+        function closeDropdownOnClickOutside(event) {
+            let dropdown = document.getElementById('bulletDropdown');
+            let button = document.querySelector('.toolbar button');
+            if (!dropdown.contains(event.target) && event.target !== button) {
+                dropdown.style.display = 'none';
+                document.removeEventListener('click', closeDropdownOnClickOutside);
+            }
+        }
+
+        
+        function setBulletType(type) {
+            bulletType = type;
+            document.getElementById('bulletDropdown').style.display = 'none'; 
+            insertBullet();
+        }
+        
+        function insertBullet() {
+            document.execCommand('insertUnorderedList');
+            let lists = document.getElementById('noteInput').getElementsByTagName('ul');
+            if (lists.length > 0) {
+                lists[lists.length - 1].style.listStyleType = bulletType;
+                }
+        }
+
+        
+        function pasteText() {
+            navigator.clipboard.readText().then(text => {
+                document.getElementById('noteInput').innerHTML += text + '<br>';
+            }).catch(err => console.error('Failed to paste:', err));
+        }
+        
+        function insertImage(event) {
+            let file = event.target.files[0];
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    let img = document.createElement('img');
+                    img.src = e.target.result;
+                    document.getElementById('noteInput').appendChild(img);
+                };
+                reader.readAsDataURL(file);
             }
         }
     </script>  
