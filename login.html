@@ -9,33 +9,37 @@
 <body>
     <div class="container">
         <div class="left">
-            <h2 id="Tagline" style="color: #fff;">Simplify Your Day,<h2>
-            <h2 id="Everyday" style="color: #fff;">Everyday</h2>
+            <h2 class="tagline">Simplify Your Day, <span class="highlight">Everyday</span></h2>
         </div>
 
         <div class="right">
             <div class="form-container login-form">
-                <h2>Login</h2>
+                <h2>Sign In</h2>
                 <div class="input-container">
                     <input type="text" placeholder="Username" required>
-                    <input type="password" placeholder="Password" required>
+                    <div class="password-container">
+                        <input type="password" id="password" placeholder="Password" required>
+                        <span class="eye-icon" onclick="togglePasswordVisibility()">👁️</span>
+                    </div>                    
                 </div>
                 <br>
-                <button>Login</button>
+                <button>Sign In</button>
                 <p class="forgot-password" onclick="toggleForgotPassword()">Forgot your password?</p>
                 <p class="toggle" onclick="toggleForm()">Don't have an account? Sign up</p>
             </div>
-
+            <!-- Sign Up Form -->
             <div class="form-container sign-up-form">
                 <h2>Sign Up</h2>
                 <div class="input-container">
                     <input type="text" placeholder="Full Name" required>
-                    <input type="email" placeholder="Email" required>
-                    <input type="password" placeholder="Password" required>
+                    <input type="email" id="email" placeholder="Email" required oninput="validateEmail()">
+                    <span id="emailError" class="error-message"></span>
+                    <input type="password" id="password" placeholder="Password" required oninput="validatePassword()">
+                    <span id="passwordError" class="error-message"></span>
                 </div>
                 <br>
-                <button>Sign Up</button>
-                <p class="toggle" onclick="toggleLogin()">Already have an account? Login</p>
+                <button onclick="checkValidation()">Sign Up</button>
+                <p class="toggle" onclick="toggleLogin()">Already have an account? Sign In</p>
             </div>
 
             <div class="form-container forgot-password-form">
@@ -45,7 +49,7 @@
                 </div>
                 <br>
                 <button>Reset Password</button>
-                <p class="toggle" onclick="toggleLogin()">Back to login</p>
+                <p class="toggle" onclick="toggleLogin()">Back to Sign In</p>
             </div>
         </div>
     </div>
