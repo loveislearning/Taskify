@@ -7,7 +7,7 @@
 
 body {
     background: #000;
-    color: white;
+    color: rgb(235, 225, 225);
     display: flex;
     justify-content: center;
     align-items: center;
