@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Planner</title>
     <style>
-        /* Your existing styles */
         * {
             margin: 0;
             padding: 0;
@@ -20,7 +19,6 @@
             flex-direction: column;
         }
 
-        /* Top Layer */
         .top-layer {
             position: fixed;
             top: 0;
@@ -41,14 +39,13 @@
         .settings-icon {
             font-size: 24px;
             cursor: pointer;
-            text-decoration: none; /* Removes underline */
-            color: white; /* Keeps it white */
+            text-decoration: none;
+            color: white;
         }
         .settings-icon:hover {
-            color: #ccc; /* Lighter shade on hover */
+            color: #ccc;
         }
 
-        /* Container for Sidebar & Main Content */
         .container {
             display: flex;
             flex-direction: row;
@@ -57,7 +54,6 @@
             width: 100%;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 260px;
             background: #272727;
@@ -88,20 +84,35 @@
             background: #393939;
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
             display: flex;
-            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
         }
         .content-box {
             background: #333;
             padding: 20px;
             border-radius: 8px;
-            width: 30%;
+            width: 100%;
+            height: 100%;
             text-align: center;
+        }
+        .progress-bar-container {
+            width: 100%;
+            background-color: #444;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-bar {
+            height: 20px;
+            background-color: #4CAF50;
+            text-align: center;
+            line-height: 20px;
+            color: white;
         }
     </style>
 </head>
@@ -115,9 +126,9 @@
         <div class="sidebar">
             <h2>Student Planner</h2>
             <ul>
-                <li>🔍 Search</li>
-                <li>🤖 Taskify AI</li>
                 <li>🏠 Home</li>
+                <li>🤖 Taskify AI</li>
+                <li>🔍 Search</li>
                 <li>📥 Inbox</li>
                 <li>📚 Class Notes</li>
                 <li>🚀 Getting Started</li>
@@ -129,9 +140,21 @@
         </div>
 
         <div class="main-content">
-            <div class="content-box">📅 Today's Tasks ✅</div>
-            <div class="content-box">📚 Study Plan</div>
-            <div class="content-box">📊 Progress Tracker</div>
+            <div class="content-box">
+                <h2>📊 Progress Tracker</h2>
+                <p>Course Completion:</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: 70%;">70%</div>
+                </div>
+                <p>Assignments Done:</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: 50%;">50%</div>
+                </div>
+                <p>Project Progress:</p>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: 85%;">85%</div>
+                </div>
+            </div>
         </div>
     </div>
 </body>
