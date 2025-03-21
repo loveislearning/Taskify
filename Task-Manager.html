@@ -8,12 +8,17 @@
         body { 
             font-family: Arial, sans-serif; 
             display: flex; 
+            flex-direction: column;
             height: 100vh; 
             margin: 0; 
             background: #121212; 
             color: white; 
             justify-content: center;
             align-items: center;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
         }
         .container {
             display: flex;
@@ -43,8 +48,11 @@
             cursor: pointer;
         }
         .today {
-            background: #007bff;
+            background: #00d4ff !important;
             font-weight: bold;
+        }
+        .has-task {
+            background: #00ff00 !important;
         }
         .selected {
             background: #ff9800 !important;
@@ -95,20 +103,29 @@
             padding: 5px;
             cursor: pointer;
             border-radius: 3px;
+            font-size: 14px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
 <body>
+    <h1>To-Do List</h1>
     <div class="container">
         <div class="calendar-container">
-            <button onclick="changeMonth(-1)">&lt;</button>
-            <h2 id="monthYear">Calendar</h2>
-            <button onclick="changeMonth(1)">&gt;</button>
+            <h2 id="monthYear">
+                <span id="prevMonth" style="cursor:pointer;" onclick="changeMonth(-1)">&lt;</span>
+                <span id="monthText"></span>
+                <span id="nextMonth" style="cursor:pointer;" onclick="changeMonth(1)">&gt;</span>
+            </h2>
             <div class="calendar" id="calendar"></div>
         </div>
         <div class="task-container">
             <h2>Task Manager</h2>
-            <input type="text" id="taskInput" placeholder="Enter new task" onkeypress="handleKeyPress(event)">
+            <input type="text" id="taskInput" placeholder="Enter new task">
             <button onclick="addTask()">Add Task</button>
             <ul id="taskList" class="task-list"></ul>
         </div>
@@ -117,6 +134,7 @@
         let selectedDate = null;
         let currentMonth = new Date().getMonth();
         let currentYear = new Date().getFullYear();
+        let tasks = {};
 
         document.addEventListener("DOMContentLoaded", () => {
             generateCalendar();
@@ -124,10 +142,10 @@
 
         function generateCalendar() {
             const calendar = document.getElementById("calendar");
-            const monthYear = document.getElementById("monthYear");
+            const monthText = document.getElementById("monthText");
             const today = new Date();
             const month = new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' });
-            monthYear.innerText = `${month} ${currentYear}`;
+            monthText.innerText = `${month}`;
 
             const firstDay = new Date(currentYear, currentMonth, 1).getDay();
             const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -145,60 +163,42 @@
                 if (i === today.getDate() && currentMonth === today.getMonth() && currentYear === today.getFullYear()) {
                     dayElement.classList.add("today");
                 }
+                if (tasks[dayElement.dataset.date]) {
+                    dayElement.classList.add("has-task");
+                }
                 calendar.appendChild(dayElement);
             }
         }
 
-        function changeMonth(step) {
-            currentMonth += step;
-            if (currentMonth < 0) {
-                currentMonth = 11;
-                currentYear--;
-            } else if (currentMonth > 11) {
-                currentMonth = 0;
-                currentYear++;
-            }
-            generateCalendar();
+        function selectDate(dayElement) {
+            document.querySelectorAll(".day").forEach(day => day.classList.remove("selected"));
+            selectedDate = dayElement.dataset.date;
+            dayElement.classList.add("selected");
+            displayTasks();
         }
 
-        function selectDate(element) {
-            if (selectedDate) {
-                selectedDate.classList.remove("selected");
+        function displayTasks() {
+            const taskList = document.getElementById("taskList");
+            taskList.innerHTML = "";
+            if (tasks[selectedDate]) {
+                tasks[selectedDate].forEach(task => {
+                    const taskItem = document.createElement("li");
+                    taskItem.classList.add("task-item");
+                    taskItem.innerHTML = `${task} <button class="remove-btn" onclick="removeTask('${task}')">✖</button>`;
+                    taskList.appendChild(taskItem);
+                });
             }
-            selectedDate = element;
-            selectedDate.classList.add("selected");
-            loadTasks(selectedDate.dataset.date);
         }
 
         function addTask() {
-            const taskText = document.getElementById("taskInput").value.trim();
-            if (!taskText || !selectedDate) {
-                return alert("Please select a date and enter a task.");
-            }
-
-            const task = { date: selectedDate.dataset.date, text: taskText };
-            saveTask(task);
-            document.getElementById("taskInput").value = "";
-            loadTasks(selectedDate.dataset.date);
-        }
-
-        function saveTask(task) {
-            let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-            tasks.push(task);
-            localStorage.setItem("tasks", JSON.stringify(tasks));
-        }
-
-        function loadTasks(date) {
-            const taskList = document.getElementById("taskList");
-            taskList.innerHTML = "";
-            let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-            tasks = tasks.filter(task => task.date === date);
-            tasks.forEach((task, index) => {
-                const li = document.createElement("li");
-                li.classList.add("task-item");
-                li.innerHTML = `${task.text} <button class="remove-btn" onclick="removeTask(${index})">X</button>`;
-                taskList.appendChild(li);
-            });
+            if (!selectedDate) return alert("Please select a date first.");
+            const taskInput = document.getElementById("taskInput");
+            if (taskInput.value.trim() === "") return;
+            if (!tasks[selectedDate]) tasks[selectedDate] = [];
+            tasks[selectedDate].push(taskInput.value.trim());
+            taskInput.value = "";
+            generateCalendar();
+            displayTasks();
         }
     </script>
 </body>
