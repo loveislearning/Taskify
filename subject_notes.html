@@ -40,6 +40,7 @@
             padding: 10px;
             color: white;
             align-items: center;
+            position: relative;
         }
         .toolbar button {
             background: #34495e;
@@ -52,10 +53,14 @@
         .toolbar button:hover {
             background: #1f2c3b;
         }
+        .bullet-container{
+            position: relative;
+        }
         .bullet-dropdown {
             display: none;
             position: absolute;
-            background: white;
+            top: 100%;
+            background: rgb(8, 0, 0);
             border: 1px solid #ccc;
             flex-direction: column;
             z-index: 1000;
@@ -206,7 +211,7 @@
 
     <div class="main-content">
         <div class="toolbar">
-            <div style="position: relative;">
+            <div class = "bullet-container">
                 <button onclick="toggleBulletDropdown()">➤ Add Bullet ▼</button>
                 <div class="bullet-dropdown" id="bulletDropdown">
                     <button onclick="setBulletType('disc')">• Disc</button>
@@ -341,53 +346,31 @@
             }
         }
         let bulletType = 'disc';
-        
-        function toggleBulletDropdown() {
-            let dropdown = document.getElementById('bulletDropdown');
-            let button = document.querySelector('.toolbar button');
-            if (dropdown.style.display === 'flex') {
-                dropdown.style.display = 'none';
-                document.removeEventListener('click', closeDropdownOnClickOutside);
-                } else {
-                    dropdown.style.display = 'flex';
-                    let rect = button.getBoundingClientRect();
-                    dropdown.style.top = rect.bottom + window.scrollY + "px";
-                    dropdown.style.left = rect.left + "px";
-                    setTimeout(() => document.addEventListener('click', closeDropdownOnClickOutside));
-                }
-        }
 
-        function closeDropdownOnClickOutside(event) {
+        function toggleBulletDropdown(event) {
             let dropdown = document.getElementById('bulletDropdown');
-            let button = document.querySelector('.toolbar button');
-            if (!dropdown.contains(event.target) && event.target !== button) {
+            dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
+            event.stopPropagation(); 
+        }
+        function closeDropdown(event) {
+            let dropdown = document.getElementById('bulletDropdown');
+            if (!event.target.closest('.bullet-container')) {
                 dropdown.style.display = 'none';
-                document.removeEventListener('click', closeDropdownOnClickOutside);
             }
         }
-
-        
         function setBulletType(type) {
-            bulletType = type;
-            document.getElementById('bulletDropdown').style.display = 'none'; 
-            insertBullet();
-        }
-        
-        function insertBullet() {
             document.execCommand('insertUnorderedList');
             let lists = document.getElementById('noteInput').getElementsByTagName('ul');
             if (lists.length > 0) {
-                lists[lists.length - 1].style.listStyleType = bulletType;
-                }
+                lists[lists.length - 1].style.listStyleType = type;
+            }
+            document.getElementById('bulletDropdown').style.display = 'none';
         }
-
-        
         function pasteText() {
             navigator.clipboard.readText().then(text => {
-                document.getElementById('noteInput').innerHTML += text + '<br>';
+                document.getElementById('noteInput').value += text + '\n';
             }).catch(err => console.error('Failed to paste:', err));
         }
-        
         function insertImage(event) {
             let file = event.target.files[0];
             if (file) {
@@ -400,6 +383,8 @@
                 reader.readAsDataURL(file);
             }
         }
+        
+        
     </script>  
 </body>
 </html>
