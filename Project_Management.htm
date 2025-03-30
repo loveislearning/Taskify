@@ -6,209 +6,231 @@
     <title>Project & Task Manager</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
         body {
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #1a1a1a;
+            background-color: #000;
             color: white;
-            line-height: 1.6;
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 50px auto;
-            background: rgba(24, 24, 24, 0.95);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
             text-align: center;
-            animation: fadeIn 1s ease-in-out;
         }
-
-        h1 {
-            font-size: 3rem;
+        .separator {
+            width: 80%;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            margin: 20px auto;
+        }
+        .project-section {
+            margin-top: 20px;
+        }
+        .project-section h2 {
             color: #00d4ff;
-            margin-bottom: 20px;
-            font-weight: 600;
+            margin-bottom: 10px;
         }
-
-        .input-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        input, button {
-            padding: 12px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 8px;
-            outline: none;
-            transition: transform 0.2s ease;
-        }
-
-        input {
-            width: 70%;
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
-            font-size: 1rem;
-        }
-
-        button {
-            background-color: #007bff;
-            color: white;
-            cursor: pointer;
-            font-size: 1.1rem;
-            transition: background 0.3s ease, transform 0.2s ease;
-            width: 200px;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
-        }
-
-        canvas {
-            margin-top: 30px;
-            max-width: 100%;
-            border-radius: 8px;
-        }
-
         .project-list {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 20px;
-            justify-content: center;
+            gap: 20px;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px;
+            justify-content: flex-start;
         }
-
         .project-card {
             background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
+            padding: 20px;
             border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-            width: 200px;
-            height: 150px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            width: 350px;
+            height: 250px;
             text-align: center;
-            animation: fadeIn 0.8s ease-in-out;
-        }
-
-        .project-card h3 {
             color: #00d4ff;
-            font-family: 'Montserrat', sans-serif;
+            box-shadow: 0 2px 5px rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            display: inline-flex;
+            flex-direction: column;
+            flex-shrink: 0;
         }
-
         .project-card:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(255, 255, 255, 0.3);
         }
-
-        .task-input {
-            display: none;
-            margin-top: 10px;
-            width: 90%;
-        }
-
         .task-list {
             list-style: none;
             padding: 0;
-            margin-top: 10px;
+            overflow-y: auto;
+            flex-grow: 1;
         }
-
         .task-item {
             display: flex;
             align-items: center;
             justify-content: space-between;
             background: rgba(255, 255, 255, 0.1);
             padding: 5px;
-            border-radius: 5px;
+            border-radius: 4px;
             margin-top: 5px;
-            width: 90%;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .task-item:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        .task-status {
+            display: flex;
+            gap: 5px;
+        }
+        #progressChart {
+            display: block;
+            margin: 30px auto;
+            width: 80%;
+            height: 500px;
+            transition: opacity 0.3s ease-in-out;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+        }
+        button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+        #new-project {
+            transition: border-color 0.3s ease-in-out;
+        }
+        #new-project:focus {
+            border-color: #00d4ff;
+        }
+        .priority-select {
+            margin-top: 10px;
+            padding: 5px;
+            border-radius: 4px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Project & Task Manager</h1>
-        <div class="input-container">
-            <input type="text" id="new-project" placeholder="Enter project name" />
-            <button onclick="addProject()">Add Project</button>
-        </div>
-        <canvas id="progressChart"></canvas>
-        <div class="project-list" id="projectList"></div>
-    </div>
+    <h1>Project & Task Manager</h1>
+    <div class="separator"></div>
+    <input type="text" id="new-project" placeholder="Enter project name">
+    <select id="project-priority" class="priority-select">
+        <option value="High">High</option>
+        <option value="Medium">Medium</option>
+        <option value="Low">Low</option>
+    </select>
+    <button onclick="addProject()">Add Project</button>
+    <canvas id="progressChart"></canvas>
+    <div class="separator"></div>
+    <div id="projectList"></div>
 
     <script>
-        let projects = [];
-        let progressChart = null;
+        var projects = JSON.parse(localStorage.getItem('projects')) || [];
+        var progressChart = null;
+
+        function saveProjects() {
+            localStorage.setItem('projects', JSON.stringify(projects));
+        }
 
         function updateChart() {
             const ctx = document.getElementById('progressChart').getContext('2d');
             const projectNames = projects.map(p => p.name);
-            const taskCounts = projects.map(p => p.tasks.length);
-
-            if (progressChart) {
-                progressChart.destroy();
-            }
-
+            const pendingTasks = projects.map(p => p.tasks.filter(t => t.status !== 'Done').length);
+            const completedTasks = projects.map(p => p.tasks.filter(t => t.status === 'Done').length);
+            if (progressChart) progressChart.destroy();
             progressChart = new Chart(ctx, {
                 type: 'bar',
-                data: {
-                    labels: projectNames,
-                    datasets: [{
-                        label: 'Number of Tasks',
-                        data: taskCounts,
-                        backgroundColor: 'rgba(0, 212, 255, 0.5)',
-                        borderColor: 'rgba(0, 212, 255, 1)',
-                        borderWidth: 1
-                    }]
+                data: { 
+                    labels: projectNames, 
+                    datasets: [
+                        { label: 'Pending Tasks', data: pendingTasks, backgroundColor: '#00d4ff', borderColor: '#0056b3', borderWidth: 1 },
+                        { label: 'Completed Tasks', data: completedTasks, backgroundColor: '#007bff', borderColor: '#004494', borderWidth: 1 }
+                    ]
                 },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: { beginAtZero: true }
-                    }
-                }
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
             });
         }
 
         function addProject() {
-            let projectName = document.getElementById('new-project').value;
-            if (projectName.trim() === "") return;
-
-            let project = { name: projectName, tasks: [] };
-            projects.push(project);
-            displayProjects();
+            let projectName = document.getElementById('new-project').value.trim();
+            let projectPriority = document.getElementById('project-priority').value;
+            if (!projectName) return;
+            projects.push({ name: projectName, tasks: [], priority: projectPriority });
+            saveProjects();
             document.getElementById('new-project').value = "";
+            displayProjects();
+            updateChart();
+        }
+
+        function addTask(event, projectIndex) {
+            if (event.key === 'Enter') {
+                let taskText = event.target.value.trim();
+                if (!taskText) return;
+                projects[projectIndex].tasks.push({ text: taskText, status: 'Started' });
+                saveProjects();
+                displayProjects();
+                updateChart();
+            }
+        }
+
+        function changeTaskStatus(projectIndex, taskIndex, status) {
+            projects[projectIndex].tasks.forEach((task, index) => {
+                if (index === taskIndex) {
+                    task.status = status;
+                }
+            });
+            saveProjects();
+            displayProjects();
             updateChart();
         }
 
         function displayProjects() {
             let projectList = document.getElementById('projectList');
             projectList.innerHTML = "";
-            projects.forEach((project, index) => {
-                let div = document.createElement('div');
-                div.classList.add('project-card');
-                div.innerHTML = `<h3>${project.name}</h3>
-                    <input type='text' class='task-input' placeholder='Add Task' onkeypress='handleTaskEntry(event, ${index})'>
-                    <ul class='task-list' id='taskList${index}'></ul>`;
-                div.onclick = () => toggleTaskInput(div, index);
-                projectList.appendChild(div);
+
+            const priorityOrder = ["High", "Medium", "Low"];
+
+            priorityOrder.forEach(priority => {
+                let priorityProjects = projects.filter(project => project.priority === priority);
+
+                if (priorityProjects.length > 0) {
+                    let section = document.createElement('div');
+                    section.classList.add('project-section');
+
+                    let heading = document.createElement('h2');
+                    heading.textContent = priority + " Priority";
+                    section.appendChild(heading);
+
+                    let listDiv = document.createElement('div');
+                    listDiv.classList.add('project-list');
+
+                    priorityProjects.forEach(project => {
+                        let projectDiv = document.createElement('div');
+                        projectDiv.classList.add('project-card');
+                        projectDiv.innerHTML = `
+                            <h3>${project.name}</h3>
+                            <input type='text' placeholder='Add Task' onkeypress='addTask(event, ${projects.indexOf(project)})'>
+                            <ul class='task-list'>
+                                ${project.tasks.map((task, taskIndex) => `
+                                    <li class='task-item'>
+                                        <span>${task.text}</span>
+                                        <div class='task-status'>
+                                            <label><input type='radio' name='status-${projects.indexOf(project)}-${taskIndex}' value='Started' onchange='changeTaskStatus(${projects.indexOf(project)}, ${taskIndex}, "Started")' ${task.status === 'Started' ? 'checked' : ''}> Started</label>
+                                            <label><input type='radio' name='status-${projects.indexOf(project)}-${taskIndex}' value='In Progress' onchange='changeTaskStatus(${projects.indexOf(project)}, ${taskIndex}, "In Progress")' ${task.status === 'In Progress' ? 'checked' : ''}> In Progress</label>
+                                            <label><input type='radio' name='status-${projects.indexOf(project)}-${taskIndex}' value='Done' onchange='changeTaskStatus(${projects.indexOf(project)}, ${taskIndex}, "Done")' ${task.status === 'Done' ? 'checked' : ''}> Done</label>
+                                        </div>
+                                    </li>`).join('')}
+                            </ul>
+                        `;
+                        listDiv.appendChild(projectDiv);
+                    });
+                    section.appendChild(listDiv);
+                    projectList.appendChild(section);
+                }
             });
         }
+
+        displayProjects();
+        updateChart();
     </script>
 </body>
 </html>
