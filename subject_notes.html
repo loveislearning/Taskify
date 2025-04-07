@@ -103,8 +103,8 @@
         }
         .resize-handle {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 5px;
+            height: 5px;
             background: rgb(7, 0, 0);
             cursor: nwse-resize;
         }
@@ -222,6 +222,14 @@
             padding: 10px;
             border-radius: 5px;
         }
+        .image-container {
+            position: relative;
+            display: inline-block;
+            margin: 10px 0;
+            max-width: 100%;
+            border: 1px solid #ccc;
+        }
+
     </style>
 </head>
 <body>
@@ -250,7 +258,7 @@
                 </div>
             </div>
             <button onclick="pasteText()">📋 Paste</button>
-            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="insertImage(event)">
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
             <button onclick="document.getElementById('imageUpload').click()">🖼 Insert Image</button>
             
         </div>
@@ -284,7 +292,6 @@
 
             let chapterActions = document.createElement("div");
             chapterActions.classList.add("chapter-actions");
-
             let pinButton = document.createElement("button");
             pinButton.innerText = "📌";
             pinButton.classList.add("pin");
@@ -392,95 +399,97 @@
             }
             document.getElementById('bulletDropdown').style.display = 'none';
         }
-        document.addEventListener('click', function(event) {
-            let dropdown = document.getElementById('bulletDropdown');
-            if (!event.target.closest('.bullet-container')) {
-                dropdown.style.display = 'none';
-            }
-        });
         function pasteText() {
             navigator.clipboard.readText().then(text => {
-                document.getElementById('noteInput').value += text + '\n';
+                document.getElementById('noteInput').insertAdjacentText('beforeend', text + '\n');
             }).catch(err => console.error('Failed to paste:', err));
         }  
 
-        function insertImage(event) {
-            let file = event.target.files[0];
-            if (file) {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    let imgContainer = document.createElement('div');
-                    imgContainer.classList.add('image-container');
-                    imgContainer.style.position = 'relative';
-                    imgContainer.style.display = 'inline-block';
-                    let img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.maxWidth = '100%';
-                    img.style.height = 'auto';
-                    img.style.display = 'block';
-                    
-                    let resizeHandleCorner = createResizeHandle('corner', 'nwse-resize', '0', '0');
-                    let resizeHandleRight = createResizeHandle('right', 'ew-resize', '50%', '0');
-                    let resizeHandleBottom = createResizeHandle('bottom', 'ns-resize', '0', '50%');
+        function insertImage(src) {
+            let imgContainer = document.createElement('div');
+            imgContainer.classList.add('image-container');
+            imgContainer.style.position = 'relative'; 
+            let img = document.createElement('img');
+            img.src = src;
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+            img.style.display = 'block';
+            img.style.resize = 'none';
+            img.style.width = '300px';
+            img.style.height = '200px';
+            imgContainer.appendChild(img);
 
-        function createResizeHandle(className, cursor, bottom, right) {
-                let handle = document.createElement('div');
-                handle.classList.add('resize-handle', className);
-                handle.style.position = 'absolute';
-                handle.style.width = '10px';
-                handle.style.height = '10px';
-                handle.style.background = '#000';
-                handle.style.cursor = cursor;
-                handle.style.bottom = bottom;
-                handle.style.right = right;
-                handle.style.transform = 'translate(50%, 50%)';
-                return handle;
+            let resizeHandleCorner = document.createElement('div');
+            resizeHandleCorner.classList.add('resize-handle', 'corner');
+
+            let resizeHandleRight = document.createElement('div');
+            resizeHandleRight.classList.add('resize-handle', 'right');
+
+            let resizeHandleBottom = document.createElement('div');
+            resizeHandleBottom.classList.add('resize-handle', 'bottom');
+
+            imgContainer.appendChild(resizeHandleCorner);
+            imgContainer.appendChild(resizeHandleRight);
+            imgContainer.appendChild(resizeHandleBottom);
+
+            function updateHandlePositions() {
+                resizeHandleCorner.style.position = 'absolute';
+                resizeHandleCorner.style.right = '0';
+                resizeHandleCorner.style.bottom = '0';
+                resizeHandleRight.style.position = 'absolute';
+                resizeHandleRight.style.right = '0';
+                resizeHandleRight.style.top = `${img.clientHeight / 2 - 5}px`;
+                resizeHandleBottom.style.position = 'absolute';
+                resizeHandleBottom.style.left = `${img.clientWidth / 2 - 5}px`; 
+                resizeHandleBottom.style.bottom = '0';
             }
-        
 
-
-        function makeResizable(handle, adjustWidth, adjustHeight) {
-                handle.addEventListener('mousedown', function (event) {
+            function makeResizable(handle, isWidth, isHeight) {
+                handle.addEventListener('mousedown', function(event) {
                     event.preventDefault();
                     document.addEventListener('mousemove', resizeImage);
                     document.addEventListener('mouseup', stopResize);
-
-                    let startX = event.clientX;
-                    let startY = event.clientY;
+                    let initialX = event.clientX;
+                    let initialY = event.clientY;
                     let startWidth = img.clientWidth;
                     let startHeight = img.clientHeight;
 
-        function resizeImage(e) {
-                        if (adjustWidth) {
-                            img.style.width = startWidth + (e.clientX - startX) + 'px';
-                        }
-                        if (adjustHeight) {
-                            img.style.height = startHeight + (e.clientY - startY) + 'px';
-                        }
+                    function resizeImage(e) {
+                        if (isWidth) {
+                            img.style.width = startWidth + (e.clientX - initialX) + 'px';
+                            }
+                        if (isHeight) {
+                            img.style.height = startHeight + (e.clientY - initialY) + 'px';
+                            }
+                        updateHandlePositions(); 
                     }
 
-        function stopResize() {
+                    function stopResize() {
                         document.removeEventListener('mousemove', resizeImage);
                         document.removeEventListener('mouseup', stopResize);
                     }
                 });
             }
 
-            
             makeResizable(resizeHandleCorner, true, true);
             makeResizable(resizeHandleRight, true, false);
             makeResizable(resizeHandleBottom, false, true);
 
-          
-            imgContainer.appendChild(img);
-            imgContainer.appendChild(resizeHandleCorner);
-            imgContainer.appendChild(resizeHandleRight);
-            imgContainer.appendChild(resizeHandleBottom);
+            updateHandlePositions(); 
             document.getElementById('noteInput').appendChild(imgContainer);
-        };
-        reader.readAsDataURL(file);
-    }
-}
+        }
+
+        
+        function handleImageUpload(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        insertImage(e.target.result); 
+                        };
+                        reader.readAsDataURL(file);
+                }
+            }
 
         
     </script>  
