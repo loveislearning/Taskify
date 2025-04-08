@@ -166,7 +166,7 @@
 <body>
 
   <header>
-    <div class="logo">♻️ <span>Recycle</span>Bin</div>
+    <div class="logo"><span>Recycle</span>Bin</div>
     <button class="sign-in">Sign In</button>
   </header>
 
@@ -181,13 +181,14 @@
   </section>
 
   <section class="cards" id="file-container">
+    <!-- File cards will be added here dynamically -->
   </section>
 
   <script>
     const deletedItems = [
-      { id: 1, name: \"Document.pdf\" },
-      { id: 2, name: \"Image.png\" },
-      { id: 3, name: \"Notes.txt\" },
+      { id: 1, name: "Document.pdf" },
+      { id: 2, name: "Image.png" },
+      { id: 3, name: "Notes.txt" },
     ];
 
     const container = document.getElementById('file-container');
@@ -197,10 +198,10 @@
       card.className = 'card';
 
       card.innerHTML = `
-        <div class=\"file-name\">${item.name}</div>
-        <div class=\"card-buttons\">
-          <button class=\"restore\">Restore</button>
-          <button class=\"delete\">Delete</button>
+        <div class="file-name">${item.name}</div>
+        <div class="card-buttons">
+          <button class="restore">Restore</button>
+          <button class="delete">Delete</button>
         </div>
       `;
 
