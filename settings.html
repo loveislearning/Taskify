@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Settings</title>
   <style>
-    
     :root {
       --bg-gradient-start: #2a2a2a;
       --bg-gradient-end: #1e1e1e;
@@ -102,7 +101,7 @@
       color: white;
     }
     button {
-      margin-top: 15px;
+      margin-top: 12px;
       padding: 12px 20px;
       border: none;
       border-radius: 8px;
@@ -129,7 +128,13 @@
       width: 100%;
       text-align: center;
     }
-    /* Responsive Design */
+    .status-message {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #00d1ff;
+      display: none;
+    }
+
     @media (max-width: 768px) {
       body {
         padding: 15px;
@@ -220,12 +225,14 @@
         </select>
       </div>
       <button type="submit">Save Settings</button>
+      <button type="button" onclick="resetSettings()">Reset Settings</button>
     </form>
     <div class="gmail-info" id="gmail-info" tabindex="0" aria-label="Logged in as">Logged in as: user@example.com</div>
     <button onclick="switchEmail()">Switch Email</button>
+    <div class="status-message" id="save-message">✅ Settings saved successfully!</div>
   </main>
+
   <script>
-    // Save settings to localStorage and prevent form submission
     function saveSettings(event) {
       event.preventDefault();
       const settings = {
@@ -238,10 +245,30 @@
         appLanguage: document.getElementById("app-language").value,
       };
       localStorage.setItem("settings", JSON.stringify(settings));
-      alert("Settings Saved Successfully!");
+
+      const msg = document.getElementById("save-message");
+      msg.textContent = "✅ Settings saved successfully!";
+      msg.style.display = "block";
+      setTimeout(() => (msg.style.display = "none"), 3000);
     }
 
-    // Load settings from localStorage on page load
+    function resetSettings() {
+      localStorage.removeItem("settings");
+
+      document.getElementById("theme").value = "dark";
+      document.getElementById("notifications").value = "yes";
+      document.getElementById("username").value = "";
+      document.getElementById("task-sort").value = "date";
+      document.getElementById("preferences").value = "default";
+      document.getElementById("start-week").value = "sunday";
+      document.getElementById("app-language").value = "english";
+
+      const msg = document.getElementById("save-message");
+      msg.textContent = "🔄 Settings have been reset.";
+      msg.style.display = "block";
+      setTimeout(() => (msg.style.display = "none"), 3000);
+    }
+
     function loadSettings() {
       const savedSettings = localStorage.getItem("settings");
       if (savedSettings) {
@@ -256,7 +283,6 @@
       }
     }
 
-    // Dummy switchEmail function
     function switchEmail() {
       const newEmail = prompt("Enter new email:");
       if (newEmail && newEmail.trim() !== "") {
@@ -267,7 +293,6 @@
       }
     }
 
-    // Load saved settings when the DOM is ready
     window.addEventListener("DOMContentLoaded", loadSettings);
   </script>
 </body>
