@@ -31,10 +31,12 @@
       padding: 0 25px;
       z-index: 1000;
     }
-    .top-layer h1 {
-      font-size: 50px;
-      font-weight: 600;
+
+    .logo {
+      height: 60px;
+      width: auto;
     }
+
     .settings-icon {
       font-size: 24px;
       cursor: pointer;
@@ -78,7 +80,7 @@
       font-size: 14px;
       border-radius: 6px;
       transition: all 0.3s ease;
-      background: transparent; /* Ensure default is clean */
+      background: transparent;
       font-weight: normal;
     }
     .sidebar ul li:hover {
@@ -121,8 +123,8 @@
     }
 
     @media (max-width: 768px) {
-      .top-layer h1 {
-        font-size: 36px;
+      .top-layer .logo {
+        height: 45px;
       }
       .container {
         flex-direction: column;
@@ -147,7 +149,7 @@
 </head>
 <body>
   <div class="top-layer">
-    <h1>Taskify</h1>
+    <img src="logo1.png" alt="Taskify Logo" class="logo" />
     <a href="/settings.html" class="settings-icon">⚙</a>
   </div>
 
@@ -162,7 +164,7 @@
         <li>📚 Class Notes</li>
         <li>🚀 Getting Started</li>
         <li>📝 Lesson Plans</li>
-        <li>📅 Student Planner</li> <!-- Not selected -->
+        <li>📅 Student Planner</li>
         <li>📂 Templates</li>
         <li>🗑 Trash</li>
       </ul>
