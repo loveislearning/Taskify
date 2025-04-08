@@ -78,7 +78,7 @@ We welcome contributions! To contribute:
 - [Shubhi Govil](https://github.com/shubhi200826)
 - [Keshav Angra](https://github.com/keshav260820)
 - [Salaj](https://github.com/Salaj0501)
-- [sajal](https://github.com/sajalvasisht)
+- [Sajal Vasisht](https://github.com/sajalvasisht)
 
 ## 🎯 Future Enhancements
 - 🔗 **AI Task Suggestions** - Smart recommendations for task scheduling
