@@ -30,13 +30,23 @@
             transition: all 0.3s ease-in-out;
         }
         .logo {
+            display: flex;
+            align-items: center;
             font-size: 30px;
             font-weight: bold;
             transition: transform 0.3s ease-in-out;
-            margin-left: 5%; 
+            margin-left: 5%;
+            gap: 10px;
         }
         .logo:hover {
             transform: scale(1.1);
+        }
+        .logo-img {
+            height: 60px;
+            width: 200px;
+        }
+        .logo-text {
+            color: white;
         }
         .btn {
             padding: 12px 24px;
@@ -49,7 +59,7 @@
         .btn-auth {
             display: flex;
             gap: 15px;
-            margin-right: 5%; 
+            margin-right: 5%;
         }
         .btn-signin {
             background: linear-gradient(135deg, #007bff, #0056b3);
@@ -62,8 +72,7 @@
         }
         .hero {
             padding: 120px 20px 40px;
-            font-size: 1000px;
-            padding-top: 60px; 
+            padding-top: 60px;
         }
         .hero h1 {
             font-size: 150px;
@@ -82,18 +91,14 @@
             font-size: 20px;
             color: #aaa;
             max-width: 600px;
-            margin: 10px auto;
-            margin-bottom: 10px;
-            margin-top: 0;
+            margin: 10px auto 10px;
         }
-
         .buttons {
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-top: 15px; 
+            margin-top: 15px;
         }
-
         .btn-primary {
             background: linear-gradient(135deg, #007bff, #00d4ff);
             color: white;
@@ -121,7 +126,10 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo">&#128221; Taskify</div>
+        <div class="logo">
+            <img src="/Taskify.png" alt="Taskify Logo" class="logo-img">
+            <span class="logo-text"></span>
+        </div>
         <div class="btn-auth">
             <a href="/login.html" class="btn btn-signin">Sign In</a>
         </div>
