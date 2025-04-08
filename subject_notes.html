@@ -228,7 +228,36 @@
             margin: 10px 0;
             max-width: 100%;
             border: 1px solid #ccc;
+            vertical-align: middle;
+            user-select: none;
         }
+        .align-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #000;
+            border: 1px solid #ccc;
+            flex-direction: column;
+            z-index: 1000;
+            width: 150px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .align-dropdown button {
+            padding: 5px;
+            border: none;
+            background: black;
+            color: white;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+        }
+
+        .align-dropdown button:hover {
+            background: #444;
+        }
+
 
     </style>
 </head>
@@ -241,7 +270,7 @@
         </div>
         <div id="subjectList"></div>
     </div>
-
+    
     <div class="main-content">
         <div class="toolbar">
             <div class = "bullet-container">
@@ -260,6 +289,14 @@
             <button onclick="pasteText()">📋 Paste</button>
             <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
             <button onclick="document.getElementById('imageUpload').click()">🖼 Insert Image</button>
+            <div class="align-container" style="position: relative;">
+                <button onclick="toggleAlignDropdown()">🖼 Align Image ▼</button>
+                <div class="align-dropdown" id="alignDropdown" style="display: none; position: absolute; top: 100%; left: 0; background: black; color: white; border: 1px solid #ccc; z-index: 1000;">
+                    <button onclick="alignSelectedImage('left')">🡸 Align Left</button>
+                    <button onclick="alignSelectedImage('center')">⇆ Center</button>
+                    <button onclick="alignSelectedImage('right')">🡺 Align Right</button>
+                </div>
+            </div>           
             
         </div>
 
@@ -267,8 +304,12 @@
             <h2 id="currentChapter">Select a Chapter</h2>
             <div id="noteInput" contenteditable="true" style="border: 1px solid #ccc; padding: 10px;"></div>
         </div>
-    </div>
 
+        <div class="image-container" contenteditable="false" style="display: block;">
+            <img src="..." class="resizable-image">
+        </div>                  
+        
+    </div>
 
     <script>
         function addSubject() {
@@ -477,6 +518,11 @@
 
             updateHandlePositions(); 
             document.getElementById('noteInput').appendChild(imgContainer);
+
+            const noteInput = document.getElementById('noteInput');
+            noteInput.appendChild(document.createElement('br'));
+            noteInput.appendChild(imgContainer);
+            noteInput.appendChild(document.createElement('br'));
         }
 
         
@@ -489,8 +535,60 @@
                         };
                         reader.readAsDataURL(file);
                 }
+        }
+
+        function toggleAlignDropdown() {
+            const dropdown = document.getElementById("alignDropdown");
+            dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+            document.addEventListener("click", closeAlignDropdown);
+        }
+
+        function closeAlignDropdown(event) {
+            if (!event.target.closest(".align-container")) {
+                document.getElementById("alignDropdown").style.display = "none";
+                document.removeEventListener("click", closeAlignDropdown);
+            }
+        }
+
+        function alignSelectedImage(direction) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+            let node = range.startContainer;
+            while (node && node.nodeType !== 1) {
+                node = node.parentNode;
+            }
+            const container = node.closest(".image-container");
+            if (!container) {
+                alert("Please select an image first.");
+                return;
+            }
+            container.style.display = "block";
+            container.style.textAlign = "";
+            if (direction === "left") {
+                container.style.textAlign = "left";
+                } else if (direction === "center") {
+                    container.style.textAlign = "center";
+                    } else if (direction === "right") {
+                        container.style.textAlign = "right";
+                    }
+            const img = container.querySelector("img");
+            if (img) {
+                img.style.display = "inline-block";
             }
 
+            document.getElementById("alignDropdown").style.display = "none";
+        }
+
+        document.addEventListener("click", function (e) {
+            if (e.target.tagName === "IMG") {
+                const range = document.createRange();
+                range.selectNode(e.target);
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        });
         
     </script>  
 </body>
