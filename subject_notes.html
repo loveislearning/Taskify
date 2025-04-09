@@ -256,7 +256,7 @@
 
         .align-dropdown button:hover {
             background: #444;
-        }
+        }   
 
 
     </style>
@@ -270,7 +270,7 @@
         </div>
         <div id="subjectList"></div>
     </div>
-    
+
     <div class="main-content">
         <div class="toolbar">
             <div class = "bullet-container">
@@ -296,7 +296,21 @@
                     <button onclick="alignSelectedImage('center')">⇆ Center</button>
                     <button onclick="alignSelectedImage('right')">🡺 Align Right</button>
                 </div>
-            </div>           
+            </div>  
+            <div class="font-size-container" style="display: flex; gap: 8px;">                
+                <select onchange="changeFontSize(this.value)" style="background-color:  #34495e; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer;">                
+                    <option value="">Font Size</option>
+                    <option value="12px">12px</option>
+                    <option value="14px">14px</option>
+                    <option value="16px">16px</option>
+                    <option value="18px">18px</option>
+                    <option value="20px">20px</option>
+                    <option value="24px">24px</option>
+                    <option value="28px">28px</option>
+                    <option value="32px">32px</option>
+                </select>
+        
+            </div>                    
             
         </div>
 
@@ -589,6 +603,19 @@
                 sel.addRange(range);
             }
         });
+
+        function changeFontSize(size) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+            const span = document.createElement("span");
+            span.style.fontSize = size;
+            span.appendChild(range.extractContents());
+            range.insertNode(span);
+            range.setStartAfter(span);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
         
     </script>  
 </body>
