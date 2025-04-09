@@ -105,6 +105,37 @@
       height: 100% !important;
       touch-action: none;
     }
+
+    /* Settings Panel */
+    #settingsPanel {
+      position: fixed;
+      top: 100px;
+      right: -320px;
+      width: 300px;
+      height: calc(100vh - 100px);
+      background: #1a1a1a;
+      color: #fff;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.5);
+      padding: 20px;
+      z-index: 2000;
+      overflow-y: auto;
+      transition: right 0.3s ease;
+    }
+    #settingsPanel.active {
+      right: 0;
+    }
+    #settingsPanel h3 {
+      margin-bottom: 20px;
+    }
+    #settingsPanel ul {
+      list-style: none;
+      padding: 0;
+    }
+    #settingsPanel ul li {
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
     @media (max-width: 768px) {
       .top-layer .logo {
         height: 45px;
@@ -133,8 +164,9 @@
 <body>
   <div class="top-layer">
     <img src="logo1.png" alt="Taskify Logo" class="logo" />
-    <a href="/settings.html" class="settings-icon">⚙</a>
+    <span class="settings-icon" onclick="toggleSettings()">⚙</span>
   </div>
+
   <div class="container">
     <div class="sidebar">
       <h2>Student Planner</h2>
@@ -155,9 +187,29 @@
       </div>
     </div>
   </div>
-  <script>
-    const ctx = document.getElementById('progressChart').getContext('2d');
 
+  <!-- Settings Panel -->
+  <div id="settingsPanel">
+    <h3>⚙ Settings</h3>
+    <ul>
+      <li>👤 My Account</li>
+      <li>🔔 Notifications and Sounds</li>
+      <li>🔒 Privacy and Security</li>
+      <li>💬 Chat Settings</li>
+      <li>📁 Folders</li>
+      <li>⚙ Advanced</li>
+      <li>🎤 Speakers and Camera</li>
+      <li>🔋 Battery and Animations</li>
+      <li>🌐 Language</li>
+    </ul>
+  </div>
+
+  <script>
+    function toggleSettings() {
+      document.getElementById('settingsPanel').classList.toggle('active');
+    }
+
+    const ctx = document.getElementById('progressChart').getContext('2d');
     function getWeeklyTaskData() {
       const data = [0, 0, 0, 0];
       for (let w = 0; w < 4; w++) {
@@ -168,7 +220,6 @@
       }
       return data;
     }
-
     const chart = new Chart(ctx, {
       type: 'line',
       data: {
