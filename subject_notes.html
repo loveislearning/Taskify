@@ -310,7 +310,25 @@
                     <option value="32px">32px</option>
                 </select>
         
-            </div>                    
+            </div>   
+            
+            <div class="font-style-container" style="position: relative;">
+                <select 
+                    onchange="changeFontStyle(this.value)" 
+                    style="background-color:#34495e; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;"
+                >
+                    <option value="">Font Style</option>
+                    <option value="Arial">Arial</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Comic Sans MS">Comic Sans</option>
+                    <option value="Impact">Impact</option>
+                    <option value="Italic">Italic</option>
+                </select>
+            </div>
+            
             
         </div>
 
@@ -616,6 +634,20 @@
             selection.removeAllRanges();
             selection.addRange(range);
         }
+
+        function changeFontStyle(font) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+            const span = document.createElement("span");
+            span.style.fontFamily = font;
+            span.appendChild(range.extractContents());
+            range.insertNode(span);
+            range.setStartAfter(span);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
+
         
     </script>  
 </body>
