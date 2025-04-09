@@ -77,7 +77,7 @@ We welcome contributions! To contribute:
 - [Shally Chauhan](https://github.com/mewwasperfect)
 - [Shubhi Govil](https://github.com/shubhi200826)
 - [Keshav Angra](https://github.com/keshav260820)
-- [Salaj](https://github.com/Salaj0501)
+- [Salaj Kumar](https://github.com/Salaj0501)
 - [Sajal Vasisht](https://github.com/sajalvasisht)
 
 ## 🎯 Future Enhancements
