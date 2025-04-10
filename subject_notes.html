@@ -328,6 +328,20 @@
                     <option value="Italic">Italic</option>
                 </select>
             </div>
+
+            <div class="highlight-container" style="position: relative;">
+                <select onchange="highlightText(this.value)" 
+                        style="background-color: #34495e; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">
+                  <option value="">Highlight</option>
+                  <option value="yellow">Yellow</option>
+                  <option value="lightgreen">Light Green</option>
+                  <option value="lightblue">Light Blue</option>
+                  <option value="pink">Pink</option>
+                  <option value="orange">Orange</option>
+                  <option value="none">Remove Highlight</option>
+                </select>
+              </div>
+              
             
             
         </div>
@@ -648,6 +662,23 @@
             selection.addRange(range);
         }
 
+        function highlightText(color) {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+            const span = document.createElement("span");
+            if (color === "none") {
+                span.style.backgroundColor = "";
+                } else {
+                    span.style.backgroundColor = color;
+                }
+
+            span.appendChild(range.extractContents());
+            range.insertNode(span);
+            range.setStartAfter(span);
+            selection.removeAllRanges();
+            selection.addRange(range);
+        }
         
     </script>  
 </body>
