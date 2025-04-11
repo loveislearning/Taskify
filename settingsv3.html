@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskify - Settings</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* Light text */
+        }
+
+        .settings-header {
+            background-color: #1E1E1E;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            width: 50px;
+            margin-right: 10px;
+        }
+
+        h1 {
+            font-size: 24px;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 200px;
+            background-color: #1E1E1E; /* Dark grey */
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 2rem;
+        }
+
+        .sidebar button {
+            display: block;
+            width: 90%;
+            margin: 10px auto; /* Center buttons in the sidebar */
+            padding: 1rem;
+            border-radius: 5px;
+            border: none;
+            background-color: #333333; /* Default button background */
+            color: #ffffff; /* White text */
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .sidebar button.active {
+            background-color: #4CAF50; /* Highlight active tab */
+        }
+
+        .sidebar button:hover {
+            background-color: #444444; /* Slight hover effect */
+        }
+
+        /* Main Content Area */
+        .settings-content {
+            margin-left: 200px; /* Offset for sidebar */
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Forms */
+        form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        form input, form select, form button {
+            margin-bottom: 1rem;
+        }
+
+        form input, form select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: none;
+            background-color: #333333; /* Dark input fields */
+            color:white ;
+}
+
+form button { 
+background
+-color: #4CAF50; /* Green button */
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+    </style>    
