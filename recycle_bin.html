@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Recycle Bin</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #fdfdfd;
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      font-weight: 600;
+    }
+
+    ul.recycle-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    li.recycle-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed #ccc;
+      padding-bottom: 0.75rem;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .fade-out {
+      opacity: 0;
+      transform: translateX(100px);
+    }
+
+    .item-content {
+      flex-grow: 1;
+      font-size: 1.1rem;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-left: 1rem;
+    }
+
+    .actions button {
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 0.95rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    .restore-btn {
+      color: #388e3c;
+      border: 1px solid #388e3c;
+    }
+
+    .restore-btn:hover {
+      background: #e8f5e9;
+    }
+
+    .delete-btn {
+      color: #d32f2f;
+      border: 1px solid #d32f2f;
+    }
+
+    .delete-btn:hover {
+      background: #fdecea;
+    }
+
+    .clear-all {
+      display: block;
+      margin: 3rem auto 1rem;
+      background-color: #ff7043;
+      color: white;
+      padding: 0.8rem 1.8rem;
+      border: none;
+      border-radius: 24px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .clear-all:hover {
+      background-color: #f4511e;
+    }
+
+    .history {
+      max-width: 600px;
+      margin: 0 auto;
+      margin-top: 2rem;
+      background: #f1f1f1;
+      padding: 1rem;
+      border-radius: 12px;
+    }
+
+    .history h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.2rem;
+    }
+
+    .history ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .history li {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .history button {
+      font-size: 0.8rem;
+      background: none;
+      border: 1px solid #444;
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 0.2rem 0.6rem;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Recycle Bin</h2>
+
+  <ul class="recycle-list" id="recycleList">
+    <li class="recycle-item">
+      <span class="item-content">🗒️ Task: Buy groceries</span>
+      <div class="actions">
+        <button class="restore-btn">Restore</button>
+        <button class="delete-btn">Delete</button>
+      </div>
+    </li>
+    <li class="recycle-item">
+      <span class="item-content">📄 File: report.docx</span>
+      <div class="actions">
+        <button class="restore-btn">Restore</button>
+        <button class="delete-btn">Delete</button>
+      </div>
+    </li>
+    <li class="recycle-item">
+      <span class="item-content">📌 Note: Meeting at 3PM</span>
+      <div class="actions">
+        <button class="restore-btn">Restore</button>
+        <button class="delete-btn">Delete</button>
+      </div>
+    </li>
+  </ul>
+
+  <button class="clear-all" id="clearAllBtn">Clear All</button>
+
+  <div class="history" id="history">
+    <h3>History</h3>
+    <ul id="historyList"></ul>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const recycleList = document.getElementById('recycleList');
+      const historyList = document.getElementById('historyList');
+
+      function animateAndRemove(element, callback) {
+        element.classList.add('fade-out');
+        setTimeout(() => {
+          element.remove();
+          if (callback) callback();
+        }, 300);
+      }
+
+      function addToHistory(action, content, elementHTML) {
+        const li = document.createElement('li');
+        li.innerHTML = `${action}: ${content} <button>Undo</button>`;
+        const undoBtn = li.querySelector('button');
+        undoBtn.addEventListener('click', () => {
+          recycleList.insertAdjacentHTML('beforeend', elementHTML);
+          attachListeners();
+          li.remove();
+        });
+        historyList.prepend(li);
+      }
+
+      function attachListeners() {
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.onclick = function () {
+            const item = this.closest('.recycle-item');
+            const content = item.querySelector('.item-content').textContent;
+            addToHistory('Deleted', content, item.outerHTML);
+            animateAndRemove(item);
+          };
+        });
+
+        document.querySelectorAll('.restore-btn').forEach(btn => {
+          btn.onclick = function () {
+            const item = this.closest('.recycle-item');
+            const content = item.querySelector('.item-content').textContent;
+            alert(`Restored: ${content}`);
+            addToHistory('Restored', content, item.outerHTML);
+            animateAndRemove(item);
+          };
+        });
+      }
+
+      document.getElementById('clearAllBtn').addEventListener('click', function () {
+        if (confirm('Are you sure you want to clear all items?')) {
+          document.querySelectorAll('.recycle-item').forEach(item => {
+            const content = item.querySelector('.item-content').textContent;
+            addToHistory('Cleared', content, item.outerHTML);
+            animateAndRemove(item);
+          });
+        }
+      });
+
+      attachListeners();
+    });
+  </script>
+
+</body>
+</html>
