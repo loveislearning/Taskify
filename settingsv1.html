@@ -3,40 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taskify Settings</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Taskify - Settings</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .settings-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .logo {
+            width: 50px;
+        }
+
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background-color: #f4f4f4;
+        }
+
+        .tab-button {
+            padding: 1rem;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+
+        .tab-button.active {
+            border-bottom: 3px solid #4CAF50;
+        }
+
+        /* Tab Content */
+        .settings-content {
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Forms */
+        form label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        form input, form select, form button {
+            margin-bottom: 1rem;
+        }
+
+        form button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+        }
+
+        .danger-button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+        }
+
+        /* Footer */
+        .settings-footer {
+            text-align: center;
+            padding: 1rem;
+            background-color: #f4f4f4;
+        }
+    </style>
 </head>
 <body>
+    <!-- Header -->
     <header class="settings-header">
-        <img src="logo.png" alt="Taskify Logo">
+        <img src="logo.png" alt="Taskify Logo" class="logo">
         <h1>Settings</h1>
     </header>
 
+    <!-- Tabs Navigation -->
     <nav class="tabs">
-        <button data-tab="account">Account</button>
-        <button data-tab="notifications">Notifications</button>
-        <button data-tab="appearance">Appearance</button>
-        <button data-tab="privacy">Privacy & Security</button>
-        <button data-tab="about">About Taskify</button>
+        <button class="tab-button active" data-tab="account">Account</button>
+        <button class="tab-button" data-tab="notifications">Notifications</button>
+        <button class="tab-button" data-tab="appearance">Appearance</button>
+        <button class="tab-button" data-tab="privacy">Privacy & Security</button>
+        <button class="tab-button" data-tab="about">About</button>
     </nav>
 
+    <!-- Tab Content -->
     <main class="settings-content">
-        <!-- Example Tab Content -->
-        <section id="account" class="tab-content">
+        <!-- Account Tab -->
+        <section id="account" class="tab-content active">
             <h2>Account Settings</h2>
             <form>
-                <label>Name: <input type="text" name="name"></label><br>
-                <label>Email: <input type="email" name="email"></label><br>
-                <label>Password: <input type="password" name="password"></label><br>
-                <button type="submit">Update Profile</button>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name"><br>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email"><br>
+
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Enter new password"><br>
+
+                <button type="submit">Save Changes</button>
             </form>
         </section>
-    </main>
 
-    <footer class="settings-footer">
-        <a href="/">Back to Dashboard</a>
-    </footer>
+        <!-- Notifications Tab -->
+        <section id="notifications" class="tab-content">
+            <h2>Notification Settings</h2>
+            <form>
+                <label>
+                    <input type="checkbox" name="email-notifications">
+                    Enable Email Notifications
+                </label><br>
 
-    <script src="scripts.js"></script>
-</body>
-</html>
+                <label for="reminder-frequency">Reminder Frequency:</label>
+                <select id="reminder-frequency" name="reminder-frequency">
+                    <option value="daily">Daily</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="monthly">Monthly</option>
+                </select><br>
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </section>
+
+        <!-- Appearance Tab -->
+        <section id="appearance" class="tab-content">
+            <h2>Appearance Settings</h2>
+            <form>
+                <label for="theme">Theme:</label>
+                <select id="theme" name="theme">
+                    <option value="light">Light Mode</option>
+                    <option value="dark">Dark Mode</option>
+                </select><br>
+
+                <label for="font-size">Font Size:</label>
+                <input type="range" id="font-size" name="font-size" min="12" max="24"><br>
+
+                <button type="submit">Save Changes</button>
+            </form>
+        </section>
+
+        <!-- Privacy & Security Tab -->
+        <section id="privacy" class="tab-content">
+            <h2>Privacy & Security</h2>
+            <p>Manage your privacy preferences and account security.</p>
+            <button className='danger-button'>Delete Account</button.
