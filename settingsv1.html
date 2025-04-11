@@ -10,10 +10,12 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #121212; /* Dark background */
+            color: #ffffff; /* Light text */
         }
 
         .settings-header {
-            background-color: #4CAF50;
+            background-color: #1E1E1E;
             color: white;
             padding: 1rem;
             text-align: center;
@@ -23,26 +25,39 @@
             width: 50px;
         }
 
-        /* Tabs Navigation */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            background-color: #f4f4f4;
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 200px;
+            background-color: #1E1E1E; /* Dark grey */
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: 2rem;
         }
 
-        .tab-button {
+        .sidebar button {
+            display: block;
+            width: 100%;
             padding: 1rem;
             border: none;
             background-color: transparent;
+            color: #ffffff; /* White text */
+            text-align: left;
             cursor: pointer;
         }
 
-        .tab-button.active {
-            border-bottom: 3px solid #4CAF50;
+        .sidebar button.active {
+            background-color: #333333; /* Highlight active tab */
         }
 
-        /* Tab Content */
+        .sidebar button:hover {
+            background-color: #444444; /* Slight hover effect */
+        }
+
+        /* Main Content Area */
         .settings-content {
+            margin-left: 200px; /* Offset for sidebar */
             padding: 2rem;
         }
 
@@ -64,15 +79,24 @@
             margin-bottom: 1rem;
         }
 
+        form input, form select {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 4px;
+            border: none;
+            background-color: #333333; /* Dark input fields */
+            color: white; /* Light text */
+        }
+
         form button {
-            background-color: #4CAF50;
+            background-color: #4CAF50; /* Green button */
             color: white;
             border: none;
             padding: 0.5rem 1rem;
         }
 
         .danger-button {
-            background-color: red;
+            background-color: red; /* Red for delete account */
             color: white;
             border: none;
             padding: 0.5rem 1rem;
@@ -82,7 +106,7 @@
         .settings-footer {
             text-align: center;
             padding: 1rem;
-            background-color: #f4f4f4;
+            background-color: #1E1E1E; /* Dark footer */
         }
     </style>
 </head>
@@ -93,10 +117,9 @@
         <h1>Settings</h1>
     </header>
 
-    <!-- Tabs Navigation -->
-    <nav class="tabs">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar">
         <button class="tab-button active" data-tab="account">Account</button>
-        <button class="tab-button" data-tab="notifications">Notifications</button>
         <button class="tab-button" data-tab="appearance">Appearance</button>
         <button class="tab-button" data-tab="privacy">Privacy & Security</button>
         <button class="tab-button" data-tab="about">About</button>
@@ -121,26 +144,6 @@
             </form>
         </section>
 
-        <!-- Notifications Tab -->
-        <section id="notifications" class="tab-content">
-            <h2>Notification Settings</h2>
-            <form>
-                <label>
-                    <input type="checkbox" name="email-notifications">
-                    Enable Email Notifications
-                </label><br>
-
-                <label for="reminder-frequency">Reminder Frequency:</label>
-                <select id="reminder-frequency" name="reminder-frequency">
-                    <option value="daily">Daily</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
-                </select><br>
-
-                <button type="submit">Save Changes</button>
-            </form>
-        </section>
-
         <!-- Appearance Tab -->
         <section id="appearance" class="tab-content">
             <h2>Appearance Settings</h2>
@@ -148,7 +151,7 @@
                 <label for="theme">Theme:</label>
                 <select id="theme" name="theme">
                     <option value="light">Light Mode</option>
-                    <option value="dark">Dark Mode</option>
+                    <option value="dark" selected>Dark Mode</option>
                 </select><br>
 
                 <label for="font-size">Font Size:</label>
@@ -162,4 +165,7 @@
         <section id="privacy" class="tab-content">
             <h2>Privacy & Security</h2>
             <p>Manage your privacy preferences and account security.</p>
-            <button className='danger-button'>Delete Account</button.
+            
+			<button class='danger-button'>Delete Account</button>.
+			
+			!-- About Tab -->
