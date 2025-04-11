@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taskify Settings</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="settings-header">
+        <img src="logo.png" alt="Taskify Logo">
+        <h1>Settings</h1>
+    </header>
+
+    <nav class="tabs">
+        <button data-tab="account">Account</button>
+        <button data-tab="notifications">Notifications</button>
+        <button data-tab="appearance">Appearance</button>
+        <button data-tab="privacy">Privacy & Security</button>
+        <button data-tab="about">About Taskify</button>
+    </nav>
+
+    <main class="settings-content">
+        <!-- Example Tab Content -->
+        <section id="account" class="tab-content">
+            <h2>Account Settings</h2>
+            <form>
+                <label>Name: <input type="text" name="name"></label><br>
+                <label>Email: <input type="email" name="email"></label><br>
+                <label>Password: <input type="password" name="password"></label><br>
+                <button type="submit">Update Profile</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="settings-footer">
+        <a href="/">Back to Dashboard</a>
+    </footer>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
