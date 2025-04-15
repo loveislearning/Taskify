@@ -7,10 +7,10 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #fdfdfd;
+      background-color: #121212;
       margin: 0;
       padding: 2rem;
-      color: #333;
+      color: #e0e0e0;
     }
 
     h2 {
@@ -32,7 +32,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px dashed #ccc;
+      border-bottom: 1px dashed #444;
       padding-bottom: 0.75rem;
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
@@ -64,21 +64,21 @@
     }
 
     .restore-btn {
-      color: #388e3c;
-      border: 1px solid #388e3c;
+      color: #81c784;
+      border: 1px solid #81c784;
     }
 
     .restore-btn:hover {
-      background: #e8f5e9;
+      background: rgba(129, 199, 132, 0.1);
     }
 
     .delete-btn {
-      color: #d32f2f;
-      border: 1px solid #d32f2f;
+      color: #ef5350;
+      border: 1px solid #ef5350;
     }
 
     .delete-btn:hover {
-      background: #fdecea;
+      background: rgba(239, 83, 80, 0.1);
     }
 
     .clear-all {
@@ -102,7 +102,7 @@
       max-width: 600px;
       margin: 0 auto;
       margin-top: 2rem;
-      background: #f1f1f1;
+      background: #1e1e1e;
       padding: 1rem;
       border-radius: 12px;
     }
@@ -122,16 +122,21 @@
       display: flex;
       justify-content: space-between;
       padding: 0.4rem 0;
-      border-bottom: 1px solid #ddd;
+      border-bottom: 1px solid #333;
     }
 
     .history button {
       font-size: 0.8rem;
       background: none;
-      border: 1px solid #444;
+      color: #ccc;
+      border: 1px solid #666;
       border-radius: 6px;
       cursor: pointer;
       padding: 0.2rem 0.6rem;
+    }
+
+    .history button:hover {
+      background: rgba(255, 255, 255, 0.05);
     }
   </style>
 </head>
@@ -218,17 +223,4 @@
 
       document.getElementById('clearAllBtn').addEventListener('click', function () {
         if (confirm('Are you sure you want to clear all items?')) {
-          document.querySelectorAll('.recycle-item').forEach(item => {
-            const content = item.querySelector('.item-content').textContent;
-            addToHistory('Cleared', content, item.outerHTML);
-            animateAndRemove(item);
-          });
-        }
-      });
-
-      attachListeners();
-    });
-  </script>
-
-</body>
-</html>
+          document.querySelectorAll
