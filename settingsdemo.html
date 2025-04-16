@@ -10,7 +10,7 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #121212;
+      background-color: #000000; /* Black background */
       color: #ffffff;
     }
 
@@ -36,20 +36,57 @@
       margin-left: 20px;
     }
 
-    .close-button {
-      position: absolute;
-      top: 50%;
-      right: 20px;
-      transform: translateY(-50%);
-      background: transparent;
-      border: none;
-      color: white;
-      font-size: 24px;
+    /* Custom Close Button */
+    .close-container {
+      position: relative;
+      width: 50px;
+      height: 50px;
       cursor: pointer;
     }
 
-    .close-button:hover {
-      color: #f44336;
+    .leftright, .rightleft {
+      height: 4px;
+      width: 50px;
+      position: absolute;
+      margin-top: 24px;
+      background-color: #ffffff; /* Changed to white */
+      border-radius: 2px;
+      transition: all .3s ease-in;
+    }
+
+    .leftright {
+      transform: rotate(45deg);
+    }
+
+    .rightleft {
+      transform: rotate(-45deg);
+    }
+
+    label {
+      color: white;
+      font-family: Helvetica, Arial, sans-serif;
+      font-size: .6em;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0;
+      transition: all .3s ease-in;
+      position: absolute;
+      top: 60px;
+      left: 5px;
+    }
+
+    .close-container:hover .leftright {
+      transform: rotate(-45deg);
+      background-color: #F25C66; /* tomato red color */
+    }
+
+    .close-container:hover .rightleft {
+      transform: rotate(45deg);
+      background-color: #F25C66; /* tomato red color */
+    }
+
+    .close-container:hover label {
+      opacity: 1;
     }
 
     /* Sidebar Navigation */
@@ -142,7 +179,11 @@
   <header class="settings-header">
     <img src="logo.png" alt="Taskify Logo" class="logo" />
     <h1>Settings</h1>
-    <a href="mainpage.html" class="close-button" title="Back to Home">×</a>
+    <div class="close-container" onclick="window.location.href='mainpage.html';">
+      <div class="leftright"></div>
+      <div class="rightleft"></div>
+      <label>Close</label>
+    </div>
   </header>
 
   <!-- Sidebar Navigation -->
