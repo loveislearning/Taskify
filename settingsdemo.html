@@ -1,213 +1,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taskify - Settings</title>
-    <style>
-        /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #121212; /* Dark background */
-            color: #ffffff; /* Light text */
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Taskify - Settings</title>
+  <style>
+    /* General Styles */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #121212;
+      color: #ffffff;
+    }
 
-        /* Header Styles */
-        .settings-header {
-            background-color: #1E1E1E;
-            color: white;
-            padding: 1rem;
-            display: flex; /* Flexbox for alignment */
-            align-items: center;
-            justify-content: space-between; /* Space between logo and title */
-        }
+    /* Header Styles */
+    .settings-header {
+      background-color: #1E1E1E;
+      color: white;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+    }
 
-        .settings-header .logo {
-            width: 50px;
-            margin-left: 20px; /* Align the logo to the left */
-        }
+    .settings-header .logo {
+      width: 50px;
+      margin-left: 20px;
+    }
 
-        .settings-header h1 {
-            font-size: 24px;
-            flex-grow: 1; /* Allow the title to fill remaining space */
-            margin-left: 20px; /* Space between logo and title */
-        }
+    .settings-header h1 {
+      font-size: 24px;
+      flex-grow: 1;
+      margin-left: 20px;
+    }
 
-        /* Sidebar Navigation */
-        .sidebar {
-            width: 200px;
-            background-color: #1E1E1E; /* Dark grey */
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding-top: 2rem;
-        }
+    .close-button {
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
 
-        .sidebar button {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            background-color: transparent;
-            color: #ffffff; /* White text */
-            text-align: left;
-            cursor: pointer;
-        }
+    .close-button:hover {
+      color: #f44336;
+    }
 
-        .sidebar button.active {
-            background-color: #333333; /* Highlight active tab */
-        }
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 200px;
+      background-color: #1E1E1E;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      padding-top: 2rem;
+    }
 
-        .sidebar button:hover {
-            background-color: #444444; /* Slight hover effect */
-        }
+    .sidebar button {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      border: none;
+      background-color: transparent;
+      color: #ffffff;
+      text-align: left;
+      cursor: pointer;
+    }
 
-        /* Main Content Area */
-        .settings-content {
-            margin-left: 200px; /* Offset for sidebar */
-            padding: 2rem;
-        }
+    .sidebar button.active {
+      background-color: #333333;
+    }
 
-        .tab-content {
-            display: none;
-        }
+    .sidebar button:hover {
+      background-color: #444444;
+    }
 
-        .tab-content.active {
-            display: block;
-        }
+    /* Main Content Area */
+    .settings-content {
+      margin-left: 200px;
+      padding: 2rem;
+    }
 
-        /* Forms */
-        form label {
-            display: block;
-            margin-bottom: 0.5rem;
-        }
+    .tab-content {
+      display: none;
+    }
 
-        form input, form select, form button {
-            margin-bottom: 1rem;
-        }
+    .tab-content.active {
+      display: block;
+    }
 
-        form input, form select {
-            width: 100%;
-            padding: 0.5rem;
-            border-radius: 4px;
-            border: none;
-            background-color: #333333; /* Dark input fields */
-            color: white; /* Light text */
-        }
+    /* Forms */
+    form label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
 
-        form button {
-            background-color: #4CAF50; /* Green button */
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-        }
+    form input, form select, form button {
+      margin-bottom: 1rem;
+    }
 
-        .danger-button {
-            background-color: red; /* Red for delete account */
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-        }
+    form input, form select {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: none;
+      background-color: #333333;
+      color: white;
+    }
 
-        /* Footer */
-        .settings-footer {
-            text-align: center;
-            padding: 1rem;
-            background-color: #1E1E1E; /* Dark footer */
-        }
-    </style>
+    form button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+    }
+
+    .danger-button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+    }
+
+    /* Footer */
+    .settings-footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #1E1E1E;
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="settings-header">
-        <img src="logo.png" alt="Taskify Logo" class="logo">
-        <h1>Settings</h1>
-    </header>
+  <!-- Header -->
+  <header class="settings-header">
+    <img src="logo.png" alt="Taskify Logo" class="logo" />
+    <h1>Settings</h1>
+    <a href="mainpage.html" class="close-button" title="Back to Home">×</a>
+  </header>
 
-    <!-- Sidebar Navigation -->
-    <nav class="sidebar">
-        <button class="tab-button active" data-tab="account">Account</button>
-        <button class="tab-button" data-tab="appearance">Appearance</button>
-        <button class="tab-button" data-tab="privacy">Privacy & Security</button>
-        <button class="tab-button" data-tab="about">About</button>
-    </nav>
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar">
+    <button class="tab-button active" data-tab="account">Account</button>
+    <button class="tab-button" data-tab="appearance">Appearance</button>
+    <button class="tab-button" data-tab="privacy">Privacy & Security</button>
+    <button class="tab-button" data-tab="about">About</button>
+  </nav>
 
-    <!-- Tab Content -->
-    <main class="settings-content">
-        <!-- Account Tab -->
-        <section id="account" class="tab-content active">
-            <h2>Account Settings</h2>
-            <form>
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" placeholder="Enter your name"><br>
+  <!-- Tab Content -->
+  <main class="settings-content">
+    <!-- Account Tab -->
+    <section id="account" class="tab-content active">
+      <h2>Account Settings</h2>
+      <form>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name" /><br />
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="Enter your email"><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email" /><br />
 
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Enter new password"><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter new password" /><br />
 
-                <button type="submit">Save Changes</button>
-            </form>
-        </section>
+        <button type="submit">Save Changes</button>
+      </form>
+    </section>
 
-        <!-- Appearance Tab -->
-        <section id="appearance" class="tab-content">
-            <h2>Appearance Settings</h2>
-            <form>
-                <label for="theme">Theme:</label>
-                <select id="theme" name="theme">
-                    <option value="light">Light Mode</option>
-                    <option value="dark" selected>Dark Mode</option>
-                </select><br>
+    <!-- Appearance Tab -->
+    <section id="appearance" class="tab-content">
+      <h2>Appearance Settings</h2>
+      <form>
+        <label for="theme">Theme:</label>
+        <select id="theme" name="theme">
+          <option value="light">Light Mode</option>
+          <option value="dark" selected>Dark Mode</option>
+        </select><br />
 
-                <label for="font-size">Font Size:</label>
-                <input type="range" id="font-size" name="font-size" min="12" max="24"><br>
+        <label for="font-size">Font Size:</label>
+        <input type="range" id="font-size" name="font-size" min="12" max="24" /><br />
 
-                <button type="submit">Save Changes</button>
-            </form>
-        </section>
+        <button type="submit">Save Changes</button>
+      </form>
+    </section>
 
-        <!-- Privacy & Security Tab -->
-        <section id="privacy" class="tab-content">
-            <h2>Privacy & Security</h2>
-            <p>Manage your privacy preferences and account security.</p>
-            <button class="danger-button">Delete Account</button>
-        </section>
+    <!-- Privacy & Security Tab -->
+    <section id="privacy" class="tab-content">
+      <h2>Privacy & Security</h2>
+      <p>Manage your privacy preferences and account security.</p>
+      <button class="danger-button">Delete Account</button>
+    </section>
 
-        <!-- About Tab -->
-        <section id="about" class="tab-content">
-            <h2>About Taskify</h2>
-            <p>Version: 1.0.0</p>
-            <p><a href="/terms-of-service.html" style="color: #4CAF50;">Terms of Service</a></p>
-            <p><a href="/privacy-policy.html" style="color: #4CAF50;">Privacy Policy</a></p>
-            <p><a href="/contact.html" style="color: #4CAF50;">Contact Support</a></p>
-        </section>
-    </main>
+    <!-- About Tab -->
+    <section id="about" class="tab-content">
+      <h2>About Taskify</h2>
+      <p>Version: 1.0.0</p>
+      <p><a href="/terms-of-service.html" style="color: #4CAF50;">Terms of Service</a></p>
+      <p><a href="/privacy-policy.html" style="color: #4CAF50;">Privacy Policy</a></p>
+      <p><a href="/contact.html" style="color: #4CAF50;">Contact Support</a></p>
+    </section>
+  </main>
 
-    <!-- Footer -->
-    <footer class="settings-footer">
-        © 2025 Taskify. All rights reserved.
-    </footer>
+  <!-- Footer -->
+  <footer class="settings-footer">
+    © 2025 Taskify. All rights reserved.
+  </footer>
 
-    <!-- JavaScript -->
-    <script>
-        // JavaScript to handle tab switching
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active state from all buttons and tabs
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+  <!-- JavaScript -->
+  <script>
+    // Tab switching
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
 
-                // Add active state to the clicked button and corresponding tab
-                button.classList.add('active');
-                const tabId = button.getAttribute('data-tab');
-                document.getElementById(tabId).classList.add('active');
-            });
-        });
-    </script>
+        button.classList.add('active');
+        const tabId = button.getAttribute('data-tab');
+        document.getElementById(tabId).classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>
