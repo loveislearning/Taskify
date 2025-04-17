@@ -1,10 +1,6 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { CalendarDays, PlusCircle, CheckCircle, Trash2 } from "lucide-react";
 import { format } from "date-fns";
+import { PlusCircle, CheckCircle, Trash2 } from "lucide-react";
 
 type Task = {
   id: number;
@@ -49,7 +45,9 @@ export default function StudentPlanner() {
   };
 
   const filteredTasks = subjectFilter
-    ? tasks.filter((task) => task.subject.toLowerCase().includes(subjectFilter.toLowerCase()))
+    ? tasks.filter((task) =>
+        task.subject.toLowerCase().includes(subjectFilter.toLowerCase())
+      )
     : tasks;
 
   return (
@@ -57,73 +55,95 @@ export default function StudentPlanner() {
       <h1 className="text-3xl font-bold">📘 Student Planner</h1>
 
       {/* New Task Form */}
-      <Card>
-        <CardContent className="p-4 space-y-4">
-          <h2 className="text-xl font-semibold flex items-center gap-2">
-            <PlusCircle className="w-5 h-5" /> Add New Task
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Input
-              placeholder="Task Title"
-              value={newTask.title}
-              onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-            />
-            <Input
-              placeholder="Subject"
-              value={newTask.subject}
-              onChange={(e) => setNewTask({ ...newTask, subject: e.target.value })}
-            />
-            <Input
-              type="date"
-              value={newTask.dueDate}
-              onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
-            />
-            <Textarea
-              placeholder="Notes (optional)"
-              value={newTask.notes}
-              onChange={(e) => setNewTask({ ...newTask, notes: e.target.value })}
-            />
-          </div>
-          <Button onClick={handleAddTask}>Add Task</Button>
-        </CardContent>
-      </Card>
+      <div className="bg-white border rounded-lg shadow p-4 space-y-4">
+        <h2 className="text-xl font-semibold flex items-center gap-2">
+          <PlusCircle className="w-5 h-5" /> Add New Task
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <input
+            className="border p-2 rounded"
+            placeholder="Task Title"
+            value={newTask.title}
+            onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+          />
+          <input
+            className="border p-2 rounded"
+            placeholder="Subject"
+            value={newTask.subject}
+            onChange={(e) => setNewTask({ ...newTask, subject: e.target.value })}
+          />
+          <input
+            type="date"
+            className="border p-2 rounded"
+            value={newTask.dueDate}
+            onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
+          />
+          <textarea
+            className="border p-2 rounded"
+            placeholder="Notes (optional)"
+            value={newTask.notes}
+            onChange={(e) => setNewTask({ ...newTask, notes: e.target.value })}
+          />
+        </div>
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          onClick={handleAddTask}
+        >
+          Add Task
+        </button>
+      </div>
 
       {/* Filters */}
       <div className="flex justify-between items-center">
-        <Input
-          className="max-w-xs"
+        <input
+          className="border rounded p-2 max-w-xs"
           placeholder="Filter by Subject..."
           value={subjectFilter}
           onChange={(e) => setSubjectFilter(e.target.value)}
         />
-        <Button variant="destructive" onClick={clearCompletedTasks}>
-          <Trash2 className="w-4 h-4 mr-1" /> Clear Completed
-        </Button>
+        <button
+          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 flex items-center gap-1"
+          onClick={clearCompletedTasks}
+        >
+          <Trash2 className="w-4 h-4" />
+          Clear Completed
+        </button>
       </div>
 
       {/* Task List */}
       <div className="space-y-4">
         {filteredTasks.length === 0 ? (
-          <p className="text-muted-foreground text-center">No tasks found.</p>
+          <p className="text-gray-500 text-center">No tasks found.</p>
         ) : (
           filteredTasks.map((task) => (
-            <Card key={task.id} className={task.completed ? "opacity-60" : ""}>
-              <CardContent className="p-4 space-y-2">
-                <div className="flex justify-between items-center">
-                  <h3 className={`text-lg font-semibold ${task.completed ? "line-through" : ""}`}>
-                    {task.title}
-                  </h3>
-                  <span className="text-sm text-muted-foreground">
-                    {format(new Date(task.dueDate), "PPP")}
-                  </span>
-                </div>
-                <p className="text-sm">📚 Subject: {task.subject}</p>
-                {task.notes && <p className="text-sm italic text-gray-600">{task.notes}</p>}
-                <Button size="sm" variant="outline" onClick={() => toggleTaskStatus(task.id)}>
-                  <CheckCircle className="w-4 h-4 mr-1" /> {task.completed ? "Mark as Pending" : "Mark as Done"}
-                </Button>
-              </CardContent>
-            </Card>
+            <div
+              key={task.id}
+              className={`border rounded p-4 shadow ${task.completed ? "opacity-60" : ""}`}
+            >
+              <div className="flex justify-between items-center">
+                <h3
+                  className={`text-lg font-semibold ${
+                    task.completed ? "line-through" : ""
+                  }`}
+                >
+                  {task.title}
+                </h3>
+                <span className="text-sm text-gray-500">
+                  {format(new Date(task.dueDate), "PPP")}
+                </span>
+              </div>
+              <p className="text-sm mt-1">📚 Subject: {task.subject}</p>
+              {task.notes && (
+                <p className="text-sm italic text-gray-600 mt-1">{task.notes}</p>
+              )}
+              <button
+                className="mt-2 text-sm border px-3 py-1 rounded hover:bg-gray-100 flex items-center gap-1"
+                onClick={() => toggleTaskStatus(task.id)}
+              >
+                <CheckCircle className="w-4 h-4" />
+                {task.completed ? "Mark as Pending" : "Mark as Done"}
+              </button>
+            </div>
           ))
         )}
       </div>
