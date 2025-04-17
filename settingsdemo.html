@@ -7,10 +7,10 @@
   <style>
     /* General Styles */
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #000000; /* Black background */
+      background-color: #000000;
       color: #ffffff;
     }
 
@@ -22,7 +22,6 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative;
     }
 
     .settings-header .logo {
@@ -32,64 +31,54 @@
 
     .settings-header h1 {
       font-size: 24px;
-      flex-grow: 1;
       margin-left: 20px;
+      flex-grow: 1;
     }
 
-    /* Custom Close Button */
+    /* Close Button */
     .close-container {
+      width: 40px;
+      height: 40px;
       position: relative;
-      width: 50px;
-      height: 50px;
       cursor: pointer;
+      transition: transform 0.3s ease;
     }
 
-    .leftright, .rightleft {
-      height: 4px;
-      width: 50px;
+    .close-container div {
       position: absolute;
-      margin-top: 24px;
-      background-color: #ffffff; /* Changed to white */
+      width: 100%;
+      height: 4px;
+      background-color: white;
+      top: 50%;
+      left: 0;
+      transform-origin: center;
       border-radius: 2px;
-      transition: all .3s ease-in;
+      transition: transform 0.3s ease, background-color 0.3s ease;
     }
 
-    .leftright {
+    .close-container .leftright {
       transform: rotate(45deg);
     }
 
-    .rightleft {
+    .close-container .rightleft {
       transform: rotate(-45deg);
-    }
-
-    label {
-      color: white;
-      font-family: Helvetica, Arial, sans-serif;
-      font-size: .6em;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      opacity: 0;
-      transition: all .3s ease-in;
-      position: absolute;
-      top: 60px;
-      left: 5px;
     }
 
     .close-container:hover .leftright {
       transform: rotate(-45deg);
-      background-color: #F25C66; /* tomato red color */
+      background-color: #F25C66;
     }
 
     .close-container:hover .rightleft {
       transform: rotate(45deg);
-      background-color: #F25C66; /* tomato red color */
+      background-color: #F25C66;
     }
 
-    .close-container:hover label {
-      opacity: 1;
+    .close-container:hover {
+      transform: scale(1.1);
     }
 
-    /* Sidebar Navigation */
+    /* Sidebar */
     .sidebar {
       width: 200px;
       background-color: #1E1E1E;
@@ -98,72 +87,92 @@
       top: 0;
       left: 0;
       padding-top: 2rem;
+      display: flex;
+      flex-direction: column;
     }
 
     .sidebar button {
-      display: block;
-      width: 100%;
-      padding: 1rem;
+      background: none;
       border: none;
-      background-color: transparent;
-      color: #ffffff;
+      color: white;
+      padding: 1rem;
       text-align: left;
       cursor: pointer;
+      transition: background 0.3s ease;
+      font-weight: bold;
+      font-size: 0.95rem;
     }
 
-    .sidebar button.active {
+    .sidebar button.active, .sidebar button:hover {
       background-color: #333333;
     }
 
-    .sidebar button:hover {
-      background-color: #444444;
-    }
-
-    /* Main Content Area */
+    /* Main Content */
     .settings-content {
       margin-left: 200px;
       padding: 2rem;
+      animation: fadeIn 0.4s ease;
     }
 
     .tab-content {
       display: none;
+      animation: fadeIn 0.4s ease;
+      background-color: #1E1E1E;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
     }
 
     .tab-content.active {
       display: block;
     }
 
-    /* Forms */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Form Styles */
     form label {
       display: block;
       margin-bottom: 0.5rem;
-    }
-
-    form input, form select, form button {
-      margin-bottom: 1rem;
+      font-size: 0.9rem;
     }
 
     form input, form select {
       width: 100%;
-      padding: 0.5rem;
-      border-radius: 4px;
+      padding: 0.6rem;
       border: none;
+      border-radius: 4px;
       background-color: #333333;
       color: white;
+      margin-bottom: 1rem;
     }
 
     form button {
       background-color: #4CAF50;
       color: white;
+      padding: 0.6rem 1.2rem;
       border: none;
-      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    form button:hover {
+      background-color: #45a049;
     }
 
     .danger-button {
       background-color: red;
-      color: white;
-      border: none;
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1.2rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .danger-button:hover {
+      background-color: darkred;
     }
 
     /* Footer */
@@ -172,21 +181,37 @@
       padding: 1rem;
       background-color: #1E1E1E;
     }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        flex-direction: row;
+        overflow-x: auto;
+      }
+
+      .settings-content {
+        margin-left: 0;
+      }
+
+      .tab-content {
+        margin-top: 1rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <!-- Header -->
   <header class="settings-header">
     <img src="logo.png" alt="Taskify Logo" class="logo" />
     <h1>Settings</h1>
     <div class="close-container" onclick="window.location.href='mainpage.html';">
       <div class="leftright"></div>
       <div class="rightleft"></div>
-      <label>Close</label>
     </div>
   </header>
 
-  <!-- Sidebar Navigation -->
   <nav class="sidebar">
     <button class="tab-button active" data-tab="account">Account</button>
     <button class="tab-button" data-tab="appearance">Appearance</button>
@@ -194,26 +219,23 @@
     <button class="tab-button" data-tab="about">About</button>
   </nav>
 
-  <!-- Tab Content -->
   <main class="settings-content">
-    <!-- Account Tab -->
     <section id="account" class="tab-content active">
       <h2>Account Settings</h2>
       <form>
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter your name" /><br />
+        <input type="text" id="name" name="name" placeholder="Enter your name" />
 
         <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" /><br />
+        <input type="email" id="email" name="email" placeholder="Enter your email" />
 
         <label for="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="Enter new password" /><br />
+        <input type="password" id="password" name="password" placeholder="Enter new password" />
 
         <button type="submit">Save Changes</button>
       </form>
     </section>
 
-    <!-- Appearance Tab -->
     <section id="appearance" class="tab-content">
       <h2>Appearance Settings</h2>
       <form>
@@ -221,23 +243,21 @@
         <select id="theme" name="theme">
           <option value="light">Light Mode</option>
           <option value="dark" selected>Dark Mode</option>
-        </select><br />
+        </select>
 
         <label for="font-size">Font Size:</label>
-        <input type="range" id="font-size" name="font-size" min="12" max="24" /><br />
+        <input type="range" id="font-size" name="font-size" min="12" max="24" />
 
         <button type="submit">Save Changes</button>
       </form>
     </section>
 
-    <!-- Privacy & Security Tab -->
     <section id="privacy" class="tab-content">
       <h2>Privacy & Security</h2>
       <p>Manage your privacy preferences and account security.</p>
       <button class="danger-button">Delete Account</button>
     </section>
 
-    <!-- About Tab -->
     <section id="about" class="tab-content">
       <h2>About Taskify</h2>
       <p>Version: 1.0.0</p>
@@ -247,12 +267,10 @@
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="settings-footer">
     © 2025 Taskify. All rights reserved.
   </footer>
 
-  <!-- JavaScript -->
   <script>
     // Tab switching
     document.querySelectorAll('.tab-button').forEach(button => {
