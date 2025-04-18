@@ -1,152 +1,196 @@
-import { useState } from "react";
-import { format } from "date-fns";
-import { PlusCircle, CheckCircle, Trash2 } from "lucide-react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>📘 Student Planner</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2rem;
+      max-width: 900px;
+      margin: auto;
+      background: #f9f9f9;
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: bold;
+    }
+    .card {
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      margin-bottom: 1rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    textarea {
+      resize: vertical;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    .task {
+      opacity: 1;
+      transition: opacity 0.2s;
+    }
+    .task.completed {
+      opacity: 0.6;
+      text-decoration: line-through;
+    }
+    .task button {
+      margin-top: 0.5rem;
+      background: #eee;
+      color: black;
+      border: 1px solid #ccc;
+    }
+    .task button:hover {
+      background: #ddd;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+    .clear-btn {
+      background-color: #dc2626;
+      color: white;
+    }
+    .clear-btn:hover {
+      background-color: #b91c1c;
+    }
+    .text-sm {
+      font-size: 0.875rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
 
-type Task = {
-  id: number;
-  title: string;
-  subject: string;
-  dueDate: string;
-  notes: string;
-  completed: boolean;
-};
+  <h1>📘 Student Planner</h1>
 
-export default function StudentPlanner() {
-  const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTask, setNewTask] = useState<Omit<Task, "id" | "completed">>({
-    title: "",
-    subject: "",
-    dueDate: "",
-    notes: "",
-  });
-  const [subjectFilter, setSubjectFilter] = useState<string>("");
-
-  const handleAddTask = () => {
-    if (!newTask.title || !newTask.subject || !newTask.dueDate) return;
-    const task: Task = {
-      ...newTask,
-      id: Date.now(),
-      completed: false,
-    };
-    setTasks([...tasks, task]);
-    setNewTask({ title: "", subject: "", dueDate: "", notes: "" });
-  };
-
-  const toggleTaskStatus = (id: number) => {
-    setTasks(
-      tasks.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
-
-  const clearCompletedTasks = () => {
-    setTasks(tasks.filter((task) => !task.completed));
-  };
-
-  const filteredTasks = subjectFilter
-    ? tasks.filter((task) =>
-        task.subject.toLowerCase().includes(subjectFilter.toLowerCase())
-      )
-    : tasks;
-
-  return (
-    <div className="p-6 space-y-6 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold">📘 Student Planner</h1>
-
-      {/* New Task Form */}
-      <div className="bg-white border rounded-lg shadow p-4 space-y-4">
-        <h2 className="text-xl font-semibold flex items-center gap-2">
-          <PlusCircle className="w-5 h-5" /> Add New Task
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <input
-            className="border p-2 rounded"
-            placeholder="Task Title"
-            value={newTask.title}
-            onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-          />
-          <input
-            className="border p-2 rounded"
-            placeholder="Subject"
-            value={newTask.subject}
-            onChange={(e) => setNewTask({ ...newTask, subject: e.target.value })}
-          />
-          <input
-            type="date"
-            className="border p-2 rounded"
-            value={newTask.dueDate}
-            onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
-          />
-          <textarea
-            className="border p-2 rounded"
-            placeholder="Notes (optional)"
-            value={newTask.notes}
-            onChange={(e) => setNewTask({ ...newTask, notes: e.target.value })}
-          />
-        </div>
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          onClick={handleAddTask}
-        >
-          Add Task
-        </button>
-      </div>
-
-      {/* Filters */}
-      <div className="flex justify-between items-center">
-        <input
-          className="border rounded p-2 max-w-xs"
-          placeholder="Filter by Subject..."
-          value={subjectFilter}
-          onChange={(e) => setSubjectFilter(e.target.value)}
-        />
-        <button
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 flex items-center gap-1"
-          onClick={clearCompletedTasks}
-        >
-          <Trash2 className="w-4 h-4" />
-          Clear Completed
-        </button>
-      </div>
-
-      {/* Task List */}
-      <div className="space-y-4">
-        {filteredTasks.length === 0 ? (
-          <p className="text-gray-500 text-center">No tasks found.</p>
-        ) : (
-          filteredTasks.map((task) => (
-            <div
-              key={task.id}
-              className={`border rounded p-4 shadow ${task.completed ? "opacity-60" : ""}`}
-            >
-              <div className="flex justify-between items-center">
-                <h3
-                  className={`text-lg font-semibold ${
-                    task.completed ? "line-through" : ""
-                  }`}
-                >
-                  {task.title}
-                </h3>
-                <span className="text-sm text-gray-500">
-                  {format(new Date(task.dueDate), "PPP")}
-                </span>
-              </div>
-              <p className="text-sm mt-1">📚 Subject: {task.subject}</p>
-              {task.notes && (
-                <p className="text-sm italic text-gray-600 mt-1">{task.notes}</p>
-              )}
-              <button
-                className="mt-2 text-sm border px-3 py-1 rounded hover:bg-gray-100 flex items-center gap-1"
-                onClick={() => toggleTaskStatus(task.id)}
-              >
-                <CheckCircle className="w-4 h-4" />
-                {task.completed ? "Mark as Pending" : "Mark as Done"}
-              </button>
-            </div>
-          ))
-        )}
-      </div>
+  <!-- New Task Form -->
+  <div class="card">
+    <h2><span>➕</span> Add New Task</h2>
+    <div class="grid">
+      <input type="text" id="title" placeholder="Task Title" />
+      <input type="text" id="subject" placeholder="Subject" />
+      <input type="date" id="dueDate" />
+      <textarea id="notes" placeholder="Notes (optional)"></textarea>
     </div>
-  );
-}
+    <button onclick="addTask()">Add Task</button>
+  </div>
+
+  <!-- Filter -->
+  <div class="top-bar">
+    <input type="text" id="subjectFilter" placeholder="Filter by Subject..." oninput="renderTasks()" />
+    <button class="clear-btn" onclick="clearCompleted()">🗑️ Clear Completed</button>
+  </div>
+
+  <!-- Task List -->
+  <div id="taskList"></div>
+
+  <script>
+    let tasks = [];
+
+    function formatDate(dateStr) {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return new Date(dateStr).toLocaleDateString(undefined, options);
+    }
+
+    function addTask() {
+      const title = document.getElementById('title').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      const dueDate = document.getElementById('dueDate').value;
+      const notes = document.getElementById('notes').value.trim();
+
+      if (!title || !subject || !dueDate) return;
+
+      tasks.push({
+        id: Date.now(),
+        title,
+        subject,
+        dueDate,
+        notes,
+        completed: false
+      });
+
+      document.getElementById('title').value = '';
+      document.getElementById('subject').value = '';
+      document.getElementById('dueDate').value = '';
+      document.getElementById('notes').value = '';
+
+      renderTasks();
+    }
+
+    function toggleTask(id) {
+      tasks = tasks.map(task =>
+        task.id === id ? { ...task, completed: !task.completed } : task
+      );
+      renderTasks();
+    }
+
+    function clearCompleted() {
+      tasks = tasks.filter(task => !task.completed);
+      renderTasks();
+    }
+
+    function renderTasks() {
+      const container = document.getElementById('taskList');
+      const filter = document.getElementById('subjectFilter').value.toLowerCase();
+      const filtered = filter
+        ? tasks.filter(t => t.subject.toLowerCase().includes(filter))
+        : tasks;
+
+      container.innerHTML = '';
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p class="text-sm">No tasks found.</p>';
+        return;
+      }
+
+      filtered.forEach(task => {
+        const taskDiv = document.createElement('div');
+        taskDiv.className = 'card task' + (task.completed ? ' completed' : '');
+        taskDiv.innerHTML = `
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h3>${task.title}</h3>
+            <span class="text-sm">${formatDate(task.dueDate)}</span>
+          </div>
+          <p class="text-sm">📚 Subject: ${task.subject}</p>
+          ${task.notes ? `<p class="text-sm"><em>${task.notes}</em></p>` : ''}
+          <button onclick="toggleTask(${task.id})">
+            ${task.completed ? "✅ Mark as Pending" : "✔️ Mark as Done"}
+          </button>
+        `;
+        container.appendChild(taskDiv);
+      });
+    }
+  </script>
+
+</body>
+</html>
