@@ -105,11 +105,13 @@
         }
         .modal-content {
             background: #111;
-            padding: 20px;
+            padding: 40px 20px 20px 20px;
             border-radius: 12px;
             width: 90%;
             max-width: 350px;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
         input, button {
             width: 100%;
@@ -147,11 +149,43 @@
             padding: 8px;
             border-radius: 5px;
         }
+        .task-actions {
+            display: flex;
+            gap: 5px;
+        }
         ul#taskList button {
+            background: transparent;
+            padding: 0;
+            border: none;
+            cursor: pointer;
+        }
+        .x-icon {
             background: red;
             padding: 2px 6px;
             border-radius: 5px;
+            color: white;
             font-size: 14px;
+        }
+        .done-icon {
+            background: #00bfff;
+            padding: 2px 6px;
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+        }
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
+            background: #222;
+            border-radius: 50%;
+            padding: 5px;
+            line-height: 1;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1001;
         }
     </style>
 </head>
@@ -159,9 +193,9 @@
     <h1>📅 Calendar Taskify</h1>
     <div class="calendar-container">
         <div class="calendar-header">
-            <span id="prevMonth" onclick="changeMonth(-1)">&lt;</span>
+            <span id="prevMonth" onclick="changeMonth(-1)" aria-label="Previous Month">&lt;</span>
             <h2 id="monthText"></h2>
-            <span id="nextMonth" onclick="changeMonth(1)">&gt;</span>
+            <span id="nextMonth" onclick="changeMonth(1)" aria-label="Next Month">&gt;</span>
         </div>
         <div class="calendar-days">
             <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
@@ -169,12 +203,12 @@
         <div class="calendar" id="calendar"></div>
     </div>
 
-    <div class="modal" id="taskModal">
+    <div class="modal" id="taskModal" role="dialog" aria-labelledby="modalDate" aria-modal="true">
         <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()" aria-label="Close">✖</button>
             <h3>Add Task for <span id="modalDate"></span></h3>
-            <input type="text" id="taskInput" placeholder="Enter task">
-            <button onclick="addTask()">Add Task</button>
-            <button onclick="closeModal()">Cancel</button>
+            <input type="text" id="taskInput" placeholder="Enter task" aria-label="Task input">
+            <button onclick="addTask()" aria-label="Add Task">Add Task</button>
             <ul id="taskList"></ul>
         </div>
     </div>
@@ -206,6 +240,9 @@
             for (let i = 1; i <= daysInMonth; i++) {
                 const dayElement = document.createElement("div");
                 dayElement.classList.add("day");
+                dayElement.setAttribute("role", "button");
+                dayElement.setAttribute("tabindex", "0");
+                dayElement.setAttribute("aria-label", `Open task modal for ${currentYear}-${currentMonth + 1}-${i}`);
                 dayElement.innerText = i;
                 const dateStr = `${currentYear}-${currentMonth + 1}-${i}`;
                 dayElement.dataset.date = dateStr;
@@ -238,7 +275,11 @@
             if (tasks[selectedDate]) {
                 tasks[selectedDate].forEach((task, index) => {
                     const li = document.createElement("li");
-                    li.innerHTML = `${task} <button onclick="removeTask(${index})">✖</button>`;
+                    li.innerHTML = `<span>${task}</span>
+                        <div class="task-actions">
+                            <button onclick="markDone(${index})" aria-label="Mark Task Done"><span class="done-icon">✔</span></button>
+                            <button onclick="removeTask(${index})" aria-label="Remove Task"><span class="x-icon">✖</span></button>
+                        </div>`;
                     taskList.appendChild(li);
                 });
             }
@@ -252,6 +293,14 @@
             taskInput.value = "";
             generateCalendar();
             displayTasks();
+        }
+
+        function markDone(index) {
+            if (!tasks[selectedDate][index].startsWith("✅")) {
+                tasks[selectedDate][index] = `✅ ${tasks[selectedDate][index]}`;
+                generateCalendar();
+                displayTasks();
+            }
         }
 
         function removeTask(index) {
