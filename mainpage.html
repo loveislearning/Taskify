@@ -114,7 +114,7 @@
     .hidden {
       display: none;
     }
-    #trashSection { ... }
+
     /* Responsive */
     @media (max-width: 768px) {
       #menuToggle {
@@ -156,7 +156,8 @@
         <li><a href="planner.html">📅 Student Planner</a></li>
         <li><a href="Project_Management.htm">📂 Project Manager</a></li>
         <li><a href="spin_the_wheel.html">🎡 Spin The Wheel</a></li>
-        <li><a href="/recycle_bin.html"">🗑 Trash</a></li>
+        <li><a onclick="showSection('pomodoro')">⏱ Pomodoro Timer</a></li>
+        <li><a href="/recycle_bin.html">🗑 Trash</a></li>
       </ul>
     </div>
 
@@ -165,7 +166,14 @@
         <h2>📈 Task Completion Tracker</h2>
         <canvas id="progressChart"></canvas>
       </div>
-      <div id="trashSection" class="hidden">...</div>
+      <div id="trashSection" class="content-box hidden">
+        <h2>🗑 Trash</h2>
+        <p>This section will show deleted items and allow you to recover them.</p>
+      </div>
+      <div id="pomodoroSection" class="content-box hidden">
+        <h2>⏱ Pomodoro Timer</h2>
+        <p>Use this section to start focused work sessions using the Pomodoro technique.</p>
+      </div>
     </div>
   </div>
 
@@ -212,13 +220,15 @@
     });
 
     function showSection(section) {
-      document.getElementById('dashboardSection').classList.add('hidden');
-      document.getElementById('trashSection').classList.add('hidden');
+      const sections = ['dashboardSection', 'trashSection', 'pomodoroSection'];
+      sections.forEach(id => document.getElementById(id).classList.add('hidden'));
 
       if (section === 'dashboard') {
         document.getElementById('dashboardSection').classList.remove('hidden');
       } else if (section === 'trash') {
         document.getElementById('trashSection').classList.remove('hidden');
+      } else if (section === 'pomodoro') {
+        document.getElementById('pomodoroSection').classList.remove('hidden');
       }
     }
   </script>
