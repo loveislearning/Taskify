@@ -30,6 +30,7 @@
             font-size: 32px;
             color: #00bfff;
             margin: 0;
+            transition: color 0.3s;
         }
 
         .calendar-container {
@@ -62,7 +63,7 @@
             font-size: 24px;
             margin: 0;
             color: #fff;
-            transition: opacity 0.3s ease;
+            transition: color 0.3s;
         }
 
         .calendar-days {
@@ -72,6 +73,7 @@
             font-weight: bold;
             color: #00bfff;
             padding: 10px 0;
+            transition: color 0.3s;
         }
 
         .calendar {
@@ -94,12 +96,13 @@
             border-radius: 10px;
             text-align: center;
             cursor: pointer;
-            transition: background 0.3s ease, transform 0.3s ease;
+            transition: background 0.3s ease, transform 0.3s ease, color 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 18px;
             border: 1px solid #333;
+            color: #fff;
         }
 
         .day:hover {
@@ -110,7 +113,7 @@
         .today {
             background: #00d4ff !important;
             font-weight: bold;
-            color: #000;
+            color: #000 !important;
             animation: pulse 1.5s infinite;
         }
 
@@ -129,6 +132,7 @@
         .has-task {
             background: #00ff99 !important;
             animation: fadeInTask 0.5s ease;
+            color: #000 !important;
         }
 
         @keyframes fadeInTask {
@@ -142,6 +146,7 @@
 
         .selected {
             background: #ffa726 !important;
+            color: #000 !important;
         }
 
         .modal {
@@ -174,7 +179,8 @@
             position: relative;
             overflow: hidden;
             transform: scale(0.8);
-            transition: transform 0.3s ease-in-out;
+            transition: transform 0.3s ease-in-out, background 0.3s, color 0.3s;
+            color: #fff;
         }
 
         .modal.show .modal-content {
@@ -188,18 +194,19 @@
             border: none;
             border-radius: 8px;
             font-size: 16px;
+            transition: background 0.3s, color 0.3s;
         }
 
         input {
             background: #222;
-            color: white;
+            color: #fff;
         }
 
         button {
             background: #007bff;
-            color: white;
+            color: #fff;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: background 0.3s ease, color 0.3s;
         }
 
         button:hover {
@@ -233,7 +240,8 @@
             background: #222;
             padding: 8px;
             border-radius: 5px;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, background 0.3s, color 0.3s;
+            color: #fff;
         }
 
         ul#taskList li:hover {
@@ -281,6 +289,7 @@
             color: #fff;
             cursor: pointer;
             z-index: 1001;
+            transition: background 0.3s, color 0.3s;
         }
 
         .theme-toggle {
@@ -292,9 +301,78 @@
             color: #fff;
             transition: color 0.3s ease;
         }
-
         .theme-toggle:hover {
             color: #00d4ff;
+        }
+
+        /* LIGHT THEME OVERRIDES */
+        body.light {
+            background-color: #fff;
+            color: #000;
+        }
+        body.light h1 {
+            color: #007bff;
+        }
+        body.light .calendar-header span {
+            color: #000;
+        }
+        body.light .calendar-header h2 {
+            color: #000;
+        }
+        body.light .calendar-days {
+            color: #007bff;
+        }
+        body.light .calendar-container {
+            background: transparent;
+        }
+        body.light .calendar {
+            background: transparent;
+        }
+        body.light .day {
+            background: #f2f2f2;
+            border: 1px solid #ccc;
+            color: #000;
+        }
+        body.light .day:hover {
+            background: #e0e0e0;
+        }
+        body.light .today {
+            background: #00d4ff !important;
+            color: #000 !important;
+        }
+        body.light .has-task {
+            background: #00ff99 !important;
+            color: #000 !important;
+        }
+        body.light .selected {
+            background: #ffa726 !important;
+            color: #000 !important;
+        }
+        body.light .modal {
+            background: rgba(0,0,0,0.2);
+        }
+        body.light .modal-content {
+            background: #fff;
+            color: #000;
+        }
+        body.light input {
+            background: #eaeaea;
+            color: #000;
+        }
+        body.light button {
+            background: #007bff;
+            color: #fff;
+        }
+        body.light ul#taskList li {
+            background: #eaeaea;
+            color: #000;
+        }
+        body.light .close-modal {
+            background: #eaeaea;
+            color: #000;
+        }
+        body.light .theme-toggle {
+            color: #000;
         }
     </style>
 </head>
@@ -332,6 +410,10 @@
         let isDarkMode = true;
 
         document.addEventListener("DOMContentLoaded", () => {
+            
+            if (localStorage.getItem("themeMode") === "light") {
+                isDarkMode = false;
+            }
             generateCalendar();
             updateTheme();
         });
@@ -425,7 +507,7 @@
         }
 
         function markTaskDone(date, index) {
-            // Placeholder for task marking logic
+            
         }
 
         function changeMonth(direction) {
@@ -443,16 +525,16 @@
         function toggleTheme() {
             isDarkMode = !isDarkMode;
             updateTheme();
+            
+            localStorage.setItem("themeMode", isDarkMode ? "dark" : "light");
         }
 
         function updateTheme() {
             if (isDarkMode) {
-                document.body.style.backgroundColor = "#000";
-                document.body.style.color = "#fff";
+                document.body.classList.remove("light");
                 document.getElementById("themeToggle").innerHTML = "&#x1F319;"; // Moon
             } else {
-                document.body.style.backgroundColor = "#fff";
-                document.body.style.color = "#000";
+                document.body.classList.add("light");
                 document.getElementById("themeToggle").innerHTML = "&#x1F31E;"; // Sun
             }
         }
