@@ -14,7 +14,16 @@
             --toolbar-bg: #2c3e50;
             --toolbar-btn: #34495e;
         }
-        
+        body.dark {
+            --sidebar-bg: #181c22;
+            --main-bg: #22272e;
+            --note-bg: #23272f;
+            --accent: #2ecc71;
+            --text: #f4f4f4;
+            --toolbar-bg: #181c22;
+            --toolbar-btn: #23272f;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: var(--main-bg);
@@ -187,6 +196,24 @@
             vertical-align: middle;
             user-select: none;
         }
+
+        .mode-toggle {
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: auto;
+        }
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 100px;
+            }
+            .main-content {
+                padding: 0;
+            }
+        }
         
     </style>
 </head>
@@ -246,7 +273,8 @@
                 <option value="orange">Orange</option>
                 <option value="none">Remove Highlight</option>
             </select>
-            
+            <button class="mode-toggle" onclick="toggleMode()">🌙/☀️</button>
+
             
         </div>
         <div class="container">
@@ -266,6 +294,20 @@
             document.getElementById('sidebar').classList.toggle('collapsed');
         }       
 
+        function toggleMode() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark'));
+        }
+        if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
+        
+        let tagList = document.getElementById('tagList');
+        let newTagInput = document.getElementById('newTag');
+        newTagInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && this.value.trim()) {
+                addTag(this.value.trim());
+                this.value = '';
+            }
+        });
         
         function addSubject() {
             let subjectName = document.getElementById("newSubject").value;
@@ -358,7 +400,6 @@
                 addSubject();
             }
         }
-
         
         function addDiscBullet() {
             document.execCommand('insertUnorderedList');
@@ -367,7 +408,6 @@
                 lists[lists.length - 1].style.listStyleType = 'disc';
             }
         }
-
         
         document.getElementById('insertImageSelect').addEventListener('change', function() {
             if (this.value === 'upload') {
@@ -375,7 +415,6 @@
                 this.selectedIndex = 0; 
             }
         });
-
        
         document.getElementById('alignImageSelect').addEventListener('change', function() {
             const direction = this.value;
@@ -410,7 +449,6 @@
             }
             this.selectedIndex = 0; 
         });
-
         
         function insertImage(src) {
             let imgContainer = document.createElement('div');
@@ -483,7 +521,6 @@
                 reader.readAsDataURL(file);
             }
         }
-
         
         document.addEventListener("click", function (e) {
             if (e.target.tagName === "IMG") {
@@ -494,7 +531,6 @@
                 sel.addRange(range);
             }
         });
-
         
         function changeFontSize(size) {
             const selection = window.getSelection();
@@ -537,6 +573,9 @@
             selection.addRange(range);
         }
         
+        window.onload = function() {
+            if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
+        };
        
         
     </script>
