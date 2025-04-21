@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Spin the Task Wheel</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+      text-align: center;
+      padding-top: 30px;
+    }
+    .wheel-container {
+      margin: 30px auto;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      border: 10px solid #444;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 25px rgba(0,0,0,0.2);
+      background-color: white;
+    }
+    .wheel {
+      width: 100%;
+      height: 100%;
+      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
+      transform: rotate(0deg);
+      position: relative;
+    }
+    .wheel div {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      color: #000;
+      line-height: 150px;
+      transform-origin: 100% 100%;
+      clip-path: polygon(100% 100%, 0% 100%, 100% 0%);
+      text-align: center;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .spin-btn, .add-btn {
+      padding: 12px 25px;
+      font-size: 16px;
+      background: linear-gradient(135deg, #007bff, #00d4ff);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      margin: 10px 5px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+      transition: 0.3s ease;
+    }
+    .spin-btn:hover, .add-btn:hover {
+      transform: scale(1.05);
+    }
+    .pointer {
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 25px solid red;
+      margin: 0 auto 15px;
+    }
+    #selected-task {
+      font-size: 20px;
+      margin-top: 25px;
+      font-weight: 600;
+      color: #333;
+    }
+    .task-input {
+      margin-top: 20px;
+    }
+    .task-input input {
+      padding: 10px;
+      width: 200px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎯 Spin to Pick a Task!</h1>
+  <div class="task-input">
+    <input type="text" id="new-task" placeholder="Enter a new task" />
+    <button class="add-btn" onclick="addTask()">➕ Add Task</button>
+  </div>
+
+  <div class="pointer"></div>
+  <div class="wheel-container">
+    <div class="wheel" id="wheel">
+      <!-- Tasks will be inserted here -->
+    </div>
+  </div>
+  <button class="spin-btn" onclick="spin()">🎲 Spin the Wheel</button>
+
+  <div id="selected-task"></div>
+
+  <script>
+    let tasks = ["Study Math", "Clean Desk", "Read Book", "Drink Water", "Do 10 Pushups", "Meditate"];
+    const wheel = document.getElementById("wheel");
+    const selectedTaskEl = document.getElementById("selected-task");
+
+    function createWheel() {
+      wheel.innerHTML = ""; // clear previous
+      const numTasks = tasks.length;
+      const degreePerTask = 360 / numTasks;
+
+      tasks.forEach((task, i) => {
+        const div = document.createElement("div");
+        div.style.transform = `rotate(${i * degreePerTask}deg)`;
+        div.style.background = i % 2 === 0 ? "#ff8a65" : "#4dd0e1";
+        div.innerHTML = task;
+        wheel.appendChild(div);
+      });
+    }
+
+    let deg = 0;
+
+    function spin() {
+      if (tasks.length === 0) return alert("Add some tasks first!");
+      const randomDeg = Math.floor(Math.random() * 360 + 1440);
+      deg += randomDeg;
+      wheel.style.transform = `rotate(${deg}deg)`;
+
+      setTimeout(() => {
+        const actualDeg = deg % 360;
+        const pickedIndex = Math.floor((360 - actualDeg + 30) % 360 / (360 / tasks.length));
+        selectedTaskEl.textContent = `✅ Do this task: ${tasks[pickedIndex]}`;
+      }, 4100);
+    }
+
+    function addTask() {
+      const newTask = document.getElementById("new-task").value.trim();
+      if (newTask) {
+        tasks.push(newTask);
+        document.getElementById("new-task").value = "";
+        createWheel();
+      }
+    }
+
+    createWheel();
+  </script>
+
+</body>
+</html>
