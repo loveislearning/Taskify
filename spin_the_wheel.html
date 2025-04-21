@@ -2,356 +2,191 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Spin the Task Wheel</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colorful Spin Wheel</title>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
-      text-align: center;
-      padding-top: 30px;
       margin: 0;
-      min-height: 100vh;
+      background: #1e1e2f;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Segoe UI', sans-serif;
     }
+
     .wheel-container {
-      margin: 30px auto;
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      border: 10px solid #222;
       position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 25px rgba(0,0,0,0.18);
-      background: linear-gradient(135deg, #f8fafc 60%, #e0e7ef 100%);
-      transition: box-shadow 0.2s;
+      width: 400px;
+      height: 400px;
     }
-    .wheel {
+
+    #wheel {
       width: 100%;
       height: 100%;
-      transition: transform 4s cubic-bezier(0.33, 1, 0.68, 1);
-      transform: rotate(0deg);
-      position: relative;
+      transition: transform 3s cubic-bezier(.25,1.7,.45,.98);
     }
-    .wheel-slice {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      left: 50%;
-      top: 50%;
-      transform-origin: 0% 0%;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      padding-right: 12px;
-      box-sizing: border-box;
-      color: #fff;
-      font-weight: bold;
-      font-size: 15px;
-      text-shadow: 1px 1px 2px #0002;
-      border-radius: 0 100% 0 0;
-      transition: background 0.4s;
-      cursor: pointer;
-      user-select: none;
-    }
-    .wheel-slice span {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .spin-btn, .add-btn {
-      padding: 12px 25px;
-      font-size: 16px;
-      background: linear-gradient(135deg, #007bff, #00d4ff);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      cursor: pointer;
-      margin: 10px 5px;
-      box-shadow: 0 8px 15px rgba(0,0,0,0.08);
-      transition: 0.3s ease;
-      outline: none;
-    }
-    .spin-btn:active, .add-btn:active {
-      transform: scale(0.97);
-    }
-    .spin-btn:focus, .add-btn:focus {
-      box-shadow: 0 0 0 3px #00d4ff55;
-    }
+
     .pointer {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%) rotate(180deg);
       width: 0;
       height: 0;
-      border-left: 22px solid transparent;
-      border-right: 22px solid transparent;
-      border-bottom: 38px solid #ff1744;
-      margin: 0 auto 12px;
-      position: relative;
+      border-left: 25px solid transparent;
+      border-right: 25px solid transparent;
+      border-top: 30px solid #ecf0f1;
       z-index: 2;
-      filter: drop-shadow(0 2px 4px #0002);
-      animation: pointer-bounce 0.9s infinite alternate;
     }
-    @keyframes pointer-bounce {
-      0% { transform: translateY(0);}
-      100% { transform: translateY(-6px);}
-    }
-    #selected-task {
-      font-size: 22px;
-      margin-top: 28px;
-      font-weight: 700;
-      color: #007bff;
-      min-height: 38px;
-      transition: color 0.4s;
-    }
-    .task-input {
-      margin-top: 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-    .task-input input {
-      padding: 10px;
-      width: 200px;
-      border: 1px solid #bbb;
-      border-radius: 8px;
-      font-size: 16px;
-      outline: none;
-      transition: border 0.2s;
-    }
-    .task-input input:focus {
-      border: 1.5px solid #007bff;
-    }
-    .task-list {
-      margin: 18px auto 0;
-      max-width: 330px;
-      text-align: left;
-      font-size: 15px;
-      color: #444;
-      padding: 0;
-      list-style: none;
-    }
-    .task-list li {
-      background: #f8fafc;
-      margin: 4px 0;
-      padding: 8px 12px;
-      border-radius: 7px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: 0 1px 3px #0001;
-      transition: background 0.25s;
-    }
-    .task-list li .remove-task {
-      background: none;
+
+    .spin-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #2c3e50;
+      color: white;
       border: none;
-      color: #ff1744;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
       font-size: 18px;
       cursor: pointer;
-      margin-left: 10px;
-      border-radius: 50%;
-      padding: 0 5px;
-      transition: background 0.2s;
+      z-index: 2;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-    .task-list li .remove-task:hover {
-      background: #ff174422;
+
+    .input-container {
+      margin-top: 30px;
+      display: flex;
+      gap: 10px;
     }
-    @media (max-width: 500px) {
-      .wheel-container { width: 98vw; height: 98vw; max-width: 340px; max-height: 340px;}
-      .task-input input { width: 120px; }
-      .task-list { max-width: 98vw;}
+
+    .input-container input {
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      width: 200px;
     }
-    /* Confetti */
-    .confetti {
+
+    .input-container button {
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      background: #27ae60;
+      color: white;
+      cursor: pointer;
+    }
+
+    #winnerPopup {
       position: fixed;
-      left: 0; top: 0; width: 100vw; height: 100vh;
-      pointer-events: none;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #333;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      display: none;
+      color: white;
+      font-size: 24px;
       z-index: 1000;
-    }
-    .confetti-piece {
-      position: absolute;
-      width: 12px; height: 18px;
-      border-radius: 3px;
-      opacity: 0.85;
-      will-change: transform;
+      text-align: center;
     }
   </style>
 </head>
 <body>
 
-  <h1>🎯 Spin to Pick a Task!</h1>
-  <div class="task-input">
-    <input type="text" id="new-task" placeholder="Enter a new task" aria-label="Enter a new task" />
-    <button class="add-btn" onclick="addTask()" aria-label="Add Task">➕ Add Task</button>
-  </div>
-
-  <ul class="task-list" id="task-list"></ul>
-
+<div class="wheel-container">
   <div class="pointer"></div>
-  <div class="wheel-container">
-    <div class="wheel" id="wheel">
-      <!-- Tasks will be inserted here -->
-    </div>
-  </div>
-  <button class="spin-btn" onclick="spin()" aria-label="Spin the Wheel">🎲 Spin the Wheel</button>
+  <canvas id="wheel" width="400" height="400"></canvas>
+  <button class="spin-button" onclick="spinWheel()">Spin</button>
+</div>
 
-  <div id="selected-task"></div>
-  <canvas class="confetti" id="confetti-canvas"></canvas>
+<div class="input-container">
+  <input type="text" id="taskInput" placeholder="Add a task...">
+  <button onclick="addTask()">Add</button>
+</div>
 
-  <!-- Sound effects -->
-  <audio id="spin-sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9b7b7b.mp3"></audio>
-  <audio id="win-sound" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9b7b7b.mp3"></audio>
+<div id="winnerPopup"></div>
 
-  <script>
-    // Task icons (optional, can expand)
-    const taskIcons = [
-      "📚", "🧹", "📖", "💧", "💪", "🧘‍♂️", "🎵", "📝", "🎨", "🍏", "🚶‍♂️", "🧑‍💻"
-    ];
+<script>
+  const canvas = document.getElementById('wheel');
+  const ctx = canvas.getContext('2d');
+  let segments = [];
+  const colors = [
+    '#ffcc00', '#339933', '#9933cc', '#ff3366',
+    '#ff3300', '#999999', '#99cc00', '#3399ff',
+    '#ff6600', '#00ccff', '#6666cc', '#ffff66'
+  ];
 
-    let tasks = [
-      "Study Math", "Clean Desk", "Read Book", "Drink Water", "Do 10 Pushups", "Meditate"
-    ];
-    const wheel = document.getElementById("wheel");
-    const selectedTaskEl = document.getElementById("selected-task");
-    const taskListEl = document.getElementById("task-list");
-    const spinSound = document.getElementById("spin-sound");
-    const winSound = document.getElementById("win-sound");
-    let deg = 0;
-    let spinning = false;
+  let startAngle = 0;
+  let rotation = 0;
+  let spinning = false;
 
-    function createWheel() {
-      wheel.innerHTML = "";
-      const numTasks = tasks.length;
-      const degreePerTask = 360 / numTasks;
-      for (let i = 0; i < numTasks; i++) {
-        const div = document.createElement("div");
-        div.className = "wheel-slice";
-        div.style.transform = `rotate(${i * degreePerTask}deg) skewY(-${90 - degreePerTask}deg)`;
-        div.style.background = `linear-gradient(135deg, ${getColor(i)}, ${getColor(i, 1)})`;
-        div.innerHTML = `<span>${taskIcons[i % taskIcons.length]} ${tasks[i]}</span>`;
-        wheel.appendChild(div);
-      }
-    }
-    function getColor(i, alt=0) {
-      // Nice pastel palette
-      const colors = [
-        ["#ff8a65", "#ffb74d"],
-        ["#4dd0e1", "#64b5f6"],
-        ["#81c784", "#aed581"],
-        ["#ba68c8", "#f06292"],
-        ["#ffd54f", "#fff176"],
-        ["#90caf9", "#80deea"],
-        ["#e57373", "#f06292"],
-        ["#a1887f", "#bcaaa4"],
-        ["#7986cb", "#64b5f6"],
-        ["#ffd600", "#ffb300"],
-        ["#00e676", "#1de9b6"],
-        ["#f44336", "#ff7043"]
-      ];
-      return colors[i % colors.length][alt];
+  function drawWheel() {
+    const arc = Math.PI * 2 / segments.length;
+    ctx.clearRect(0, 0, 400, 400);
+
+    for (let i = 0; i < segments.length; i++) {
+      const angle = startAngle + i * arc;
+      ctx.beginPath();
+      ctx.fillStyle = colors[i % colors.length];
+      ctx.moveTo(200, 200);
+      ctx.arc(200, 200, 200, angle, angle + arc, false);
+      ctx.lineTo(200, 200);
+      ctx.fill();
+
+      // Add label
+      ctx.save();
+      ctx.translate(200, 200);
+      ctx.rotate(angle + arc / 2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = "#fff";
+      ctx.font = "16px sans-serif";
+      ctx.fillText(segments[i], 180, 5);
+      ctx.restore();
     }
 
-    function updateTaskList() {
-      taskListEl.innerHTML = "";
-      tasks.forEach((task, i) => {
-        const li = document.createElement("li");
-        li.innerHTML = `<span>${taskIcons[i % taskIcons.length]} ${task}</span>
-          <button class="remove-task" aria-label="Remove Task" onclick="removeTask(${i})">✖️</button>`;
-        taskListEl.appendChild(li);
-      });
-    }
+    // Draw center circle
+    ctx.beginPath();
+    ctx.fillStyle = "#2c3e50";
+    ctx.arc(200, 200, 50, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
-    function addTask() {
-      const input = document.getElementById("new-task");
-      const newTask = input.value.trim();
-      if (newTask) {
-        tasks.push(newTask);
-        input.value = "";
-        createWheel();
-        updateTaskList();
-      }
-      input.focus();
-    }
-    function removeTask(idx) {
-      tasks.splice(idx, 1);
-      createWheel();
-      updateTaskList();
-    }
+  function spinWheel() {
+    if (spinning || segments.length === 0) return;
+    spinning = true;
+    const spinAngle = Math.floor(3600 + Math.random() * 360);
+    rotation += spinAngle;
+    canvas.style.transform = `rotate(${rotation}deg)`;
+    const arc = 360 / segments.length;
+    const selectedIndex = segments.length - Math.floor((rotation % 360) / arc) - 1;
+    const winner = segments[selectedIndex < 0 ? selectedIndex + segments.length : selectedIndex];
 
-    function spin() {
-      if (spinning) return;
-      if (tasks.length === 0) return alert("Add some tasks first!");
-      spinning = true;
-      spinSound.currentTime = 0;
-      spinSound.play();
-      selectedTaskEl.textContent = "";
-      const randomDeg = Math.floor(Math.random() * 360 + 1440); // 4+ spins
-      deg += randomDeg;
-      wheel.style.transform = `rotate(${deg}deg)`;
-
+    setTimeout(() => {
+      spinning = false;
+      document.getElementById("winnerPopup").textContent = `🎉 ${winner} 🎉`;
+      document.getElementById("winnerPopup").style.display = 'block';
       setTimeout(() => {
-        const actualDeg = deg % 360;
-        const degreePerTask = 360 / tasks.length;
-        // Offset by half a slice for pointer alignment
-        const pickedIndex = Math.floor(((360 - actualDeg + degreePerTask/2) % 360) / degreePerTask);
-        const pickedTask = tasks[pickedIndex];
-        selectedTaskEl.textContent = `✅ Do this task: ${pickedTask}`;
-        selectedTaskEl.style.color = getColor(pickedIndex);
-        winSound.currentTime = 0;
-        winSound.play();
-        launchConfetti();
-        // Optionally, remove the task after selection:
-        // tasks.splice(pickedIndex, 1); createWheel(); updateTaskList();
-        spinning = false;
-      }, 4100);
+        document.getElementById("winnerPopup").style.display = 'none';
+      }, 3000);
+    }, 3000);
+  }
+
+  function addTask() {
+    const taskInput = document.getElementById('taskInput');
+    const task = taskInput.value.trim();
+    if (task) {
+      segments.push(task);
+      taskInput.value = '';
+      drawWheel();
     }
+  }
+</script>
 
-    // Confetti effect
-    function launchConfetti() {
-      const canvas = document.getElementById("confetti-canvas");
-      const ctx = canvas.getContext("2d");
-      let pieces = [];
-      let W = window.innerWidth, H = window.innerHeight;
-      canvas.width = W; canvas.height = H;
-      const colors = ["#ff8a65", "#4dd0e1", "#ffd54f", "#ba68c8", "#81c784", "#f44336"];
-      for (let i = 0; i < 50; i++) {
-        pieces.push({
-          x: Math.random() * W,
-          y: Math.random() * -H/2,
-          w: 12, h: 18,
-          color: colors[Math.floor(Math.random()*colors.length)],
-          speed: 2 + Math.random()*3,
-          angle: Math.random()*2*Math.PI,
-          spin: (Math.random()-0.5)*0.2
-        });
-      }
-      let frame = 0;
-      function draw() {
-        ctx.clearRect(0,0,W,H);
-        for (let p of pieces) {
-          ctx.save();
-          ctx.translate(p.x, p.y);
-          ctx.rotate(p.angle);
-          ctx.fillStyle = p.color;
-          ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
-          ctx.restore();
-          p.y += p.speed;
-          p.angle += p.spin;
-        }
-        frame++;
-        if (frame < 60) requestAnimationFrame(draw);
-      }
-      draw();
-      setTimeout(()=>ctx.clearRect(0,0,W,H), 1800);
-    }
-
-    // Accessibility: Enter to add task
-    document.getElementById("new-task").addEventListener("keyup", function(e){
-      if (e.key === "Enter") addTask();
-    });
-
-    // Initial render
-    createWheel();
-    updateTaskList();
-  </script>
 </body>
 </html>
