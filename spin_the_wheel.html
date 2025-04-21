@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Taskify Wheel</title>
+  <title>Colorful Spin Wheel</title>
   <style>
     body {
       margin: 0;
@@ -37,7 +37,7 @@
       height: 0;
       border-left: 25px solid transparent;
       border-right: 25px solid transparent;
-      border-top: 30px solid #ffffff;
+      border-top: 30px solid #ecf0f1;
       z-index: 2;
     }
 
@@ -46,17 +46,16 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: linear-gradient(to right, #007bff, #00c6ff);
+      background: #2c3e50;
       color: white;
       border: none;
       border-radius: 50%;
       width: 80px;
       height: 80px;
       font-size: 18px;
-      font-weight: bold;
       cursor: pointer;
       z-index: 2;
-      box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
 
     .input-container {
@@ -72,152 +71,178 @@
       width: 200px;
     }
 
-    .input-container button {
+    .input-container button,
+    .reset-button {
       padding: 10px 20px;
       border-radius: 5px;
       border: none;
-      background: #007bff;
+      background: #27ae60;
       color: white;
-      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .input-container button:hover {
-      background: #0056b3;
     }
 
     #winnerPopup {
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
-      background: #111;
-      padding: 30px;
-      border-radius: 10px;
-      border: 2px solid #00c6ff;
-      color: #00c6ff;
-      font-size: 24px;
-      font-weight: bold;
+      transform: translate(-50%, -50%) scale(0.5);
+      background: #222;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
       display: none;
+      color: white;
+      font-size: 26px;
       z-index: 1000;
       text-align: center;
-      box-shadow: 0 0 20px rgba(0, 198, 255, 0.6);
+      animation: popin 0.3s ease forwards;
     }
 
-    .reset-button {
-      margin-top: 15px;
+    #winnerPopup.show {
+      display: block;
+    }
+
+    #winnerPopup button {
+      margin-top: 20px;
       padding: 10px 20px;
-      border-radius: 5px;
+      background: #27ae60;
       border: none;
-      background: #dc3545;
       color: white;
-      font-weight: bold;
+      border-radius: 10px;
       cursor: pointer;
+      font-size: 16px;
+    }
+
+    @keyframes popin {
+      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-  <div class="wheel-container">
-    <div class="pointer"></div>
-    <canvas id="wheel" width="400" height="400"></canvas>
-    <button class="spin-button" onclick="spinWheel()">Spin</button>
-  </div>
+<div class="wheel-container">
+  <div class="pointer"></div>
+  <canvas id="wheel" width="400" height="400"></canvas>
+  <button class="spin-button" onclick="spinWheel()">Spin</button>
+</div>
 
-  <div class="input-container">
-    <input type="text" id="taskInput" placeholder="Add a task...">
-    <button onclick="addTask()">Add</button>
-    <button class="reset-button" onclick="resetTasks()">Reset</button>
-  </div>
+<div class="input-container">
+  <input type="text" id="taskInput" placeholder="Add a task...">
+  <button onclick="addTask()">Add</button>
+  <button class="reset-button" onclick="resetTasks()">Reset</button>
+</div>
 
-  <div id="winnerPopup"></div>
+<div id="winnerPopup"></div>
+<audio id="spinSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
 
-  <script>
-    const canvas = document.getElementById('wheel');
-    const ctx = canvas.getContext('2d');
-    let segments = [];
-    const colors = [
-      '#ffcc00', '#339933', '#9933cc', '#ff3366',
-      '#ff3300', '#999999', '#99cc00', '#3399ff',
-      '#ff6600', '#00ccff', '#6666cc', '#ffff66'
-    ];
+<script>
+  const canvas = document.getElementById('wheel');
+  const ctx = canvas.getContext('2d');
+  let segments = [];
+  const colors = [
+    '#ffcc00', '#339933', '#9933cc', '#ff3366', '#ff3300',
+    '#999999', '#99cc00', '#3399ff', '#ff6600', '#00ccff',
+    '#6666cc', '#ffff66', '#ff99cc', '#66ffcc', '#ff9966'
+  ];
 
-    let startAngle = 0;
-    let rotation = 0;
-    let spinning = false;
+  let startAngle = 0;
+  let rotation = 0;
+  let spinning = false;
 
-    function drawWheel() {
-      const arc = Math.PI * 2 / segments.length;
-      ctx.clearRect(0, 0, 400, 400);
+  const spinSound = document.getElementById("spinSound");
+  const winnerPopup = document.getElementById("winnerPopup");
 
-      for (let i = 0; i < segments.length; i++) {
-        const angle = startAngle + i * arc;
-        ctx.beginPath();
-        ctx.fillStyle = colors[i % colors.length];
-        ctx.moveTo(200, 200);
-        ctx.arc(200, 200, 200, angle, angle + arc, false);
-        ctx.lineTo(200, 200);
-        ctx.fill();
+  function drawWheel() {
+    const arc = Math.PI * 2 / segments.length;
+    ctx.clearRect(0, 0, 400, 400);
 
-        ctx.save();
-        ctx.translate(200, 200);
-        ctx.rotate(angle + arc / 2);
-        ctx.textAlign = "right";
-        ctx.fillStyle = "#fff";
-        ctx.font = "16px sans-serif";
-        ctx.fillText(segments[i], 180, 5);
-        ctx.restore();
-      }
-
+    for (let i = 0; i < segments.length; i++) {
+      const angle = startAngle + i * arc;
       ctx.beginPath();
-      ctx.fillStyle = "#2c3e50";
-      ctx.arc(200, 200, 50, 0, Math.PI * 2);
+      ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+      ctx.moveTo(200, 200);
+      ctx.arc(200, 200, 200, angle, angle + arc, false);
+      ctx.lineTo(200, 200);
       ctx.fill();
+
+      ctx.save();
+      ctx.translate(200, 200);
+      ctx.rotate(angle + arc / 2);
+      ctx.textAlign = "right";
+      ctx.fillStyle = "#fff";
+      ctx.font = "16px sans-serif";
+      ctx.fillText(segments[i], 180, 5);
+      ctx.restore();
     }
 
-    function spinWheel() {
-      if (spinning || segments.length === 0) return;
-      spinning = true;
-      const spinAngle = Math.floor(3600 + Math.random() * 360);
-      rotation += spinAngle;
-      canvas.style.transform = `rotate(${rotation}deg)`;
-      const arc = 360 / segments.length;
-      const selectedIndex = segments.length - Math.floor((rotation % 360) / arc) - 1;
-      const winner = segments[selectedIndex < 0 ? selectedIndex + segments.length : selectedIndex];
+    ctx.beginPath();
+    ctx.fillStyle = "#2c3e50";
+    ctx.arc(200, 200, 50, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
-      setTimeout(() => {
-        spinning = false;
-        const confirmComplete = confirm(`Did you complete: ${winner}? Click OK to remove it.`);
-        if (confirmComplete) {
-          segments.splice(selectedIndex, 1);
-          drawWheel();
-        }
-        document.getElementById("winnerPopup").textContent = `🎉 ${winner} 🎉`;
-        document.getElementById("winnerPopup").style.display = 'block';
-        setTimeout(() => {
-          document.getElementById("winnerPopup").style.display = 'none';
-        }, 3000);
-      }, 3000);
-    }
+  function spinWheel() {
+    if (spinning || segments.length === 0) return;
+    spinning = true;
+    spinSound.currentTime = 0;
+    spinSound.play().catch(e => console.warn("Sound blocked:", e));
 
-    function addTask() {
-      const taskInput = document.getElementById('taskInput');
-      const task = taskInput.value.trim();
-      if (task) {
-        segments.push(task);
-        taskInput.value = '';
-        drawWheel();
-      }
-    }
+    const spinAngle = Math.floor(3600 + Math.random() * 360);
+    rotation += spinAngle;
+    canvas.style.transform = `rotate(${rotation}deg)`;
+    const arc = 360 / segments.length;
+    const selectedIndex = segments.length - Math.floor((rotation % 360) / arc) - 1;
+    const winner = segments[selectedIndex < 0 ? selectedIndex + segments.length : selectedIndex];
 
-    function resetTasks() {
-      if (confirm("Are you sure you want to reset all tasks?")) {
-        segments = [];
-        drawWheel();
-      }
+    setTimeout(() => {
+      spinning = false;
+      showWinnerPopup(winner, selectedIndex);
+    }, 3000);
+  }
+
+  function showWinnerPopup(winner, index) {
+    winnerPopup.innerHTML = `
+      <div>🎉 <strong>${winner}</strong> 🎉</div>
+      <button onclick="removeWinner(${index})">Remove Task</button>
+      <button onclick="closeWinnerPopup()">Keep Task</button>
+    `;
+    winnerPopup.classList.add("show");
+  }
+
+  function closeWinnerPopup() {
+    winnerPopup.classList.remove("show");
+  }
+
+  function removeWinner(index) {
+    segments.splice(index, 1);
+    drawWheel();
+    closeWinnerPopup();
+  }
+
+  function addTask() {
+    const taskInput = document.getElementById('taskInput');
+    const task = taskInput.value.trim();
+    if (task) {
+      segments.push(task);
+      taskInput.value = '';
+      drawWheel();
     }
-  </script>
+  }
+
+  function resetTasks() {
+    if (confirm("Are you sure you want to clear all tasks?")) {
+      segments = [];
+      drawWheel();
+    }
+  }
+
+  document.getElementById("taskInput").addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      addTask();
+    }
+  });
+</script>
 
 </body>
 </html>
