@@ -115,6 +115,133 @@
       display: none;
     }
 
+    /* Pomodoro Timer Styles */
+    .pomodoro-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+    }
+    .timer-display {
+      font-size: 6rem;
+      font-weight: 300;
+      margin: 30px 0;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 200, 150, 0.5);
+      font-family: 'Courier New', monospace;
+    }
+    .timer-controls {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .timer-btn {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .start-btn {
+      background: linear-gradient(135deg, #00b894, #00cec9);
+      color: white;
+      box-shadow: 0 4px 15px rgba(0, 200, 150, 0.4);
+    }
+    .start-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 200, 150, 0.6);
+    }
+    .reset-btn {
+      background: linear-gradient(135deg, #ff7675, #e84393);
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 100, 100, 0.4);
+    }
+    .reset-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 100, 100, 0.6);
+    }
+    .timer-settings {
+      display: flex;
+      gap: 30px;
+      margin-top: 20px;
+    }
+    .timer-mode {
+      text-align: center;
+    }
+    .timer-mode h3 {
+      margin-bottom: 10px;
+      color: #aaa;
+      font-weight: 500;
+    }
+    .timer-mode-btn {
+      background: #333;
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .timer-mode-btn.active {
+      background: #00b894;
+      color: white;
+    }
+    .timer-mode-btn:hover:not(.active) {
+      background: #444;
+    }
+    .timer-adjust {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    .timer-adjust button {
+      background: #333;
+      color: #fff;
+      border: none;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .timer-adjust button:hover {
+      background: #444;
+    }
+    .timer-adjust span {
+      min-width: 30px;
+      text-align: center;
+    }
+    .progress-ring {
+      position: relative;
+      width: 300px;
+      height: 300px;
+    }
+    .progress-ring-circle {
+      transform: rotate(-90deg);
+      transform-origin: 50% 50%;
+      transition: stroke-dashoffset 0.5s linear;
+    }
+    .session-counter {
+      margin-top: 30px;
+      font-size: 1.2rem;
+      color: #aaa;
+    }
+    .session-counter span {
+      color: #00b894;
+      font-weight: bold;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       #menuToggle {
@@ -133,6 +260,13 @@
       }
       .sidebar.active {
         transform: translateX(0);
+      }
+      .timer-display {
+        font-size: 4rem;
+      }
+      .progress-ring {
+        width: 250px;
+        height: 250px;
       }
     }
   </style>
@@ -171,8 +305,52 @@
         <p>This section will show deleted items and allow you to recover them.</p>
       </div>
       <div id="pomodoroSection" class="content-box hidden">
-        <h2>⏱ Pomodoro Timer</h2>
-        <p>Use this section to start focused work sessions using the Pomodoro technique.</p>
+        <div class="pomodoro-container">
+          <h2>⏱ Pomodoro Timer</h2>
+          <div class="progress-ring">
+            <svg width="100%" height="100%" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="45" fill="none" stroke="#333" stroke-width="5"/>
+              <circle class="progress-ring-circle" cx="50" cy="50" r="45" fill="none" stroke="#00b894" stroke-width="5" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="0"/>
+            </svg>
+            <div class="timer-display">25:00</div>
+          </div>
+          <div class="timer-controls">
+            <button class="timer-btn start-btn">Start</button>
+            <button class="timer-btn reset-btn">Reset</button>
+          </div>
+          <div class="timer-settings">
+            <div class="timer-mode">
+              <h3>Focus Time</h3>
+              <button class="timer-mode-btn active" data-mode="focus">25:00</button>
+              <div class="timer-adjust">
+                <button class="decrease-focus">-</button>
+                <span>25</span>
+                <button class="increase-focus">+</button>
+              </div>
+            </div>
+            <div class="timer-mode">
+              <h3>Short Break</h3>
+              <button class="timer-mode-btn" data-mode="shortBreak">05:00</button>
+              <div class="timer-adjust">
+                <button class="decrease-shortBreak">-</button>
+                <span>5</span>
+                <button class="increase-shortBreak">+</button>
+              </div>
+            </div>
+            <div class="timer-mode">
+              <h3>Long Break</h3>
+              <button class="timer-mode-btn" data-mode="longBreak">15:00</button>
+              <div class="timer-adjust">
+                <button class="decrease-longBreak">-</button>
+                <span>15</span>
+                <button class="increase-longBreak">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="session-counter">
+            Sessions completed: <span>0</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -231,6 +409,205 @@
         document.getElementById('pomodoroSection').classList.remove('hidden');
       }
     }
+
+    // Pomodoro Timer Functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      const timerDisplay = document.querySelector('.timer-display');
+      const startBtn = document.querySelector('.start-btn');
+      const resetBtn = document.querySelector('.reset-btn');
+      const modeButtons = document.querySelectorAll('.timer-mode-btn');
+      const sessionCounter = document.querySelector('.session-counter span');
+      const progressCircle = document.querySelector('.progress-ring-circle');
+      const circleCircumference = 2 * Math.PI * 45;
+      
+      // Set initial stroke dasharray and offset
+      progressCircle.style.strokeDasharray = circleCircumference;
+      progressCircle.style.strokeDashoffset = 0;
+
+      // Timer settings
+      let settings = {
+        focus: 25,
+        shortBreak: 5,
+        longBreak: 15,
+        longBreakInterval: 4,
+        sessions: 0
+      };
+
+      // Timer state
+      let state = {
+        timeLeft: settings.focus * 60,
+        isRunning: false,
+        mode: 'focus',
+        interval: null,
+        totalSeconds: settings.focus * 60
+      };
+
+      // Update the timer display
+      function updateDisplay() {
+        const minutes = Math.floor(state.timeLeft / 60);
+        const seconds = state.timeLeft % 60;
+        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        
+        // Update progress circle
+        const progressOffset = circleCircumference - (state.timeLeft / state.totalSeconds) * circleCircumference;
+        progressCircle.style.strokeDashoffset = progressOffset;
+      }
+
+      // Switch timer mode
+      function switchMode(mode) {
+        state.mode = mode;
+        state.totalSeconds = settings[mode] * 60;
+        state.timeLeft = state.totalSeconds;
+        
+        // Update active mode button
+        modeButtons.forEach(btn => btn.classList.remove('active'));
+        document.querySelector(`.timer-mode-btn[data-mode="${mode}"]`).classList.add('active');
+        
+        // Update display
+        updateDisplay();
+        
+        // Change circle color based on mode
+        if (mode === 'focus') {
+          progressCircle.style.stroke = '#00b894';
+        } else {
+          progressCircle.style.stroke = '#0984e3';
+        }
+      }
+
+      // Start the timer
+      function startTimer() {
+        if (state.isRunning) return;
+        
+        state.isRunning = true;
+        startBtn.textContent = 'Pause';
+        
+        state.interval = setInterval(() => {
+          state.timeLeft--;
+          updateDisplay();
+          
+          if (state.timeLeft <= 0) {
+            clearInterval(state.interval);
+            state.isRunning = false;
+            
+            // Play sound
+            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
+            audio.play();
+            
+            // Handle mode switching
+            if (state.mode === 'focus') {
+              settings.sessions++;
+              sessionCounter.textContent = settings.sessions;
+              
+              if (settings.sessions % settings.longBreakInterval === 0) {
+                switchMode('longBreak');
+              } else {
+                switchMode('shortBreak');
+              }
+              
+              // Auto-start break if in focus mode
+              setTimeout(() => {
+                startTimer();
+              }, 1000);
+            } else {
+              // Auto-start focus after break
+              setTimeout(() => {
+                switchMode('focus');
+                startTimer();
+              }, 1000);
+            }
+          }
+        }, 1000);
+      }
+
+      // Pause the timer
+      function pauseTimer() {
+        clearInterval(state.interval);
+        state.isRunning = false;
+        startBtn.textContent = 'Start';
+      }
+
+      // Reset the timer
+      function resetTimer() {
+        pauseTimer();
+        state.timeLeft = settings[state.mode] * 60;
+        state.totalSeconds = state.timeLeft;
+        updateDisplay();
+      }
+
+      // Event listeners
+      startBtn.addEventListener('click', () => {
+        if (state.isRunning) {
+          pauseTimer();
+        } else {
+          startTimer();
+        }
+      });
+
+      resetBtn.addEventListener('click', resetTimer);
+
+      // Mode switching
+      modeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (state.isRunning) pauseTimer();
+          switchMode(btn.dataset.mode);
+        });
+      });
+
+      // Time adjustment buttons
+      document.querySelectorAll('.increase-focus, .decrease-focus').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('increase-focus')) {
+            settings.focus = Math.min(60, settings.focus + 1);
+          } else {
+            settings.focus = Math.max(1, settings.focus - 1);
+          }
+          document.querySelector('.timer-mode-btn[data-mode="focus"]').textContent = `${settings.focus}:00`;
+          btn.parentElement.querySelector('span').textContent = settings.focus;
+          if (state.mode === 'focus') {
+            state.timeLeft = settings.focus * 60;
+            state.totalSeconds = state.timeLeft;
+            updateDisplay();
+          }
+        });
+      });
+
+      document.querySelectorAll('.increase-shortBreak, .decrease-shortBreak').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('increase-shortBreak')) {
+            settings.shortBreak = Math.min(15, settings.shortBreak + 1);
+          } else {
+            settings.shortBreak = Math.max(1, settings.shortBreak - 1);
+          }
+          document.querySelector('.timer-mode-btn[data-mode="shortBreak"]').textContent = `${settings.shortBreak}:00`;
+          btn.parentElement.querySelector('span').textContent = settings.shortBreak;
+          if (state.mode === 'shortBreak') {
+            state.timeLeft = settings.shortBreak * 60;
+            state.totalSeconds = state.timeLeft;
+            updateDisplay();
+          }
+        });
+      });
+
+      document.querySelectorAll('.increase-longBreak, .decrease-longBreak').forEach(btn => {
+        btn.addEventListener('click', () => {
+          if (btn.classList.contains('increase-longBreak')) {
+            settings.longBreak = Math.min(30, settings.longBreak + 1);
+          } else {
+            settings.longBreak = Math.max(5, settings.longBreak - 1);
+          }
+          document.querySelector('.timer-mode-btn[data-mode="longBreak"]').textContent = `${settings.longBreak}:00`;
+          btn.parentElement.querySelector('span').textContent = settings.longBreak;
+          if (state.mode === 'longBreak') {
+            state.timeLeft = settings.longBreak * 60;
+            state.totalSeconds = state.timeLeft;
+            updateDisplay();
+          }
+        });
+      });
+
+      // Initialize
+      updateDisplay();
+    });
   </script>
 </body>
 </html>
