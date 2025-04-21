@@ -5,18 +5,24 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Taskify - Settings</title>
   <style>
-    /* General Styles */
+    :root {
+      --bg-color: #000000;
+      --text-color: #ffffff;
+      --card-bg: #1E1E1E;
+      --accent-color: #4CAF50;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #000000;
-      color: #ffffff;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    /* Header Styles */
     .settings-header {
-      background-color: #1E1E1E;
+      background-color: var(--card-bg);
       color: white;
       padding: 1rem;
       display: flex;
@@ -35,7 +41,6 @@
       flex-grow: 1;
     }
 
-    /* Close Button */
     .close-container {
       width: 40px;
       height: 40px;
@@ -78,10 +83,9 @@
       transform: scale(1.1);
     }
 
-    /* Sidebar */
     .sidebar {
       width: 200px;
-      background-color: #1E1E1E;
+      background-color: var(--card-bg);
       height: 100vh;
       position: fixed;
       top: 0;
@@ -107,7 +111,6 @@
       background-color: #333333;
     }
 
-    /* Main Content */
     .settings-content {
       margin-left: 200px;
       padding: 2rem;
@@ -117,10 +120,11 @@
     .tab-content {
       display: none;
       animation: fadeIn 0.4s ease;
-      background-color: #1E1E1E;
+      background-color: var(--card-bg);
       border-radius: 8px;
       padding: 2rem;
       box-shadow: 0 0 10px rgba(255,255,255,0.1);
+      margin-bottom: 2rem;
     }
 
     .tab-content.active {
@@ -132,7 +136,6 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Form Styles */
     form label {
       display: block;
       margin-bottom: 0.5rem;
@@ -149,8 +152,12 @@
       margin-bottom: 1rem;
     }
 
+    form input[type="range"] {
+      width: 100%;
+    }
+
     form button {
-      background-color: #4CAF50;
+      background-color: var(--accent-color);
       color: white;
       padding: 0.6rem 1.2rem;
       border: none;
@@ -175,14 +182,17 @@
       background-color: darkred;
     }
 
-    /* Footer */
+    .font-preview {
+      font-size: 16px;
+      margin-bottom: 1rem;
+    }
+
     .settings-footer {
       text-align: center;
       padding: 1rem;
-      background-color: #1E1E1E;
+      background-color: var(--card-bg);
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       .sidebar {
         position: relative;
@@ -223,6 +233,9 @@
     <section id="account" class="tab-content active">
       <h2>Account Settings</h2>
       <form>
+        <label for="profile-pic">Profile Picture:</label>
+        <input type="file" id="profile-pic" name="profile-pic" accept="image/*" />
+
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" placeholder="Enter your name" />
 
@@ -242,11 +255,19 @@
         <label for="theme">Theme:</label>
         <select id="theme" name="theme">
           <option value="light">Light Mode</option>
-          <option value="dark" selected>Dark Mode</option>
+          <option value="dark">Dark Mode</option>
         </select>
 
         <label for="font-size">Font Size:</label>
         <input type="range" id="font-size" name="font-size" min="12" max="24" />
+        <p class="font-preview">This is a font preview.</p>
+
+        <label for="language">Language:</label>
+        <select id="language" name="language">
+          <option value="en">English</option>
+          <option value="es">Spanish</option>
+          <option value="fr">French</option>
+        </select>
 
         <button type="submit">Save Changes</button>
       </form>
@@ -255,15 +276,15 @@
     <section id="privacy" class="tab-content">
       <h2>Privacy & Security</h2>
       <p>Manage your privacy preferences and account security.</p>
-      <button class="danger-button">Delete Account</button>
+      <button class="danger-button" onclick="confirmDelete()">Delete Account</button>
     </section>
 
     <section id="about" class="tab-content">
       <h2>About Taskify</h2>
       <p>Version: 1.0.0</p>
-      <p><a href="/terms-of-service.html" style="color: #4CAF50;">Terms of Service</a></p>
-      <p><a href="/privacy-policy.html" style="color: #4CAF50;">Privacy Policy</a></p>
-      <p><a href="/contact.html" style="color: #4CAF50;">Contact Support</a></p>
+      <p><a href="/terms-of-service.html" style="color: var(--accent-color);">Terms of Service</a></p>
+      <p><a href="/privacy-policy.html" style="color: var(--accent-color);">Privacy Policy</a></p>
+      <p><a href="/contact.html" style="color: var(--accent-color);">Contact Support</a></p>
     </section>
   </main>
 
@@ -283,6 +304,47 @@
         document.getElementById(tabId).classList.add('active');
       });
     });
+
+    // Font size preview
+    const fontSizeSlider = document.getElementById('font-size');
+    const fontPreview = document.querySelector('.font-preview');
+    fontSizeSlider.addEventListener('input', () => {
+      fontPreview.style.fontSize = `${fontSizeSlider.value}px`;
+    });
+
+    // Theme selector with localStorage
+    const themeSelect = document.getElementById('theme');
+    const root = document.documentElement;
+
+    function applyTheme(theme) {
+      if (theme === 'light') {
+        root.style.setProperty('--bg-color', '#ffffff');
+        root.style.setProperty('--text-color', '#000000');
+        root.style.setProperty('--card-bg', '#f2f2f2');
+      } else {
+        root.style.setProperty('--bg-color', '#000000');
+        root.style.setProperty('--text-color', '#ffffff');
+        root.style.setProperty('--card-bg', '#1E1E1E');
+      }
+      localStorage.setItem('theme', theme);
+    }
+
+    themeSelect.addEventListener('change', () => {
+      applyTheme(themeSelect.value);
+    });
+
+    // Apply stored theme on load
+    const storedTheme = localStorage.getItem('theme') || 'dark';
+    themeSelect.value = storedTheme;
+    applyTheme(storedTheme);
+
+    // Confirm delete action
+    function confirmDelete() {
+      if (confirm("Are you sure you want to delete your account? This action is irreversible.")) {
+        alert("Account deleted.");
+        // Add actual delete logic here
+      }
+    }
   </script>
 </body>
 </html>
