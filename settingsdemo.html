@@ -4,37 +4,66 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Taskify - Settings</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --bg-color: #000000;
+      --bg-color: #121212;
       --text-color: #ffffff;
       --card-bg: #1E1E1E;
       --accent-color: #4CAF50;
+      --hover-color: #45a049;
+      --danger-color: #e53935;
+      --danger-hover: #c62828;
+      --border-radius: 8px;
+      --transition-speed: 0.3s;
+      --sidebar-width: 240px;
+      --header-height: 70px;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Light theme variables */
+    [data-theme="light"] {
+      --bg-color: #f5f5f5;
+      --text-color: #333333;
+      --card-bg: #ffffff;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     }
 
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: var(--bg-color);
       color: var(--text-color);
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color var(--transition-speed), color var(--transition-speed);
+      line-height: 1.6;
     }
 
     .settings-header {
       background-color: var(--card-bg);
-      color: white;
-      padding: 1rem;
+      color: var(--text-color);
+      padding: 0 1.5rem;
+      height: var(--header-height);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      animation: slideIn 0.5s ease-in-out;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
     }
 
     .settings-header .logo {
-      width: 50px;
-      margin-left: 20px;
-      transition: transform 0.3s ease;
+      width: 40px;
+      height: 40px;
+      transition: transform 0.5s ease;
     }
 
     .settings-header .logo:hover {
@@ -42,10 +71,10 @@
     }
 
     .settings-header h1 {
-      font-size: 24px;
-      margin-left: 20px;
-      flex-grow: 1;
-      transition: color 0.3s ease;
+      font-size: 1.5rem;
+      margin: 0;
+      font-weight: 600;
+      transition: color var(--transition-speed);
     }
 
     .settings-header h1:hover {
@@ -55,88 +84,97 @@
     .close-container {
       width: 40px;
       height: 40px;
-      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .close-container div {
-      position: absolute;
-      width: 100%;
-      height: 4px;
-      background-color: white;
-      top: 50%;
-      left: 0;
-      transform-origin: center;
-      border-radius: 2px;
-      transition: transform 0.3s ease, background-color 0.3s ease;
-    }
-
-    .close-container .leftright {
-      transform: rotate(45deg);
-    }
-
-    .close-container .rightleft {
-      transform: rotate(-45deg);
-    }
-
-    .close-container:hover .leftright {
-      transform: rotate(-45deg);
-      background-color: #F25C66;
-    }
-
-    .close-container:hover .rightleft {
-      transform: rotate(45deg);
-      background-color: #F25C66;
+      border-radius: 50%;
+      transition: background-color var(--transition-speed);
     }
 
     .close-container:hover {
-      transform: scale(1.1);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .close-icon {
+      font-size: 1.5rem;
+      color: var(--text-color);
+      transition: color var(--transition-speed);
+    }
+
+    .close-container:hover .close-icon {
+      color: var(--danger-color);
+    }
+
+    .settings-container {
+      display: flex;
+      min-height: calc(100vh - var(--header-height));
     }
 
     .sidebar {
-      width: 200px;
+      width: var(--sidebar-width);
       background-color: var(--card-bg);
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: -250px;
-      padding-top: 2rem;
+      padding: 1.5rem 0;
+      box-shadow: var(--shadow);
+      position: relative;
+      z-index: 10;
+      transition: transform var(--transition-speed);
+    }
+
+    .sidebar-menu {
       display: flex;
       flex-direction: column;
-      animation: slideInSidebar 0.5s ease-in-out forwards;
+      gap: 0.5rem;
     }
 
     .sidebar button {
       background: none;
       border: none;
-      color: white;
-      padding: 1rem;
+      color: var(--text-color);
+      padding: 0.75rem 1.5rem;
       text-align: left;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
-      font-weight: bold;
+      transition: all var(--transition-speed);
+      font-weight: 500;
       font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-radius: 0 var(--border-radius) var(--border-radius) 0;
+      margin-right: 1rem;
     }
 
-    .sidebar button.active, .sidebar button:hover {
-      background-color: #333333;
-      transform: scale(1.05);
+    .sidebar button i {
+      width: 20px;
+      text-align: center;
+    }
+
+    .sidebar button.active, 
+    .sidebar button:hover {
+      background-color: rgba(76, 175, 80, 0.15);
+      color: var(--accent-color);
+      transform: translateX(5px);
+    }
+
+    .sidebar button.active {
+      font-weight: 600;
     }
 
     .settings-content {
-      margin-left: 200px;
+      flex: 1;
       padding: 2rem;
-      animation: fadeIn 0.5s ease-out;
+      max-width: 800px;
+      margin: 0 auto;
+      width: 100%;
     }
 
     .tab-content {
       display: none;
-      animation: fadeIn 0.5s ease-out;
+      animation: fadeIn 0.4s ease-out;
       background-color: var(--card-bg);
-      border-radius: 8px;
+      border-radius: var(--border-radius);
       padding: 2rem;
-      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+      box-shadow: var(--shadow);
       margin-bottom: 2rem;
     }
 
@@ -144,196 +182,531 @@
       display: block;
     }
 
+    .tab-content h2 {
+      margin-top: 0;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      color: var(--accent-color);
+    }
+
+    .tab-content p {
+      margin-bottom: 1.5rem;
+    }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes slideInSidebar {
-      from {
-        left: -250px;
-      }
-      to {
-        left: 0;
-      }
+    form {
+      display: grid;
+      gap: 1.25rem;
     }
 
-    @keyframes slideIn {
-      from {
-        transform: translateX(-100%);
-      }
-      to {
-        transform: translateX(0);
-      }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     form label {
-      display: block;
-      margin-bottom: 0.5rem;
       font-size: 0.9rem;
+      font-weight: 500;
     }
 
-    form input, form select {
+    form input, 
+    form select,
+    form textarea {
       width: 100%;
-      padding: 0.6rem;
-      border: none;
-      border-radius: 4px;
-      background-color: #333333;
-      color: white;
-      margin-bottom: 1rem;
-      transition: background-color 0.3s ease;
+      padding: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--border-radius);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: border-color var(--transition-speed);
+    }
+
+    [data-theme="light"] form input,
+    [data-theme="light"] form select,
+    [data-theme="light"] form textarea {
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    form input:focus, 
+    form select:focus,
+    form textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
     }
 
     form input[type="range"] {
-      width: 100%;
+      padding: 0;
+      accent-color: var(--accent-color);
     }
 
-    form button {
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 500;
+      transition: all var(--transition-speed);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
       background-color: var(--accent-color);
       color: white;
-      padding: 0.6rem 1.2rem;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
     }
 
-    form button:hover {
-      background-color: #45a049;
-      transform: scale(1.05);
+    .btn-primary:hover {
+      background-color: var(--hover-color);
+      transform: translateY(-2px);
     }
 
-    .danger-button {
-      background-color: red;
-      padding: 0.6rem 1.2rem;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s ease, transform 0.3s ease;
+    .btn-danger {
+      background-color: var(--danger-color);
+      color: white;
     }
 
-    .danger-button:hover {
-      background-color: darkred;
-      transform: scale(1.05);
+    .btn-danger:hover {
+      background-color: var(--danger-hover);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background-color: transparent;
+      border: 1px solid var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    .btn-outline:hover {
+      background-color: rgba(76, 175, 80, 0.1);
     }
 
     .font-preview {
       font-size: 16px;
-      margin-bottom: 1rem;
-      transition: font-size 0.3s ease;
+      margin: 0.5rem 0 1rem;
+      padding: 1rem;
+      background-color: var(--bg-color);
+      border-radius: var(--border-radius);
+      transition: font-size var(--transition-speed);
     }
 
     .settings-footer {
       text-align: center;
-      padding: 1rem;
+      padding: 1.5rem;
       background-color: var(--card-bg);
-      animation: fadeInFooter 1s ease-out;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: rgba(var(--text-color), 0.7);
     }
 
-    @keyframes fadeInFooter {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .link {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: color var(--transition-speed);
     }
 
-    @media (max-width: 768px) {
+    .link:hover {
+      color: var(--hover-color);
+      text-decoration: underline;
+    }
+
+    /* Responsive styles */
+    @media (max-width: 992px) {
+      .settings-container {
+        flex-direction: column;
+      }
+
       .sidebar {
-        position: relative;
         width: 100%;
-        height: auto;
+        padding: 1rem 0;
+      }
+
+      .sidebar-menu {
         flex-direction: row;
         overflow-x: auto;
+        padding: 0 1rem;
+      }
+
+      .sidebar button {
+        white-space: nowrap;
+        border-radius: var(--border-radius);
+        margin-right: 0;
+      }
+
+      .sidebar button:hover {
+        transform: translateY(-2px);
       }
 
       .settings-content {
-        margin-left: 0;
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .settings-header {
+        padding: 0 1rem;
+      }
+
+      .settings-header h1 {
+        font-size: 1.25rem;
       }
 
       .tab-content {
-        margin-top: 1rem;
+        padding: 1.5rem;
       }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    /* Custom checkbox */
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .custom-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--accent-color);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color var(--transition-speed);
+    }
+
+    .custom-checkbox i {
+      font-size: 12px;
+      color: white;
+      display: none;
+    }
+
+    input[type="checkbox"] {
+      display: none;
+    }
+
+    input[type="checkbox"]:checked + .custom-checkbox {
+      background-color: var(--accent-color);
+    }
+
+    input[type="checkbox"]:checked + .custom-checkbox i {
+      display: block;
+    }
+
+    /* File input styling */
+    .file-input-container {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    .file-input-button {
+      padding: 0.75rem 1.5rem;
+      background-color: var(--accent-color);
+      color: white;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      transition: background-color var(--transition-speed);
+    }
+
+    .file-input-button:hover {
+      background-color: var(--hover-color);
+    }
+
+    .file-input {
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-name {
+      margin-left: 1rem;
+      font-size: 0.9rem;
+      color: rgba(var(--text-color), 0.7);
     }
   </style>
 </head>
 <body>
   <header class="settings-header">
-    <img src="logo.png" alt="Taskify Logo" class="logo" />
-    <h1>Settings</h1>
-    <div class="close-container" onclick="window.location.href='mainpage.html';">
-      <div class="leftright"></div>
-      <div class="rightleft"></div>
+    <div class="header-content">
+      <img src="logo.png" alt="Taskify Logo" class="logo" />
+      <h1>Settings</h1>
+      <div class="close-container" onclick="window.location.href='mainpage.html';">
+        <i class="fas fa-times close-icon"></i>
+      </div>
     </div>
   </header>
 
-  <nav class="sidebar">
-    <button class="tab-button active" data-tab="account">Account</button>
-    <button class="tab-button" data-tab="appearance">Appearance</button>
-    <button class="tab-button" data-tab="privacy">Privacy & Security</button>
-    <button class="tab-button" data-tab="about">About</button>
-  </nav>
+  <div class="settings-container">
+    <nav class="sidebar">
+      <div class="sidebar-menu">
+        <button class="tab-button active" data-tab="account">
+          <i class="fas fa-user"></i>
+          <span>Account</span>
+        </button>
+        <button class="tab-button" data-tab="appearance">
+          <i class="fas fa-palette"></i>
+          <span>Appearance</span>
+        </button>
+        <button class="tab-button" data-tab="privacy">
+          <i class="fas fa-shield-alt"></i>
+          <span>Privacy & Security</span>
+        </button>
+        <button class="tab-button" data-tab="notifications">
+          <i class="fas fa-bell"></i>
+          <span>Notifications</span>
+        </button>
+        <button class="tab-button" data-tab="about">
+          <i class="fas fa-info-circle"></i>
+          <span>About</span>
+        </button>
+      </div>
+    </nav>
 
-  <main class="settings-content">
-    <section id="account" class="tab-content active">
-      <h2>Account Settings</h2>
-      <form>
-        <label for="profile-pic">Profile Picture:</label>
-        <input type="file" id="profile-pic" name="profile-pic" accept="image/*" />
+    <main class="settings-content">
+      <section id="account" class="tab-content active">
+        <h2>Account Settings</h2>
+        <form id="account-form">
+          <div class="form-group">
+            <label for="profile-pic">Profile Picture</label>
+            <div class="file-input-container">
+              <button type="button" class="file-input-button">
+                <i class="fas fa-upload"></i> Choose Image
+              </button>
+              <input type="file" id="profile-pic" name="profile-pic" accept="image/*" class="file-input" />
+              <span class="file-name" id="file-name">No file chosen</span>
+            </div>
+          </div>
 
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" placeholder="Enter your name" />
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" placeholder="Enter your full name" />
+          </div>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" placeholder="Enter your email" />
+          <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" />
+          </div>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="Enter new password" />
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email address" />
+          </div>
 
-        <button type="submit">Save Changes</button>
-      </form>
-    </section>
+          <div class="form-group">
+            <label for="bio">Bio</label>
+            <textarea id="bio" name="bio" rows="3" placeholder="Tell us about yourself"></textarea>
+          </div>
 
-    <section id="appearance" class="tab-content">
-      <h2>Appearance Settings</h2>
-      <form>
-        <label for="theme">Theme:</label>
-        <select id="theme" name="theme">
-          <option value="light">Light Mode</option>
-          <option value="dark">Dark Mode</option>
-        </select>
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-save"></i> Save Changes
+            </button>
+            <button type="button" class="btn btn-outline">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </section>
 
-        <label for="font-size">Font Size:</label>
-        <input type="range" id="font-size" name="font-size" min="12" max="24" />
-        <p class="font-preview">This is a font preview.</p>
+      <section id="appearance" class="tab-content">
+        <h2>Appearance Settings</h2>
+        <form id="appearance-form">
+          <div class="form-group">
+            <label for="theme">Theme Preference</label>
+            <select id="theme" name="theme">
+              <option value="dark">Dark Mode</option>
+              <option value="light">Light Mode</option>
+              <option value="system">System Default</option>
+            </select>
+          </div>
 
-        <label for="language">Language:</label>
-        <select id="language" name="language">
-          <option value="en">English</option>
-          <option value="es">Spanish</option>
-          <option value="fr">French</option>
-        </select>
+          <div class="form-group">
+            <label for="font-size">Font Size</label>
+            <input type="range" id="font-size" name="font-size" min="12" max="24" value="16" />
+            <div class="font-preview">This is how your text will appear with the selected font size.</div>
+          </div>
 
-        <button type="submit">Save Changes</button>
-      </form>
-    </section>
+          <div class="form-group">
+            <label for="language">Language</label>
+            <select id="language" name="language">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+              <option value="ja">日本語</option>
+            </select>
+          </div>
 
-    <section id="privacy" class="tab-content">
-      <h2>Privacy & Security</h2>
-      <p>Manage your privacy preferences and account security.</p>
-      <button class="danger-button" onclick="confirmDelete()">Delete Account</button>
-    </section>
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary">Save Preferences</button>
+            <button type="button" class="btn btn-outline" id="reset-appearance">Reset to Default</button>
+          </div>
+        </form>
+      </section>
 
-    <section id="about" class="tab-content">
-      <h2>About Taskify</h2>
-      <p>Version: 1.0.0</p>
-      <p><a href="/terms-of-service.html" style="color: var(--accent-color);">Terms of Service</a></p>
-      <p><a href="/privacy-policy.html" style="color: var(--accent-color);">Privacy Policy</a></p>
-      <p><a href="/contact.html" style="color: var(--accent-color);">Contact Support</a></p>
-    </section>
-  </main>
+      <section id="privacy" class="tab-content">
+        <h2>Privacy & Security</h2>
+        <form id="privacy-form">
+          <div class="form-group">
+            <label>Privacy Settings</label>
+            <div class="checkbox-container">
+              <input type="checkbox" id="activity-status" name="activity-status" checked />
+              <div class="custom-checkbox">
+                <i class="fas fa-check"></i>
+              </div>
+              <label for="activity-status">Show my activity status</label>
+            </div>
+
+            <div class="checkbox-container">
+              <input type="checkbox" id="data-collection" name="data-collection" checked />
+              <div class="custom-checkbox">
+                <i class="fas fa-check"></i>
+              </div>
+              <label for="data-collection">Allow anonymous data collection</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Change Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter new password" />
+            <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm new password" />
+          </div>
+
+          <div class="form-group">
+            <label>Two-Factor Authentication</label>
+            <div class="checkbox-container">
+              <input type="checkbox" id="two-factor" name="two-factor" />
+              <div class="custom-checkbox">
+                <i class="fas fa-check"></i>
+              </div>
+              <label for="two-factor">Enable two-factor authentication</label>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary">Update Settings</button>
+          </div>
+
+          <div class="form-group">
+            <h3>Danger Zone</h3>
+            <p>These actions are irreversible. Proceed with caution.</p>
+            <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+              <i class="fas fa-trash-alt"></i> Delete Account
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section id="notifications" class="tab-content">
+        <h2>Notification Settings</h2>
+        <form id="notifications-form">
+          <div class="form-group">
+            <label>Notification Preferences</label>
+            <div class="checkbox-container">
+              <input type="checkbox" id="email-notifications" name="email-notifications" checked />
+              <div class="custom-checkbox">
+                <i class="fas fa-check"></i>
+              </div>
+              <label for="email-notifications">Email notifications</label>
+            </div>
+
+            <div class="checkbox-container">
+              <input type="checkbox" id="push-notifications" name="push-notifications" checked />
+              <div class="custom-checkbox">
+                <i class="fas fa-check"></i>
+              </div>
+              <label for="push-notifications">Push notifications</label>
+            </div>
+
+            <div class="checkbox-container">
+              <input type="checkbox" id="sms-notifications" name="sms-notifications" />
+              <div class="custom-checkbox">
+                <i class="fas fa-check"></i>
+              </div>
+              <label for="sms-notifications">SMS notifications</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Notification Types</label>
+            <div class="checkbox-container">
+              <input type="checkbox" id="task-reminders" name="task-reminders" checked />
+              <div class="custom-checkbox">
+                <i class="fas fa-check"></i>
+              </div>
+              <label for="task-reminders">Task reminders</label>
+            </div>
+
+            <div class="checkbox-container">
+              <input type="checkbox" id="due-date-alerts" name="due-date-alerts" checked />
+              <div class="custom-checkbox">
+                <i class="fas fa-check"></i>
+              </div>
+              <label for="due-date-alerts">Due date alerts</label>
+            </div>
+
+            <div class="checkbox-container">
+              <input type="checkbox" id="product-updates" name="product-updates" checked />
+              <div class="custom-checkbox">
+                <i class="fas fa-check"></i>
+              </div>
+              <label for="product-updates">Product updates</label>
+            </div>
+          </div>
+
+          <div class="button-group">
+            <button type="submit" class="btn btn-primary">Save Preferences</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="about" class="tab-content">
+        <h2>About Taskify</h2>
+        <div class="form-group">
+          <p>Taskify helps you organize your work and life. Stay productive with our intuitive task management system.</p>
+          
+          <h3>Version Information</h3>
+          <p><strong>Version:</strong> 1.2.0</p>
+          <p><strong>Release Date:</strong> June 15, 2025</p>
+          <p><strong>License:</strong> Proprietary</p>
+          
+          <h3>Legal</h3>
+          <p><a href="/terms-of-service.html" class="link">Terms of Service</a></p>
+          <p><a href="/privacy-policy.html" class="link">Privacy Policy</a></p>
+          
+          <h3>Support</h3>
+          <p><a href="/contact.html" class="link">Contact Support</a></p>
+          <p><a href="/feedback.html" class="link">Submit Feedback</a></p>
+        </div>
+      </section>
+    </main>
+  </div>
 
   <footer class="settings-footer">
     © 2025 Taskify. All rights reserved.
@@ -355,43 +728,107 @@
     // Font size preview
     const fontSizeSlider = document.getElementById('font-size');
     const fontPreview = document.querySelector('.font-preview');
+    
+    // Load saved font size or use default
+    const savedFontSize = localStorage.getItem('fontSize') || 16;
+    fontSizeSlider.value = savedFontSize;
+    fontPreview.style.fontSize = `${savedFontSize}px`;
+    
     fontSizeSlider.addEventListener('input', () => {
-      fontPreview.style.fontSize = `${fontSizeSlider.value}px`;
+      const size = fontSizeSlider.value;
+      fontPreview.style.fontSize = `${size}px`;
+      localStorage.setItem('fontSize', size);
     });
 
-    // Theme selector with localStorage
+    // Theme selector with localStorage and system preference
     const themeSelect = document.getElementById('theme');
-    const root = document.documentElement;
-
+    const html = document.documentElement;
+    
     function applyTheme(theme) {
-      if (theme === 'light') {
-        root.style.setProperty('--bg-color', '#ffffff');
-        root.style.setProperty('--text-color', '#000000');
-        root.style.setProperty('--card-bg', '#f2f2f2');
-      } else {
-        root.style.setProperty('--bg-color', '#000000');
-        root.style.setProperty('--text-color', '#ffffff');
-        root.style.setProperty('--card-bg', '#1E1E1E');
+      if (theme === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        theme = prefersDark ? 'dark' : 'light';
       }
+      
+      html.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
+      themeSelect.value = theme === 'system' ? 'system' : theme;
     }
-
+    
     themeSelect.addEventListener('change', () => {
       applyTheme(themeSelect.value);
     });
-
-    // Apply stored theme on load
-    const storedTheme = localStorage.getItem('theme') || 'dark';
-    themeSelect.value = storedTheme;
+    
+    // Apply stored theme on load or use system preference
+    const storedTheme = localStorage.getItem('theme') || 'system';
     applyTheme(storedTheme);
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (themeSelect.value === 'system') {
+        applyTheme('system');
+      }
+    });
+
+    // File input display
+    const fileInput = document.getElementById('profile-pic');
+    const fileNameDisplay = document.getElementById('file-name');
+    
+    fileInput.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) {
+        fileNameDisplay.textContent = e.target.files[0].name;
+      } else {
+        fileNameDisplay.textContent = 'No file chosen';
+      }
+    });
+
+    // Reset appearance button
+    document.getElementById('reset-appearance').addEventListener('click', () => {
+      if (confirm('Reset all appearance settings to default?')) {
+        themeSelect.value = 'system';
+        fontSizeSlider.value = 16;
+        fontPreview.style.fontSize = '16px';
+        localStorage.removeItem('fontSize');
+        localStorage.removeItem('theme');
+        applyTheme('system');
+      }
+    });
 
     // Confirm delete action
     function confirmDelete() {
-      if (confirm("Are you sure you want to delete your account? This action is irreversible.")) {
-        alert("Account deleted.");
-        // Add actual delete logic here
+      if (confirm("Are you sure you want to delete your account? This will permanently erase all your data and cannot be undone.")) {
+        // Show loading state
+        const deleteBtn = document.querySelector('.btn-danger');
+        deleteBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+        deleteBtn.disabled = true;
+        
+        // Simulate API call
+        setTimeout(() => {
+          alert("Your account has been deleted successfully.");
+          window.location.href = '/';
+        }, 1500);
       }
     }
+
+    // Form submission handlers
+    document.querySelectorAll('form').forEach(form => {
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Show success message
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> Saved!';
+        
+        setTimeout(() => {
+          submitBtn.innerHTML = originalText;
+        }, 2000);
+      });
+    });
+
+    // Load saved settings if available
+    document.addEventListener('DOMContentLoaded', () => {
+      // You could load other saved settings here
+    });
   </script>
 </body>
 </html>
