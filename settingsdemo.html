@@ -28,17 +28,28 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      animation: slideIn 0.5s ease-in-out;
     }
 
     .settings-header .logo {
       width: 50px;
       margin-left: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .settings-header .logo:hover {
+      transform: rotate(360deg);
     }
 
     .settings-header h1 {
       font-size: 24px;
       margin-left: 20px;
       flex-grow: 1;
+      transition: color 0.3s ease;
+    }
+
+    .settings-header h1:hover {
+      color: var(--accent-color);
     }
 
     .close-container {
@@ -89,10 +100,11 @@
       height: 100vh;
       position: fixed;
       top: 0;
-      left: 0;
+      left: -250px;
       padding-top: 2rem;
       display: flex;
       flex-direction: column;
+      animation: slideInSidebar 0.5s ease-in-out forwards;
     }
 
     .sidebar button {
@@ -102,24 +114,25 @@
       padding: 1rem;
       text-align: left;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.3s ease;
       font-weight: bold;
       font-size: 0.95rem;
     }
 
     .sidebar button.active, .sidebar button:hover {
       background-color: #333333;
+      transform: scale(1.05);
     }
 
     .settings-content {
       margin-left: 200px;
       padding: 2rem;
-      animation: fadeIn 0.4s ease;
+      animation: fadeIn 0.5s ease-out;
     }
 
     .tab-content {
       display: none;
-      animation: fadeIn 0.4s ease;
+      animation: fadeIn 0.5s ease-out;
       background-color: var(--card-bg);
       border-radius: 8px;
       padding: 2rem;
@@ -136,6 +149,24 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
+    @keyframes slideInSidebar {
+      from {
+        left: -250px;
+      }
+      to {
+        left: 0;
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(-100%);
+      }
+      to {
+        transform: translateX(0);
+      }
+    }
+
     form label {
       display: block;
       margin-bottom: 0.5rem;
@@ -150,6 +181,7 @@
       background-color: #333333;
       color: white;
       margin-bottom: 1rem;
+      transition: background-color 0.3s ease;
     }
 
     form input[type="range"] {
@@ -163,11 +195,12 @@
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.3s ease;
     }
 
     form button:hover {
       background-color: #45a049;
+      transform: scale(1.05);
     }
 
     .danger-button {
@@ -175,22 +208,36 @@
       padding: 0.6rem 1.2rem;
       border-radius: 4px;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: background 0.3s ease, transform 0.3s ease;
     }
 
     .danger-button:hover {
       background-color: darkred;
+      transform: scale(1.05);
     }
 
     .font-preview {
       font-size: 16px;
       margin-bottom: 1rem;
+      transition: font-size 0.3s ease;
     }
 
     .settings-footer {
       text-align: center;
       padding: 1rem;
       background-color: var(--card-bg);
+      animation: fadeInFooter 1s ease-out;
+    }
+
+    @keyframes fadeInFooter {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     @media (max-width: 768px) {
