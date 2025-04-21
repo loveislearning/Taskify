@@ -92,7 +92,7 @@
     }
     .main-content {
       flex: 1;
-      padding: 120px 20px 20px;
+      padding: 20px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -103,8 +103,13 @@
       padding: 20px;
       border-radius: 8px;
       width: 100%;
-      height: 100%;
+      max-width: 1000px;
       margin-bottom: 20px;
+    }
+    .chart-container {
+      position: relative;
+      height: 400px;
+      width: 100%;
     }
     canvas {
       max-width: 100%;
@@ -121,17 +126,26 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100%;
       width: 100%;
       padding: 20px;
     }
+    .timer-display-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 20px 0;
+    }
     .timer-display {
-      font-size: 6rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3.5rem;
       font-weight: 300;
-      margin: 30px 0;
       color: #fff;
       text-shadow: 0 0 10px rgba(0, 200, 150, 0.5);
       font-family: 'Courier New', monospace;
+      z-index: 2;
     }
     .timer-controls {
       display: flex;
@@ -235,9 +249,11 @@
       text-align: center;
     }
     .progress-ring {
-      position: relative;
-      width: 300px;
-      height: 300px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
     }
     .progress-ring-circle {
       transform: rotate(-90deg);
@@ -245,7 +261,7 @@
       transition: stroke-dashoffset 0.5s linear;
     }
     .session-counter {
-      margin-top: 30px;
+      margin-top: 20px;
       font-size: 1.2rem;
       color: #aaa;
       text-align: center;
@@ -275,9 +291,9 @@
         transform: translateX(0);
       }
       .timer-display {
-        font-size: 4rem;
+        font-size: 2.5rem;
       }
-      .progress-ring {
+      .timer-display-container {
         width: 250px;
         height: 250px;
       }
@@ -289,6 +305,9 @@
       .timer-mode {
         width: 100%;
         max-width: 250px;
+      }
+      .chart-container {
+        height: 300px;
       }
     }
   </style>
@@ -320,7 +339,9 @@
     <div class="main-content">
       <div id="dashboardSection" class="content-box">
         <h2>📈 Task Completion Tracker</h2>
-        <canvas id="progressChart"></canvas>
+        <div class="chart-container">
+          <canvas id="progressChart"></canvas>
+        </div>
       </div>
       <div id="trashSection" class="content-box hidden">
         <h2>🗑 Trash</h2>
@@ -329,10 +350,10 @@
       <div id="pomodoroSection" class="content-box hidden">
         <div class="pomodoro-container">
           <h2>⏱ Pomodoro Timer</h2>
-          <div class="progress-ring">
-            <svg width="100%" height="100%" viewBox="0 0 100 100">
+          <div class="timer-display-container">
+            <svg class="progress-ring" width="100%" height="100%" viewBox="0 0 100 100">
               <circle cx="50" cy="50" r="45" fill="none" stroke="#333" stroke-width="5"/>
-              <circle class="progress-ring-circle" cx="50" cy="50" r="45" fill="none" stroke="#00b894" stroke-width="5" stroke-linecap="round" stroke-dasharray="283" stroke-dashoffset="0"/>
+              <circle class="progress-ring-circle" cx="50" cy="50" r="45" fill="none" stroke="#00b894" stroke-width="5" stroke-linecap="round"/>
             </svg>
             <div class="timer-display">25:00</div>
           </div>
@@ -378,53 +399,82 @@
   </div>
 
   <script>
-    const ctx = document.getElementById('progressChart').getContext('2d');
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, '#00b894');
-    gradient.addColorStop(1, '#00cec9');
+    // Initialize Chart
+    function initChart() {
+      const ctx = document.getElementById('progressChart').getContext('2d');
+      const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+      gradient.addColorStop(0, '#00b894');
+      gradient.addColorStop(1, '#00cec9');
 
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-        datasets: [{
-          label: 'Task Completion %',
-          data: [75, 60, 80, 90],
-          borderColor: gradient,
-          backgroundColor: 'transparent',
-          borderDash: [5, 5],
-          pointBackgroundColor: '#00cec9',
-          pointBorderColor: '#00cec9',
-          tension: 0.4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-          legend: { labels: { color: '#fff' } },
-          zoom: {
-            pan: { enabled: true, mode: 'xy' },
-            zoom: { wheel: { enabled: true }, pinch: { enabled: true }, drag: { enabled: true }, mode: 'xy' }
-          }
+      return new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [{
+            label: 'Task Completion %',
+            data: [75, 60, 80, 90],
+            borderColor: gradient,
+            backgroundColor: 'transparent',
+            borderDash: [5, 5],
+            pointBackgroundColor: '#00cec9',
+            pointBorderColor: '#00cec9',
+            tension: 0.4
+          }]
         },
-        scales: {
-          x: { ticks: { color: '#fff' }, grid: { color: '#444' } },
-          y: { beginAtZero: true, max: 100, ticks: { color: '#fff' }, grid: { color: '#444' } }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { 
+              labels: { 
+                color: '#fff',
+                boxWidth: 20,
+                padding: 20
+              } 
+            },
+            zoom: {
+              pan: { enabled: true, mode: 'xy' },
+              zoom: { 
+                wheel: { enabled: true }, 
+                pinch: { enabled: true }, 
+                mode: 'xy',
+              }
+            }
+          },
+          scales: {
+            x: { 
+              ticks: { color: '#fff' }, 
+              grid: { color: '#444' } 
+            },
+            y: { 
+              beginAtZero: true, 
+              max: 100, 
+              ticks: { color: '#fff' }, 
+              grid: { color: '#444' } 
+            }
+          }
         }
-      }
-    });
+      });
+    }
 
+    // Sidebar toggle
     document.getElementById('menuToggle').addEventListener('click', () => {
       document.querySelector('.sidebar').classList.toggle('active');
     });
 
+    // Section navigation
     function showSection(section) {
       const sections = ['dashboardSection', 'trashSection', 'pomodoroSection'];
       sections.forEach(id => document.getElementById(id).classList.add('hidden'));
 
       if (section === 'dashboard') {
         document.getElementById('dashboardSection').classList.remove('hidden');
+        // Reinitialize chart when showing dashboard to ensure proper rendering
+        if (!window.progressChart) {
+          window.progressChart = initChart();
+        } else {
+          window.progressChart.update();
+        }
       } else if (section === 'trash') {
         document.getElementById('trashSection').classList.remove('hidden');
       } else if (section === 'pomodoro') {
@@ -440,10 +490,13 @@
       const modeButtons = document.querySelectorAll('.timer-mode-btn');
       const sessionCounter = document.querySelector('.session-counter span');
       const progressCircle = document.querySelector('.progress-ring-circle');
-      const circleCircumference = 2 * Math.PI * 45;
       
-      // Set initial stroke dasharray and offset
-      progressCircle.style.strokeDasharray = circleCircumference;
+      // Calculate circumference of the circle (2πr)
+      const radius = 45;
+      const circumference = 2 * Math.PI * radius;
+      
+      // Set initial stroke properties
+      progressCircle.style.strokeDasharray = circumference;
       progressCircle.style.strokeDashoffset = 0;
 
       // Timer settings
@@ -464,15 +517,18 @@
         totalSeconds: settings.focus * 60
       };
 
-      // Update the timer display
+      // Update the timer display and progress circle
       function updateDisplay() {
         const minutes = Math.floor(state.timeLeft / 60);
         const seconds = state.timeLeft % 60;
         timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         
-        // Update progress circle
-        const progressOffset = circleCircumference - (state.timeLeft / state.totalSeconds) * circleCircumference;
-        progressCircle.style.strokeDashoffset = progressOffset;
+        // Calculate progress
+        const progress = state.timeLeft / state.totalSeconds;
+        const dashOffset = progress * circumference;
+        
+        // Update circle progress
+        progressCircle.style.strokeDashoffset = dashOffset;
       }
 
       // Switch timer mode
@@ -489,11 +545,7 @@
         updateDisplay();
         
         // Change circle color based on mode
-        if (mode === 'focus') {
-          progressCircle.style.stroke = '#00b894';
-        } else {
-          progressCircle.style.stroke = '#0984e3';
-        }
+        progressCircle.style.stroke = mode === 'focus' ? '#00b894' : '#0984e3';
       }
 
       // Start the timer
@@ -629,6 +681,11 @@
 
       // Initialize
       updateDisplay();
+      
+      // Initialize chart on page load if dashboard is shown by default
+      if (document.getElementById('dashboardSection') && !document.getElementById('dashboardSection').classList.contains('hidden')) {
+        window.progressChart = initChart();
+      }
     });
   </script>
 </body>
