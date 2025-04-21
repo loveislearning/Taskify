@@ -222,7 +222,6 @@
             transition: color 0.3s ease;
         }
         .theme-toggle:hover { color: #00d4ff; }
-        
         body.light {
             background-color: #fff;
             color: #000;
@@ -289,6 +288,13 @@
             updateTheme();
         });
 
+        
+        document.getElementById("taskInput").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                addTask();
+            }
+        });
+
         function generateCalendar() {
             const calendar = document.getElementById("calendar");
             const monthText = document.getElementById("monthText");
@@ -343,9 +349,7 @@
             taskList.innerHTML = "";
             if (tasks[selectedDate]) {
                 tasks[selectedDate].forEach((task, index) => {
-                    
                     let taskObj = typeof task === 'string' ? { text: task, done: false } : task;
-                    
                     if(typeof task === 'string') tasks[selectedDate][index] = taskObj;
                     const li = document.createElement("li");
                     li.innerHTML = `<span style="${taskObj.done ? 'text-decoration: line-through; color: #888;' : ''}">${taskObj.text}</span>
@@ -381,7 +385,6 @@
 
         function markTaskDone(date, index) {
             if (tasks[date] && tasks[date][index]) {
-                
                 if (typeof tasks[date][index] === 'string') {
                     tasks[date][index] = { text: tasks[date][index], done: true };
                 } else {
