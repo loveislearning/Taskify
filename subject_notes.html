@@ -23,7 +23,6 @@
             --toolbar-bg: #181c22;
             --toolbar-btn: #23272f;
         }
-
         body {
             font-family: Arial, sans-serif;
             background-color: var(--main-bg);
@@ -98,7 +97,7 @@
             background: var(--note-bg);
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
             overflow-y: auto;
-            height: calc(100vh - 50px); 
+            height: calc(100vh - 50px);
             transition: background 0.2s;
         }
         #noteInput {
@@ -172,8 +171,17 @@
         .pin:hover, .add-chapter:hover, .delete-chapter:hover, .delete-subject:hover {
             color: #dddddd;
         }    
-        
-       
+        .search-bar {
+            margin-bottom: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        .search-bar input {
+            flex: 1;
+            padding: 6px;
+            border-radius: 5px;
+            border: 1px solid #bbb;
+        }
         .resize-handle {
             position: absolute;
             width: 12px;
@@ -196,7 +204,6 @@
             vertical-align: middle;
             user-select: none;
         }
-
         .mode-toggle {
             background: var(--accent);
             color: white;
@@ -214,7 +221,6 @@
                 padding: 0;
             }
         }
-        
     </style>
 </head>
 <body>
@@ -223,20 +229,23 @@
         <h3>Subjects</h3>
         <div class="input-container">
             <input type="text" id="newSubject" placeholder="Add Subject" onkeypress="handleKeyPress(event)">
-            <button onclick="addSubject()">+</button>
+            <button onclick="addSubject()">+</button>            
         </div>
-        
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search...">
+            <button onclick="searchNotes()">🔍</button>
+        </div>      
         <div id="subjectList"></div>
     </div>
     <div class="main-content">
         <div class="toolbar">
-            <button onclick="addDiscBullet()">   Add Bullet</button>
+            <button onclick="addDiscBullet()">Add Bullet</button>
             <input type="file" id="imageUpload" accept="image/*" style="display:none" onchange="handleImageUpload(event)">
-            <select id="insertImageSelect" style="background: #34495e; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">
-                <option value="upload"> Insert Image </option>
+            <select id="insertImageSelect">
+                <option value="upload">Insert Image</option>
                 <option value="upload">Upload from Device</option>
             </select>
-            <select id="alignImageSelect" style="background: #34495e; color: white; border: none; padding: 8px; border-radius: 5px; cursor: pointer;">
+            <select id="alignImageSelect">
                 <option value="">Align Image</option>
                 <option value="left">🡸 Left</option>
                 <option value="center">⇆ Center</option>
@@ -274,22 +283,16 @@
                 <option value="none">Remove Highlight</option>
             </select>
             <button class="mode-toggle" onclick="toggleMode()">🌙/☀️</button>
-
-            
         </div>
         <div class="container">
             <h2 id="currentChapter">Select a Chapter</h2>
-            <div id="noteInput" contenteditable="true" style="border: 1px solid #ccc; padding: 10px; background:inherit; color:inherit;"></div>
+            <div id="noteInput" contenteditable="true"></div>
             <div class="tag-list" id="tagList"></div>
-            <div class="input-container" style="margin-top:8px;">
-                
-            </div>
+            <div class="input-container" style="margin-top:8px;"></div>
         </div>
-        
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('collapsed');
         }       
@@ -299,24 +302,17 @@
             localStorage.setItem('darkMode', document.body.classList.contains('dark'));
         }
         if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
-        
-        let tagList = document.getElementById('tagList');
-        let newTagInput = document.getElementById('newTag');
-        newTagInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && this.value.trim()) {
-                addTag(this.value.trim());
-                this.value = '';
-            }
-        });
-        
+
         function addSubject() {
-            let subjectName = document.getElementById("newSubject").value;
+            let subjectName = document.getElementById("newSubject").value.trim();
             if (subjectName === "") return;
             let subjectList = document.getElementById("subjectList");
             let subjectDiv = document.createElement("div");
             subjectDiv.classList.add("subject");
+
             let chapterContainer = document.createElement("div");
             chapterContainer.classList.add("chapter-container");
+
             let subjectText = document.createElement("span");
             subjectText.innerText = subjectName;
             subjectText.oncontextmenu = function (event) {
@@ -324,14 +320,17 @@
                 let newName = prompt("Rename Subject:", subjectText.innerText);
                 if (newName) subjectText.innerText = newName;
             };
+
             let chapterActions = document.createElement("div");
             chapterActions.classList.add("chapter-actions");
+
             let pinButton = document.createElement("button");
             pinButton.innerText = "📌";
             pinButton.classList.add("pin");
             pinButton.onclick = function () {
                 subjectList.prepend(subjectDiv);
             };
+
             let deleteSubjectBtn = document.createElement("button");
             deleteSubjectBtn.innerText = "🗑";
             deleteSubjectBtn.classList.add("delete-subject");
@@ -340,6 +339,7 @@
                     subjectDiv.remove();
                 }
             };
+
             let addChapterBtn = document.createElement("button");
             addChapterBtn.innerText = "+";
             addChapterBtn.classList.add("add-chapter");
@@ -361,10 +361,10 @@
                     chapterItem.onclick = function (e) {
                         if (e.target.classList.contains('delete-chapter')) return;
                         document.getElementById("currentChapter").innerText = chapterName;
-                        noteInput.innerHTML = localStorage.getItem(chapterName) || '';
-                        loadTags(chapterName);
-                        restoreAutosave(chapterName);
-                        document.getElementById("saveNoteBtn").disabled = true;
+                        document.getElementById("noteInput").innerHTML = localStorage.getItem(chapterName) || '';
+                        // loadTags(chapterName); // Not implemented
+                        // restoreAutosave(chapterName); // Not implemented
+                        // document.getElementById("saveNoteBtn").disabled = true; // Not implemented
                     };
                     chapterItem.oncontextmenu = function (event) {
                         event.preventDefault();
@@ -379,28 +379,63 @@
                     chapterList.appendChild(chapterItem);
                 }
             };
+
             chapterActions.appendChild(pinButton);
             chapterActions.appendChild(deleteSubjectBtn);
             chapterActions.appendChild(addChapterBtn);
             chapterContainer.appendChild(subjectText);
             chapterContainer.appendChild(chapterActions);
             subjectDiv.appendChild(chapterContainer);
+
             let chapterList = document.createElement("div");
             chapterList.classList.add("chapter-list");
             subjectDiv.appendChild(chapterList);
+
             subjectDiv.onclick = function (e) {
                 if (e.target !== subjectDiv && !e.target.classList.contains('chapter-container')) return;
                 chapterList.style.display = chapterList.style.display === "block" ? "none" : "block";
             };
+
             subjectList.appendChild(subjectDiv);
             document.getElementById("newSubject").value = "";
         }
+
         function handleKeyPress(event) {
             if (event.key === "Enter") {
                 addSubject();
             }
         }
-        
+
+        function searchNotes() {
+            let query = document.getElementById('searchInput').value.toLowerCase();
+            let subjectDivs = document.querySelectorAll('#subjectList > .subject');
+            subjectDivs.forEach(subjectDiv => {
+                let subjectText = subjectDiv.querySelector('.chapter-container span').innerText.toLowerCase();
+                let chapterList = subjectDiv.querySelector('.chapter-list');
+                let chapters = chapterList ? chapterList.querySelectorAll('.chapter') : [];
+                let subjectMatch = subjectText.includes(query);
+
+                let chapterMatchCount = 0;
+                chapters.forEach(chap => {
+                    let chapterName = chap.querySelector('span').innerText.toLowerCase();
+                    if (chapterName.includes(query) || subjectMatch) {
+                        chap.style.display = '';
+                        chapterMatchCount++;
+                    } else {
+                        chap.style.display = 'none';
+                    }
+                });
+
+                if (subjectMatch || chapterMatchCount > 0 || query === '') {
+                    subjectDiv.style.display = '';
+                    if (chapterList) chapterList.style.display = (query && (chapterMatchCount > 0 || subjectMatch)) ? 'block' : 'none';
+                } else {
+                    subjectDiv.style.display = 'none';
+                }
+            });
+        }
+        document.getElementById('searchInput').addEventListener('input', searchNotes);
+
         function addDiscBullet() {
             document.execCommand('insertUnorderedList');
             let lists = document.getElementById('noteInput').getElementsByTagName('ul');
@@ -408,14 +443,14 @@
                 lists[lists.length - 1].style.listStyleType = 'disc';
             }
         }
-        
+
         document.getElementById('insertImageSelect').addEventListener('change', function() {
             if (this.value === 'upload') {
                 document.getElementById('imageUpload').click();
                 this.selectedIndex = 0; 
             }
         });
-       
+
         document.getElementById('alignImageSelect').addEventListener('change', function() {
             const direction = this.value;
             if (!direction) return;
@@ -449,7 +484,7 @@
             }
             this.selectedIndex = 0; 
         });
-        
+
         function insertImage(src) {
             let imgContainer = document.createElement('div');
             imgContainer.classList.add('image-container');
@@ -485,8 +520,6 @@
             function makeResizable(handle, isWidth, isHeight) {
                 handle.addEventListener('mousedown', function(event) {
                     event.preventDefault();
-                    document.addEventListener('mousemove', resizeImage);
-                    document.addEventListener('mouseup', stopResize);
                     let initialX = event.clientX;
                     let initialY = event.clientY;
                     let startWidth = img.clientWidth;
@@ -500,6 +533,8 @@
                         document.removeEventListener('mousemove', resizeImage);
                         document.removeEventListener('mouseup', stopResize);
                     }
+                    document.addEventListener('mousemove', resizeImage);
+                    document.addEventListener('mouseup', stopResize);
                 });
             }
             makeResizable(resizeHandleCorner, true, true);
@@ -521,7 +556,7 @@
                 reader.readAsDataURL(file);
             }
         }
-        
+
         document.addEventListener("click", function (e) {
             if (e.target.tagName === "IMG") {
                 const range = document.createRange();
@@ -531,7 +566,7 @@
                 sel.addRange(range);
             }
         });
-        
+
         function changeFontSize(size) {
             const selection = window.getSelection();
             if (!selection.rangeCount) return;
@@ -572,12 +607,10 @@
             selection.removeAllRanges();
             selection.addRange(range);
         }
-        
+
         window.onload = function() {
             if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
         };
-       
-        
     </script>
 </body>
 </html>
