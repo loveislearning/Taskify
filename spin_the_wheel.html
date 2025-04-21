@@ -6,7 +6,7 @@
   <style>
     body {
       margin: 0;
-      background: #000; /* Match Taskify's black background */
+      background: #000;
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -104,6 +104,17 @@
       text-align: center;
       box-shadow: 0 0 20px rgba(0, 198, 255, 0.6);
     }
+
+    .reset-button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border-radius: 5px;
+      border: none;
+      background: #dc3545;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -117,6 +128,7 @@
   <div class="input-container">
     <input type="text" id="taskInput" placeholder="Add a task...">
     <button onclick="addTask()">Add</button>
+    <button class="reset-button" onclick="resetTasks()">Reset</button>
   </div>
 
   <div id="winnerPopup"></div>
@@ -148,7 +160,6 @@
         ctx.lineTo(200, 200);
         ctx.fill();
 
-        // Add label
         ctx.save();
         ctx.translate(200, 200);
         ctx.rotate(angle + arc / 2);
@@ -159,7 +170,6 @@
         ctx.restore();
       }
 
-      // Draw center circle
       ctx.beginPath();
       ctx.fillStyle = "#2c3e50";
       ctx.arc(200, 200, 50, 0, Math.PI * 2);
@@ -178,6 +188,11 @@
 
       setTimeout(() => {
         spinning = false;
+        const confirmComplete = confirm(`Did you complete: ${winner}? Click OK to remove it.`);
+        if (confirmComplete) {
+          segments.splice(selectedIndex, 1);
+          drawWheel();
+        }
         document.getElementById("winnerPopup").textContent = `🎉 ${winner} 🎉`;
         document.getElementById("winnerPopup").style.display = 'block';
         setTimeout(() => {
@@ -192,6 +207,13 @@
       if (task) {
         segments.push(task);
         taskInput.value = '';
+        drawWheel();
+      }
+    }
+
+    function resetTasks() {
+      if (confirm("Are you sure you want to reset all tasks?")) {
+        segments = [];
         drawWheel();
       }
     }
