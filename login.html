@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sign in & Sign Up</title>
     <link rel="stylesheet" href="/login.css">
+    <style>
+        @keyframes blinkFast {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+    
+        .eye-icon {
+          cursor: pointer;
+        }
+    
+        .blink-once {
+          animation: blinkFast 0.2s linear 0s 10; /* 0.2s * 10 = 2s */
+          animation-fill-mode: forwards;
+        }
+    
+        .eye-icon:hover {
+          animation: blinkFast 0.2s linear 0s 10 !important;
+        }
+      </style>
 </head>
 <body>
     <div class="container">
