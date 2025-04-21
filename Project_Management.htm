@@ -195,8 +195,6 @@
       <option value="Low">Low</option>
     </select>
     <button onclick="addProject()">Add Project</button>
-    <button onclick="exportData()">⬇ Export</button>
-    <input type="file" id="importFile" onchange="importData(event)" accept=".json">
     <button onclick="clearAllProjects()">🧹 Clear All</button>
   </div>
   <div id="summary" class="summary-cards">
@@ -221,34 +219,6 @@
 
     function saveProjects() {
       localStorage.setItem('projects', JSON.stringify(projects));
-    }
-
-    function exportData() {
-      const blob = new Blob([JSON.stringify(projects, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'projects.json';
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          projects = JSON.parse(e.target.result);
-          saveProjects();
-          displayProjects();
-          updateChart();
-          updateSummary(); 
-        } catch (err) {
-          alert("Invalid JSON file.");
-        }
-      };
-      reader.readAsText(file);
     }
 
     function clearAllProjects() {
