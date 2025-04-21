@@ -6,16 +6,24 @@
     <title>sign in & Sign Up</title>
     <link rel="stylesheet" href="/login.css">
     <style>
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        @keyframes blinkFast {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
         }
-
+    
         .eye-icon {
-            cursor: pointer;
-            animation: blink 1s infinite;
+          cursor: pointer;
         }
-    </style>
+    
+        .blink-once {
+          animation: blinkFast 0.2s linear 0s 10; /* 0.2s * 10 = 2s */
+          animation-fill-mode: forwards;
+        }
+    
+        .eye-icon:hover {
+          animation: blinkFast 0.2s linear 0s 10 !important;
+        }
+      </style>
 </head>
 <body>
     <div class="container">
