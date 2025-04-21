@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Colorful Spin Wheel</title>
+  <title>Taskify Wheel</title>
   <style>
     body {
       margin: 0;
-      background: #1e1e2f;
+      background: #000; /* Match Taskify's black background */
       color: #fff;
       display: flex;
       flex-direction: column;
@@ -37,7 +37,7 @@
       height: 0;
       border-left: 25px solid transparent;
       border-right: 25px solid transparent;
-      border-top: 30px solid #ecf0f1;
+      border-top: 30px solid #ffffff;
       z-index: 2;
     }
 
@@ -46,16 +46,17 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #2c3e50;
+      background: linear-gradient(to right, #007bff, #00c6ff);
       color: white;
       border: none;
       border-radius: 50%;
       width: 80px;
       height: 80px;
       font-size: 18px;
+      font-weight: bold;
       cursor: pointer;
       z-index: 2;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 0 15px rgba(0, 123, 255, 0.6);
     }
 
     .input-container {
@@ -75,9 +76,15 @@
       padding: 10px 20px;
       border-radius: 5px;
       border: none;
-      background: #27ae60;
+      background: #007bff;
       color: white;
+      font-weight: bold;
       cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .input-container button:hover {
+      background: #0056b3;
     }
 
     #winnerPopup {
@@ -85,108 +92,110 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #333;
+      background: #111;
       padding: 30px;
       border-radius: 10px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
-      display: none;
-      color: white;
+      border: 2px solid #00c6ff;
+      color: #00c6ff;
       font-size: 24px;
+      font-weight: bold;
+      display: none;
       z-index: 1000;
       text-align: center;
+      box-shadow: 0 0 20px rgba(0, 198, 255, 0.6);
     }
   </style>
 </head>
 <body>
 
-<div class="wheel-container">
-  <div class="pointer"></div>
-  <canvas id="wheel" width="400" height="400"></canvas>
-  <button class="spin-button" onclick="spinWheel()">Spin</button>
-</div>
+  <div class="wheel-container">
+    <div class="pointer"></div>
+    <canvas id="wheel" width="400" height="400"></canvas>
+    <button class="spin-button" onclick="spinWheel()">Spin</button>
+  </div>
 
-<div class="input-container">
-  <input type="text" id="taskInput" placeholder="Add a task...">
-  <button onclick="addTask()">Add</button>
-</div>
+  <div class="input-container">
+    <input type="text" id="taskInput" placeholder="Add a task...">
+    <button onclick="addTask()">Add</button>
+  </div>
 
-<div id="winnerPopup"></div>
+  <div id="winnerPopup"></div>
 
-<script>
-  const canvas = document.getElementById('wheel');
-  const ctx = canvas.getContext('2d');
-  let segments = [];
-  const colors = [
-    '#ffcc00', '#339933', '#9933cc', '#ff3366',
-    '#ff3300', '#999999', '#99cc00', '#3399ff',
-    '#ff6600', '#00ccff', '#6666cc', '#ffff66'
-  ];
+  <script>
+    const canvas = document.getElementById('wheel');
+    const ctx = canvas.getContext('2d');
+    let segments = [];
+    const colors = [
+      '#ffcc00', '#339933', '#9933cc', '#ff3366',
+      '#ff3300', '#999999', '#99cc00', '#3399ff',
+      '#ff6600', '#00ccff', '#6666cc', '#ffff66'
+    ];
 
-  let startAngle = 0;
-  let rotation = 0;
-  let spinning = false;
+    let startAngle = 0;
+    let rotation = 0;
+    let spinning = false;
 
-  function drawWheel() {
-    const arc = Math.PI * 2 / segments.length;
-    ctx.clearRect(0, 0, 400, 400);
+    function drawWheel() {
+      const arc = Math.PI * 2 / segments.length;
+      ctx.clearRect(0, 0, 400, 400);
 
-    for (let i = 0; i < segments.length; i++) {
-      const angle = startAngle + i * arc;
+      for (let i = 0; i < segments.length; i++) {
+        const angle = startAngle + i * arc;
+        ctx.beginPath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.moveTo(200, 200);
+        ctx.arc(200, 200, 200, angle, angle + arc, false);
+        ctx.lineTo(200, 200);
+        ctx.fill();
+
+        // Add label
+        ctx.save();
+        ctx.translate(200, 200);
+        ctx.rotate(angle + arc / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#fff";
+        ctx.font = "16px sans-serif";
+        ctx.fillText(segments[i], 180, 5);
+        ctx.restore();
+      }
+
+      // Draw center circle
       ctx.beginPath();
-      ctx.fillStyle = colors[i % colors.length];
-      ctx.moveTo(200, 200);
-      ctx.arc(200, 200, 200, angle, angle + arc, false);
-      ctx.lineTo(200, 200);
+      ctx.fillStyle = "#2c3e50";
+      ctx.arc(200, 200, 50, 0, Math.PI * 2);
       ctx.fill();
-
-      // Add label
-      ctx.save();
-      ctx.translate(200, 200);
-      ctx.rotate(angle + arc / 2);
-      ctx.textAlign = "right";
-      ctx.fillStyle = "#fff";
-      ctx.font = "16px sans-serif";
-      ctx.fillText(segments[i], 180, 5);
-      ctx.restore();
     }
 
-    // Draw center circle
-    ctx.beginPath();
-    ctx.fillStyle = "#2c3e50";
-    ctx.arc(200, 200, 50, 0, Math.PI * 2);
-    ctx.fill();
-  }
+    function spinWheel() {
+      if (spinning || segments.length === 0) return;
+      spinning = true;
+      const spinAngle = Math.floor(3600 + Math.random() * 360);
+      rotation += spinAngle;
+      canvas.style.transform = `rotate(${rotation}deg)`;
+      const arc = 360 / segments.length;
+      const selectedIndex = segments.length - Math.floor((rotation % 360) / arc) - 1;
+      const winner = segments[selectedIndex < 0 ? selectedIndex + segments.length : selectedIndex];
 
-  function spinWheel() {
-    if (spinning || segments.length === 0) return;
-    spinning = true;
-    const spinAngle = Math.floor(3600 + Math.random() * 360);
-    rotation += spinAngle;
-    canvas.style.transform = `rotate(${rotation}deg)`;
-    const arc = 360 / segments.length;
-    const selectedIndex = segments.length - Math.floor((rotation % 360) / arc) - 1;
-    const winner = segments[selectedIndex < 0 ? selectedIndex + segments.length : selectedIndex];
-
-    setTimeout(() => {
-      spinning = false;
-      document.getElementById("winnerPopup").textContent = `🎉 ${winner} 🎉`;
-      document.getElementById("winnerPopup").style.display = 'block';
       setTimeout(() => {
-        document.getElementById("winnerPopup").style.display = 'none';
+        spinning = false;
+        document.getElementById("winnerPopup").textContent = `🎉 ${winner} 🎉`;
+        document.getElementById("winnerPopup").style.display = 'block';
+        setTimeout(() => {
+          document.getElementById("winnerPopup").style.display = 'none';
+        }, 3000);
       }, 3000);
-    }, 3000);
-  }
-
-  function addTask() {
-    const taskInput = document.getElementById('taskInput');
-    const task = taskInput.value.trim();
-    if (task) {
-      segments.push(task);
-      taskInput.value = '';
-      drawWheel();
     }
-  }
-</script>
+
+    function addTask() {
+      const taskInput = document.getElementById('taskInput');
+      const task = taskInput.value.trim();
+      if (task) {
+        segments.push(task);
+        taskInput.value = '';
+        drawWheel();
+      }
+    }
+  </script>
 
 </body>
 </html>
