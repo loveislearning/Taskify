@@ -15,20 +15,16 @@
       height: 100vh;
       font-family: 'Segoe UI', sans-serif;
     }
-
     .wheel-container {
       position: relative;
       width: 400px;
       height: 400px;
     }
-
     #wheel {
       width: 100%;
       height: 100%;
       transition: transform 4s cubic-bezier(.25,1,.5,1);
-      /* Smoother, longer spin */
     }
-
     .pointer {
       position: absolute;
       bottom: -20px;
@@ -41,7 +37,6 @@
       border-top: 30px solid #ecf0f1;
       z-index: 2;
     }
-
     .spin-button {
       position: absolute;
       top: 50%;
@@ -59,24 +54,18 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       transition: background-color 0.3s ease;
     }
-
-    .spin-button:hover {
-      background-color: #34495e;
-    }
-
+    .spin-button:hover { background-color: #34495e; }
     .input-container {
       margin-top: 30px;
       display: flex;
       gap: 10px;
     }
-
     .input-container input {
       padding: 10px;
       border-radius: 5px;
       border: none;
       width: 200px;
     }
-
     .input-container button,
     .reset-button {
       padding: 10px 20px;
@@ -87,59 +76,84 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
-
     .input-container button:hover,
-    .reset-button:hover {
-      background: #2ecc71;
-    }
+    .reset-button:hover { background: #2ecc71; }
 
+    /* Winner Popup Animation */
     #winnerPopup {
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%) scale(0.5);
-      background: rgba(0, 0, 0, 0.9);
-      padding: 40px;
+      min-width: 320px;
+      transform: translate(-50%, -50%) scale(0.7) rotate(-10deg);
+      background: rgba(0, 0, 0, 0.95);
+      padding: 50px 40px 40px 40px;
       border-radius: 20px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.8);
       display: none;
       color: white;
-      font-size: 26px;
+      font-size: 28px;
       z-index: 1000;
       text-align: center;
-      animation: popin 0.3s ease forwards, glow 1.5s infinite alternate;
+      opacity: 0;
     }
-
     #winnerPopup.show {
       display: block;
-      animation: popin 0.5s cubic-bezier(.25,1,.5,1) forwards, glow 1.5s infinite alternate;
+      animation: popup-bounce 0.7s cubic-bezier(.19,1,.22,1) forwards, popup-glow 1.5s infinite alternate;
     }
-
+    #winnerPopup.hide {
+      animation: popup-fadeout 0.4s cubic-bezier(.19,1,.22,1) forwards;
+    }
+    @keyframes popup-bounce {
+      0%   { transform: translate(-50%, -50%) scale(0.7) rotate(-10deg); opacity:0;}
+      60%  { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); opacity:1;}
+      80%  { transform: translate(-50%, -50%) scale(0.95) rotate(-2deg);}
+      100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity:1;}
+    }
+    @keyframes popup-glow {
+      0% { box-shadow: 0 0 20px #27ae60, 0 0 40px #2ecc71; }
+      100% { box-shadow: 0 0 40px #27ae60, 0 0 80px #2ecc71; }
+    }
+    @keyframes popup-fadeout {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1);}
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7);}
+    }
     #winnerPopup button {
-      margin: 10px 10px 0;
-      padding: 10px 20px;
+      margin: 15px 10px 0;
+      padding: 12px 24px;
       background: #27ae60;
       border: none;
       color: white;
       border-radius: 10px;
       cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
+      font-size: 18px;
+      transition: background-color 0.3s;
     }
+    #winnerPopup button:hover { background: #2ecc71; }
 
-    #winnerPopup button:hover {
-      background: #2ecc71;
+    /* Confetti */
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2000;
+      overflow: hidden;
     }
-
-    @keyframes popin {
-      0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
-      80% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
-      100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    .confetti-piece {
+      position: absolute;
+      width: 12px;
+      height: 24px;
+      border-radius: 4px;
+      opacity: 0.8;
+      animation: confetti-fall 1.6s linear forwards;
     }
-
-    @keyframes glow {
-      0% { box-shadow: 0 0 10px #27ae60, 0 0 20px #27ae60; }
-      100% { box-shadow: 0 0 20px #2ecc71, 0 0 30px #2ecc71; }
+    @keyframes confetti-fall {
+      0% { transform: translateY(-40px) rotateZ(0deg) scale(1);}
+      80% { opacity: 1;}
+      100% { transform: translateY(100vh) rotateZ(360deg) scale(0.7); opacity: 0;}
     }
   </style>
 </head>
@@ -158,6 +172,7 @@
 </div>
 
 <div id="winnerPopup"></div>
+<div class="confetti" id="confetti"></div>
 <audio id="spinSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" preload="auto"></audio>
 
 <script>
@@ -175,6 +190,7 @@
 
   const spinSound = document.getElementById("spinSound");
   const winnerPopup = document.getElementById("winnerPopup");
+  const confettiContainer = document.getElementById("confetti");
 
   function drawWheel() {
     const arc = Math.PI * 2 / segments.length;
@@ -223,20 +239,31 @@
       const selectedIndex = Math.floor(((360 - normalizedRotation) % 360) / arc);
       const winner = segments[selectedIndex];
       showWinnerPopup(winner, selectedIndex);
+      launchConfetti();
     }, 4000);
   }
 
   function showWinnerPopup(winner, index) {
     winnerPopup.innerHTML = `
-      <div style="animation: popin 0.5s cubic-bezier(.25,1,.5,1);">🎉 <strong>${winner}</strong> 🎉</div>
+      <div style="margin-bottom: 10px; font-size: 2.2em; letter-spacing: 2px;">
+        <span style="font-size:1.3em;">🎉</span>
+        <strong>${winner}</strong>
+        <span style="font-size:1.3em;">🎉</span>
+      </div>
       <button onclick="removeWinner(${index})">Remove Task</button>
       <button onclick="closeWinnerPopup()">Keep Task</button>
     `;
+    winnerPopup.classList.remove("hide");
     winnerPopup.classList.add("show");
   }
 
   function closeWinnerPopup() {
     winnerPopup.classList.remove("show");
+    winnerPopup.classList.add("hide");
+    setTimeout(() => {
+      winnerPopup.classList.remove("hide");
+      winnerPopup.style.display = "none";
+    }, 400);
   }
 
   function removeWinner(index) {
@@ -267,6 +294,27 @@
       addTask();
     }
   });
+
+  // --- Confetti Animation ---
+  function launchConfetti() {
+    confettiContainer.innerHTML = '';
+    const confettiColors = [
+      "#ffcc00", "#339933", "#9933cc", "#ff3366", "#ff3300",
+      "#999999", "#99cc00", "#3399ff", "#ff6600", "#00ccff",
+      "#6666cc", "#ffff66", "#ff99cc", "#66ffcc", "#ff9966"
+    ];
+    const confettiCount = 32;
+    for (let i = 0; i < confettiCount; i++) {
+      const conf = document.createElement("div");
+      conf.className = "confetti-piece";
+      conf.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+      conf.style.left = Math.random() * 100 + "vw";
+      conf.style.animationDelay = (Math.random() * 0.6) + "s";
+      conf.style.transform = `rotate(${Math.random()*360}deg)`;
+      confettiContainer.appendChild(conf);
+    }
+    setTimeout(() => confettiContainer.innerHTML = '', 2000);
+  }
 
   drawWheel();
 </script>
