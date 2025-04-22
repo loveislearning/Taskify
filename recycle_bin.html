@@ -5,43 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Recycle Bin</title>
   <style>
-    :root {
-      --bg-color: #121212;
-      --text-color: #e0e0e0;
-      --input-bg: #222;
-      --border-color: #444;
-      --item-bg: #1e1e1e;
-      --restore-border: #388e3c;
-      --delete-border: #d32f2f;
-      --clear-bg: #ff7043;
-      --clear-hover: #f4511e;
-      --restore-hover: #e8f5e9;
-      --delete-hover: #fdecea;
-      --history-bg: #222;
-    }
-
-    .light-theme {
-      --bg-color: #ffffff;
-      --text-color: #121212;
-      --input-bg: #f0f0f0;
-      --border-color: #ccc;
-      --item-bg: #f9f9f9;
-      --restore-border: #2e7d32;
-      --delete-border: #c62828;
-      --clear-bg: #ff7043;
-      --clear-hover: #e64a19;
-      --restore-hover: #c8e6c9;
-      --delete-hover: #ffcdd2;
-      --history-bg: #f4f4f4;
-    }
-
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-color);
+      background-color: #121212;
       margin: 0;
       padding: 2rem;
-      transition: background-color 0.3s, color 0.3s;
+      color: #e0e0e0;
     }
 
     h2 {
@@ -49,7 +18,7 @@
       font-size: 2rem;
       margin-bottom: 2rem;
       font-weight: 600;
-      color: var(--text-color);
+      color: #fff;
     }
 
     #search {
@@ -57,9 +26,9 @@
       padding: 0.5rem;
       margin-bottom: 1rem;
       border-radius: 8px;
-      border: 1px solid var(--border-color);
-      background-color: var(--input-bg);
-      color: var(--text-color);
+      border: 1px solid #444;
+      background-color: #222;
+      color: #fff;
     }
 
     ul.recycle-list {
@@ -74,10 +43,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px dashed var(--border-color);
+      border-bottom: 1px dashed #444;
       padding-bottom: 0.75rem;
       transition: opacity 0.3s ease, transform 0.3s ease;
-      background-color: var(--item-bg);
+      background-color: #1e1e1e;
       border-radius: 8px;
     }
 
@@ -86,10 +55,26 @@
       transform: translateX(100px);
     }
 
+    /* ✅ Fade-in animation */
+    .fade-in {
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
     .item-content {
       flex-grow: 1;
       font-size: 1.1rem;
-      color: var(--text-color);
+      color: #fff;
     }
 
     .actions {
@@ -106,31 +91,31 @@
       padding: 0.4rem 0.8rem;
       border-radius: 6px;
       transition: background 0.2s;
-      color: var(--text-color);
+      color: #e0e0e0;
     }
 
     .restore-btn {
-      color: var(--restore-border);
-      border: 1px solid var(--restore-border);
+      color: #388e3c;
+      border: 1px solid #388e3c;
     }
 
     .restore-btn:hover {
-      background: var(--restore-hover);
+      background: #e8f5e9;
     }
 
     .delete-btn {
-      color: var(--delete-border);
-      border: 1px solid var(--delete-border);
+      color: #d32f2f;
+      border: 1px solid #d32f2f;
     }
 
     .delete-btn:hover {
-      background: var(--delete-hover);
+      background: #fdecea;
     }
 
     .clear-all {
       display: block;
       margin: 3rem auto 1rem;
-      background-color: var(--clear-bg);
+      background-color: #ff7043;
       color: white;
       padding: 0.8rem 1.8rem;
       border: none;
@@ -141,14 +126,14 @@
     }
 
     .clear-all:hover {
-      background-color: var(--clear-hover);
+      background-color: #f4511e;
     }
 
     .history {
       max-width: 600px;
       margin: 0 auto;
       margin-top: 2rem;
-      background: var(--history-bg);
+      background: #222;
       padding: 1rem;
       border-radius: 12px;
     }
@@ -156,45 +141,39 @@
     .history h3 {
       margin: 0 0 0.5rem;
       font-size: 1.2rem;
-      color: var(--text-color);
+      color: #fff;
+    }
+
+    .history ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
     }
 
     .history li {
       display: flex;
       justify-content: space-between;
       padding: 0.4rem 0;
-      border-bottom: 1px solid var(--border-color);
-      color: var(--text-color);
+      border-bottom: 1px solid #444;
+      color: #e0e0e0;
     }
 
     .history button {
       font-size: 0.8rem;
       background: none;
-      border: 1px solid var(--border-color);
+      border: 1px solid #444;
       border-radius: 6px;
       cursor: pointer;
       padding: 0.2rem 0.6rem;
-      color: var(--text-color);
-    }
-
-    #themeToggle {
-      position: absolute;
-      top: 1rem;
-      right: 2rem;
-      padding: 0.4rem 0.8rem;
-      border: none;
-      border-radius: 6px;
-      background: var(--item-bg);
-      color: var(--text-color);
-      cursor: pointer;
-      border: 1px solid var(--border-color);
+      color: #e0e0e0;
     }
   </style>
 </head>
 <body>
 
-  <button id="themeToggle">Switch Theme</button>
   <h2>Recycle Bin</h2>
+
+  <!-- Search Bar -->
   <input type="text" id="search" placeholder="Search items..." />
 
   <ul class="recycle-list" id="recycleList">
@@ -232,21 +211,9 @@
     document.addEventListener('DOMContentLoaded', function () {
       const recycleList = document.getElementById('recycleList');
       const searchInput = document.getElementById('search');
-      const themeToggle = document.getElementById('themeToggle');
-      const body = document.body;
+      const historyList = document.getElementById('historyList');
 
-      // Load saved theme
-      if (localStorage.getItem('theme') === 'light') {
-        body.classList.add('light-theme');
-      }
-
-      // Theme switcher
-      themeToggle.addEventListener('click', () => {
-        body.classList.toggle('light-theme');
-        localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
-      });
-
-      // Search
+      // Filter items
       searchInput.addEventListener('input', function () {
         const query = this.value.toLowerCase();
         document.querySelectorAll('.recycle-item').forEach(item => {
@@ -267,12 +234,18 @@
         const li = document.createElement('li');
         li.innerHTML = `${action}: ${content} <button>Undo</button>`;
         const undoBtn = li.querySelector('button');
+
         undoBtn.addEventListener('click', () => {
-          recycleList.insertAdjacentHTML('beforeend', elementHTML);
+          const tempContainer = document.createElement('div');
+          tempContainer.innerHTML = elementHTML;
+          const restoredItem = tempContainer.firstElementChild;
+          restoredItem.classList.add('fade-in');
+          recycleList.appendChild(restoredItem);
           attachListeners();
           li.remove();
         });
-        document.getElementById('historyList').prepend(li);
+
+        historyList.prepend(li);
       }
 
       function attachListeners() {
@@ -289,8 +262,10 @@
           btn.onclick = function () {
             const item = this.closest('.recycle-item');
             const content = item.querySelector('.item-content').textContent;
+            const clone = item.cloneNode(true);
+            clone.classList.add('fade-in');
             alert(`Restored: ${content}`);
-            addToHistory('Restored', content, item.outerHTML);
+            addToHistory('Restored', content, clone.outerHTML);
             animateAndRemove(item);
           };
         });
