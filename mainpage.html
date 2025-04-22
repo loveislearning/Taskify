@@ -602,6 +602,8 @@
         <li><a href="Project_Management.htm">📂 Project Manager</a></li>
         <li><a href="spin_the_wheel.html">🎡 Spin The Wheel</a></li>
         <li><a onclick="showSection('pomodoro')">⏱ Pomodoro Timer</a></li>
+        <li><a onclick="showSection('subscription')">💳 Subscription</a></li>
+        <li><a onclick="showSection('collaboration')">🤝 Collaboration</a></li>
         <li><a onclick="showSection('assistant')">🤖 AI Study Assistant</a></li>
         <li><a href="/recycle_bin.html">🗑 Trash</a></li>
       </ul>
@@ -789,6 +791,14 @@
           </div>
         </div>
       </div>
+      <div id="subscriptionSection" class="content-box hidden">
+        <h2>💳 Subscription</h2>
+        <p>Manage your subscription plan and billing details here.</p>
+      </div>
+      <div id="collaborationSection" class="content-box hidden">
+        <h2>🤝 Collaboration</h2>
+        <p>Invite others, share projects, and collaborate with your peers.</p>
+      </div> 
     </div>
   </div>
 
@@ -858,7 +868,7 @@
 
     // Section navigation
     function showSection(section) {
-      const sections = ['dashboardSection', 'gradesSection', 'trashSection', 'pomodoroSection', 'assistantSection'];
+      const sections = ['dashboardSection', 'gradesSection', 'trashSection', 'pomodoroSection', 'assistantSection','subscriptionSection','collaborationSection'];
       sections.forEach(id => document.getElementById(id).classList.add('hidden'));
 
       if (section === 'dashboard') {
@@ -876,6 +886,10 @@
         document.getElementById('pomodoroSection').classList.remove('hidden');
       } else if (section === 'assistant') {
         document.getElementById('assistantSection').classList.remove('hidden');
+      } else if (section === 'subscription') {
+        document.getElementById('subscriptionSection').classList.remove('hidden');
+      } else if (section === 'collaboration') {
+        document.getElementById('collaborationSection').classList.remove('hidden');
       }
     }
 
