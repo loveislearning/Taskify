@@ -5,23 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Organized Notes - Enhanced</title>
     <style>
+        /* Light theme (default) */
         :root {
-            --sidebar-bg: #2c3e50;
-            --main-bg: #f4f4f4;
-            --note-bg: #fff;
-            --accent: #27ae60;
-            --text: #333;
-            --toolbar-bg: #2c3e50;
-            --toolbar-btn: #34495e;
+            --sidebar-bg: #f7f7f9;
+            --main-bg: #ffffff;
+            --note-bg: #f4f8fb;
+            --accent: #0099ff;
+            --text: #18191c;
+            --toolbar-bg: #e9eef3;
+            --toolbar-btn: #e0e6ed;
+            --chapter-bg: #e0e6ed;
+            --chapter-hover: #0099ff;
+            --tag-remove: #e74c3c;
+            --secondary-text: #666666;
         }
+        /* Dark theme overrides */
         body.dark {
-            --sidebar-bg: #181c22;
-            --main-bg: #22272e;
-            --note-bg: #23272f;
-            --accent: #2ecc71;
-            --text: #f4f4f4;
-            --toolbar-bg: #181c22;
+            --sidebar-bg: #111217;
+            --main-bg: #000000;
+            --note-bg: #18191c;
+            --accent: #0099ff;
+            --text: #ffffff;
+            --toolbar-bg: #18191c;
             --toolbar-btn: #23272f;
+            --chapter-bg: #23272f;
+            --chapter-hover: #0099ff;
+            --tag-remove: #e74c3c;
+            --secondary-text: #cccccc;
         }
         body {
             font-family: Arial, sans-serif;
@@ -36,15 +46,15 @@
         .sidebar {
             width: 280px;
             background: var(--sidebar-bg);
-            color: white;
+            color: var(--text);
             padding: 15px;
             height: 100vh;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.07);
             font-family: 'Poppins', sans-serif;
-            transition: width 0.2s;
+            transition: width 0.2s, background 0.2s, color 0.2s;
         }
         .sidebar.collapsed {
             width: 50px;
@@ -76,35 +86,39 @@
             gap: 10px;
             background: var(--toolbar-bg);
             padding: 10px;
-            color: white;
+            color: var(--text);
             align-items: center;
             position: relative;
+            transition: background 0.2s, color 0.2s;
         }
         .toolbar button, .toolbar select {
             background: var(--toolbar-btn);
-            color: white;
+            color: var(--text);
             border: none;
             padding: 8px;
             cursor: pointer;
             border-radius: 5px;
+            transition: background 0.2s, color 0.2s;
         }
         .toolbar button:hover, .toolbar select:hover {
             background: var(--accent);
+            color: #fff;
         }
         .container {
             flex: 1;
             padding: 20px;
             background: var(--note-bg);
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-shadow: 0 0 10px rgba(0,0,0,0.07);
             overflow-y: auto;
             height: calc(100vh - 50px);
-            transition: background 0.2s;
+            transition: background 0.2s, color 0.2s;
+            color: var(--text);
         }
         #noteInput {
             width: 100%;
             min-height: 60vh;
             font-size: 16px;
-            border: 1px solid #ccc;
+            border: 1px solid #23272f22;
             padding: 10px;
             border-radius: 5px;
             resize: none;
@@ -123,6 +137,11 @@
             border: none;
             border-radius: 5px;
             outline: none;
+            background: #f7f7f9;
+            color: var(--text);
+        }
+        body.dark .input-container input {
+            background: #23272f;
         }
         .input-container button {
             background: var(--accent);
@@ -150,7 +169,7 @@
             cursor: pointer;
         }
         .tag.remove {
-            background: #e74c3c;
+            background: var(--tag-remove);
         }
         .subject {
             cursor: pointer;
@@ -158,6 +177,7 @@
             background: var(--toolbar-btn);
             margin-bottom: 5px;
             border-radius: 5px;
+            color: var(--text);
         }
         .chapter-list {
             margin-left: 10px;
@@ -169,19 +189,21 @@
             justify-content: space-between;
             align-items: center;
             padding: 5px;
-            background: #3b5998;
+            background: var(--chapter-bg);
             margin-bottom: 5px;
-            color: white;
+            color: #fff;
             border-radius: 5px;
             flex: 1;
+            transition: background 0.2s;
         }
         .chapter:hover {
-            background: #2d4373;
+            background: var(--chapter-hover);
+            color: #fff;
         }
         .pin, .add-chapter, .delete-chapter, .delete-subject {
             background: none;
             border: none;
-            color: rgb(245, 243, 243);
+            color: var(--text);
             cursor: pointer;
             padding: 5px;
             font-size: 18px;
@@ -198,7 +220,13 @@
             flex: 1;
             padding: 6px;
             border-radius: 5px;
-            border: 1px solid #bbb;
+            border: 1px solid #e0e6ed;
+            background: #f7f7f9;
+            color: var(--text);
+        }
+        body.dark .search-bar input {
+            background: #23272f;
+            border: 1px solid #23272f;
         }
         .resize-handle {
             position: absolute;
@@ -218,16 +246,18 @@
             display: inline-block;
             margin: 10px 0;
             max-width: 100%;
-            border: 1px solid #ccc;
+            border: 1px solid #e0e6ed;
             vertical-align: middle;
             user-select: none;
         }
-
+        body.dark .image-container {
+            border: 1px solid #23272f;
+        }
         #saveNoteBtn {
             position:fixed;
             bottom: 25px;
             right: 20px;
-            background: linear-gradient(90deg, var(--accent) 60%, #219150 100%);
+            background: linear-gradient(90deg, var(--accent) 60%, #007acc 100%);
             color: #fff;
             border: none;
             padding: 10px 15px;
@@ -236,14 +266,14 @@
             font-weight: bold;
             letter-spacing: 1px;
             cursor: pointer;
-            box-shadow: 0 8px 24px rgba(39, 174, 96, 0.15);
+            box-shadow: 0 8px 24px rgba(0,153,255, 0.15);
             z-index: 999;
             transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
             outline: none;
         }
         #saveNoteBtn:hover, #saveNoteBtn:focus {
-            background: linear-gradient(90deg, #219150 60%, var(--accent) 100%);
-            box-shadow: 0 12px 32px rgba(39, 174, 96, 0.25);
+            background: linear-gradient(90deg, #007acc 60%, var(--accent) 100%);
+            box-shadow: 0 12px 32px rgba(0,153,255, 0.25);
             transform: translateY(-2px) scale(1.03);
         }
         #saveNoteBtn:active {
@@ -251,13 +281,12 @@
             transform: scale(0.98);
         }
         #saveNoteBtn:disabled {
-            background: #bdc3c7;
+            background: #444;
             color: #fff;
             cursor: not-allowed;
             box-shadow: none;
             opacity: 0.8;
         }
-
         .mode-toggle {
             background: var(--accent);
             color: white;
@@ -266,6 +295,19 @@
             padding: 5px 10px;
             cursor: pointer;
             margin-left: auto;
+        }
+        .container small, .container .secondary, .toolbar small {
+            color: var(--secondary-text);
+        }
+        #currentChapter {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 0.5em;
+            text-align: center;
+        }
+        #currentChapter .blue {
+            color: var(--accent);
         }
         @media (max-width: 700px) {
             .sidebar {
@@ -351,19 +393,18 @@
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
-        
+        // Sidebar toggle
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('collapsed');
         }
-
-      
+        // Theme toggle
         function toggleMode() {
             document.body.classList.toggle('dark');
             localStorage.setItem('darkMode', document.body.classList.contains('dark'));
         }
         if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
 
-        
+        // Tags
         const tagList = document.getElementById('tagList');
         const newTagInput = document.getElementById('newTag');
         newTagInput.addEventListener('keypress', function(e) {
@@ -400,6 +441,7 @@
             tags.forEach(tag => addTag(tag));
         }
 
+        // Autosave
         function autosaveNote() {
             let chapter = document.getElementById('currentChapter').innerText;
             if (chapter && chapter !== "Select a Chapter") {
@@ -410,7 +452,8 @@
             let val = localStorage.getItem('autosave_' + chapter);
             if (val) noteInput.innerHTML = val;
         }
-        
+
+        // Subject and Chapter handling
         function addSubject() {
             let subjectName = document.getElementById("newSubject").value.trim();
             if (subjectName === "") return;
@@ -512,7 +555,7 @@
             }
         }
 
-       
+        // Search
         function searchNotes() {
             let query = document.getElementById('searchInput').value.toLowerCase();
             let subjectDivs = document.querySelectorAll('#subjectList > .subject');
@@ -543,7 +586,7 @@
         }
         document.getElementById('searchInput').addEventListener('input', searchNotes);
 
-        
+        // Bullets
         function addDiscBullet() {
             document.execCommand('insertUnorderedList');
             let lists = document.getElementById('noteInput').getElementsByTagName('ul');
@@ -552,7 +595,7 @@
             }
         }
 
-        
+        // Image insert and align
         document.getElementById('insertImageSelect').addEventListener('change', function() {
             if (this.value === 'upload') {
                 document.getElementById('imageUpload').click();
@@ -676,6 +719,7 @@
             }
         });
 
+        // Font size and style
         function changeFontSize(size) {
             const selection = window.getSelection();
             if (!selection.rangeCount) return;
@@ -717,6 +761,7 @@
             selection.addRange(range);
         }
 
+        // Export PDF
         function exportPDF() {
             let chapter = document.getElementById('currentChapter').innerText;
             if (!chapter || chapter === "Select a Chapter") {
@@ -730,6 +775,7 @@
             doc.save(chapter + ".pdf");
         }
 
+        // Save note
         function saveNote() {
             const currentChapter = document.getElementById("currentChapter").innerText;
             const noteContent = document.getElementById("noteInput").innerHTML;
@@ -740,7 +786,6 @@
             localStorage.setItem(currentChapter, noteContent);
             saveTags();
 
-            
             const saveBtn = document.getElementById("saveNoteBtn");
             const originalText = saveBtn.innerText;
             saveBtn.innerText = "✅ Saved!";
@@ -750,11 +795,9 @@
                 saveBtn.disabled = false;
             }, 1200);
         }
-        
         document.getElementById("noteInput").addEventListener("input", function() {
             document.getElementById("saveNoteBtn").disabled = false;
         });
-
 
         window.onload = function() {
             if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');

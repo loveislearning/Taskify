@@ -50,7 +50,7 @@
       height: 80px;
       font-size: 18px;
       cursor: pointer;
-      z-index: 2;
+      z-index: 1;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       transition: background-color 0.3s ease;
     }
@@ -158,6 +158,9 @@
 
     /* Styling for the description */
     .description-container {
+      position: absolute;
+      top: 10px;
+      left: 10px;
       max-width: 600px;
       background: rgba(255, 255, 255, 0.1);
       padding: 20px;
@@ -168,7 +171,10 @@
       color: #ddd;
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
       max-height: 300px;
-      overflow-y: auto; /* Enable vertical scrolling */
+      overflow-y: auto;
+      display: none;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      z-index: 3; /* Added z-index to make sure it's above other content */
     }
     .description-container h2 {
       color: #fff;
@@ -183,12 +189,34 @@
     .description-container p strong {
       color: #27ae60;
     }
+
+    .description-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #27ae60;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      z-index: 4; /* Ensures it's on top of other elements */
+      transition: background-color 0.3s ease;
+    }
+
+    .description-button:hover {
+      background-color: #2ecc71;
+    }
   </style>
 </head>
 <body>
 
-<!-- Instructions -->
-<div class="description-container">
+<!-- Description Button -->
+<button class="description-button" onclick="toggleDescription()">Description</button>
+
+<!-- Instructions Popup (hidden initially) -->
+<div class="description-container" id="descriptionContainer">
   <h2>🎯 How to Use the Spin Wheel</h2>
   <p>1. Enter a <strong>task</strong> or <strong>name</strong> into the input box and click <strong>Add</strong> to add it to the wheel.</p>
   <p>2. You can add as many entries as you want — each one will be a segment on the wheel.</p>
@@ -229,6 +257,7 @@
   const spinSound = document.getElementById("spinSound");
   const winnerPopup = document.getElementById("winnerPopup");
   const confettiContainer = document.getElementById("confetti");
+  const descriptionContainer = document.getElementById("descriptionContainer");
 
   function drawWheel() {
     const arc = Math.PI * 2 / segments.length;
@@ -321,40 +350,32 @@
   }
 
   function resetTasks() {
-    if (confirm("Are you sure you want to clear all tasks?")) {
-      segments = [];
-      drawWheel();
-    }
+    segments = [];
+    drawWheel();
+    closeWinnerPopup();
   }
 
-  document.getElementById("taskInput").addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-      addTask();
-    }
-  });
-
-  // --- Confetti Animation ---
   function launchConfetti() {
-    confettiContainer.innerHTML = '';
-    const confettiColors = [
-      "#ffcc00", "#339933", "#9933cc", "#ff3366", "#ff3300",
-      "#999999", "#99cc00", "#3399ff", "#ff6600", "#00ccff",
-      "#6666cc", "#ffff66", "#ff99cc", "#66ffcc", "#ff9966"
-    ];
-    const confettiCount = 32;
-    for (let i = 0; i < confettiCount; i++) {
-      const conf = document.createElement("div");
-      conf.className = "confetti-piece";
-      conf.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
-      conf.style.left = Math.random() * 100 + "vw";
-      conf.style.animationDelay = (Math.random() * 0.6) + "s";
-      conf.style.transform = `rotate(${Math.random()*360}deg)`;
+    const numberOfConfetti = 100;
+    for (let i = 0; i < numberOfConfetti; i++) {
+      const conf = document.createElement('div');
+      conf.classList.add('confetti-piece');
+      conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      conf.style.left = Math.random() * 100 + 'vw';
+      conf.style.animationDuration = Math.random() * 2 + 1 + 's';
+      conf.style.animationDelay = Math.random() * 2 + 's';
       confettiContainer.appendChild(conf);
     }
-    setTimeout(() => confettiContainer.innerHTML = '', 2000);
   }
 
+  // Initial setup
   drawWheel();
+
+  // Description Toggle Function
+  function toggleDescription() {
+    const descriptionVisible = descriptionContainer.style.display === "block";
+    descriptionContainer.style.display = descriptionVisible ? "none" : "block";
+  }
 </script>
 
 </body>
