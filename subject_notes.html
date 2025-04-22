@@ -222,6 +222,42 @@
             vertical-align: middle;
             user-select: none;
         }
+
+        #saveNoteBtn {
+            position:fixed;
+            bottom: 25px;
+            right: 20px;
+            background: linear-gradient(90deg, var(--accent) 60%, #219150 100%);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 8px 24px rgba(39, 174, 96, 0.15);
+            z-index: 999;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+            outline: none;
+        }
+        #saveNoteBtn:hover, #saveNoteBtn:focus {
+            background: linear-gradient(90deg, #219150 60%, var(--accent) 100%);
+            box-shadow: 0 12px 32px rgba(39, 174, 96, 0.25);
+            transform: translateY(-2px) scale(1.03);
+        }
+        #saveNoteBtn:active {
+            background: var(--accent);
+            transform: scale(0.98);
+        }
+        #saveNoteBtn:disabled {
+            background: #bdc3c7;
+            color: #fff;
+            cursor: not-allowed;
+            box-shadow: none;
+            opacity: 0.8;
+        }
+
         .mode-toggle {
             background: var(--accent);
             color: white;
@@ -311,6 +347,7 @@
                 <input type="text" id="newTag" placeholder="Add tag (press Enter)">
             </div>
         </div>
+        <button id="saveNoteBtn" onclick="saveNote()">💾 Save</button>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
@@ -363,6 +400,16 @@
             tags.forEach(tag => addTag(tag));
         }
 
+        function autosaveNote() {
+            let chapter = document.getElementById('currentChapter').innerText;
+            if (chapter && chapter !== "Select a Chapter") {
+                localStorage.setItem('autosave_' + chapter, noteInput.innerHTML);
+            }
+        }
+        function restoreAutosave(chapter) {
+            let val = localStorage.getItem('autosave_' + chapter);
+            if (val) noteInput.innerHTML = val;
+        }
         
         function addSubject() {
             let subjectName = document.getElementById("newSubject").value.trim();
@@ -682,6 +729,32 @@
             doc.text(text, 10, 20);
             doc.save(chapter + ".pdf");
         }
+
+        function saveNote() {
+            const currentChapter = document.getElementById("currentChapter").innerText;
+            const noteContent = document.getElementById("noteInput").innerHTML;
+            if (currentChapter === "Select a Chapter") {
+                alert("Please select a chapter to save notes.");
+                return;
+            }
+            localStorage.setItem(currentChapter, noteContent);
+            saveTags();
+
+            
+            const saveBtn = document.getElementById("saveNoteBtn");
+            const originalText = saveBtn.innerText;
+            saveBtn.innerText = "✅ Saved!";
+            saveBtn.disabled = true;
+            setTimeout(() => {
+                saveBtn.innerText = originalText;
+                saveBtn.disabled = false;
+            }, 1200);
+        }
+        
+        document.getElementById("noteInput").addEventListener("input", function() {
+            document.getElementById("saveNoteBtn").disabled = false;
+        });
+
 
         window.onload = function() {
             if (localStorage.getItem('darkMode') === 'true') document.body.classList.add('dark');
