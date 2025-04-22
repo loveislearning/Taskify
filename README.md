@@ -1,4 +1,4 @@
-# 🚀 Takify - Task Management System
+# 🚀 Taskify - Task Management System
 
 ## 📌 Overview
 Takify is an advanced task management system designed to help users efficiently organize, track, and manage their daily tasks. Whether you're a student, professional, or freelancer, Takify ensures that you stay on top of your work with powerful task management features. With an intuitive interface, users can create, update, and complete tasks seamlessly while benefiting from progress tracking, categorization, and reminders. The system is built with scalability in mind, allowing both individual users and teams to streamline their workflows.
