@@ -1,115 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Terms of Service - Takify</title>
   <style>
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       background-color: #121212;
       color: #E0E0E0;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .container {
-      width: 80%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
       background-color: #1E1E1E;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      animation: fadeIn 1s ease-in-out;
-      max-height: 80vh;
+      border-radius: 12px;
+      padding: 40px 30px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.8s ease-in-out both;
       overflow-y: auto;
+      max-height: 90vh;
     }
 
     h1 {
       text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      animation: slideIn 1s ease-out;
-    }
-
-    p {
-      line-height: 1.6;
-      font-size: 1rem;
-      margin-bottom: 20px;
+      font-size: 2.75rem;
+      margin-bottom: 30px;
+      color: #BB86FC;
+      animation: slideIn 0.6s ease-out;
     }
 
     .section-title {
-      font-size: 1.3rem;
-      font-weight: bold;
-      margin-top: 20px;
-      animation: fadeInUp 1s ease-out;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      animation: fadeInUp 0.6s ease-out;
     }
 
+    p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+      color: #CCCCCC;
+    }
+
+    /* Scrollbar styling for better UX */
+    .container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .container::-webkit-scrollbar-thumb {
+      background-color: #333;
+      border-radius: 10px;
+    }
+
+    /* Animations */
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @keyframes slideIn {
-      from {
-        transform: translateX(-100%);
-      }
-      to {
-        transform: translateX(0);
-      }
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+      }
+
+      p {
+        font-size: 0.95rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Terms of Service</h1>
+  <main class="container" role="main" aria-labelledby="terms-title">
+    <h1 id="terms-title">Terms of Service</h1>
 
     <p>Welcome to Takify! Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the Takify website (the "Service") operated by Takify Inc. ("us", "we", or "our").</p>
 
-    <div class="section-title">1. Acceptance of Terms</div>
-    <p>By accessing or using the Service, you agree to be bound by these Terms. If you do not agree with any part of the Terms, you must not use the Service.</p>
+    <section>
+      <div class="section-title">1. Acceptance of Terms</div>
+      <p>By accessing or using the Service, you agree to be bound by these Terms. If you do not agree with any part of the Terms, you must not use the Service.</p>
+    </section>
 
-    <div class="section-title">2. Use of Service</div>
-    <p>You are granted a non-exclusive, non-transferable license to access and use the Service in accordance with these Terms. You agree not to misuse the Service in any way, including but not limited to attempting to hack, disable, or damage the Service.</p>
+    <section>
+      <div class="section-title">2. Use of Service</div>
+      <p>You are granted a non-exclusive, non-transferable license to access and use the Service in accordance with these Terms. You agree not to misuse the Service in any way, including but not limited to attempting to hack, disable, or damage the Service.</p>
+    </section>
 
-    <div class="section-title">3. Privacy</div>
-    <p>Our Privacy Policy governs the collection, use, and sharing of your personal information. By using the Service, you consent to the practices described in the Privacy Policy.</p>
+    <section>
+      <div class="section-title">3. Privacy</div>
+      <p>Our Privacy Policy governs the collection, use, and sharing of your personal information. By using the Service, you consent to the practices described in the Privacy Policy.</p>
+    </section>
 
-    <div class="section-title">4. User Content</div>
-    <p>You retain ownership of any content you create or upload to the Service. By submitting content, you grant Takify a worldwide, royalty-free license to use, modify, and display such content in connection with the Service.</p>
+    <section>
+      <div class="section-title">4. User Content</div>
+      <p>You retain ownership of any content you create or upload to the Service. By submitting content, you grant Takify a worldwide, royalty-free license to use, modify, and display such content in connection with the Service.</p>
+    </section>
 
-    <div class="section-title">5. Termination</div>
-    <p>We may terminate or suspend your account and access to the Service at any time, without notice, for conduct that we believe violates these Terms or is harmful to other users of the Service.</p>
+    <section>
+      <div class="section-title">5. Termination</div>
+      <p>We may terminate or suspend your account and access to the Service at any time, without notice, for conduct that we believe violates these Terms or is harmful to other users of the Service.</p>
+    </section>
 
-    <div class="section-title">6. Limitation of Liability</div>
-    <p>Takify will not be held liable for any damages, losses, or liabilities arising from your use or inability to use the Service. Our liability is limited to the maximum extent allowed by law.</p>
+    <section>
+      <div class="section-title">6. Limitation of Liability</div>
+      <p>Takify will not be held liable for any damages, losses, or liabilities arising from your use or inability to use the Service. Our liability is limited to the maximum extent allowed by law.</p>
+    </section>
 
-    <div class="section-title">7. Modifications</div>
-    <p>We reserve the right to modify or update these Terms at any time. Any changes will be effective immediately upon posting on the Service. Your continued use of the Service constitutes acceptance of those changes.</p>
+    <section>
+      <div class="section-title">7. Modifications</div>
+      <p>We reserve the right to modify or update these Terms at any time. Any changes will be effective immediately upon posting on the Service. Your continued use of the Service constitutes acceptance of those changes.</p>
+    </section>
 
-    <div class="section-title">8. Governing Law</div>
-    <p>These Terms are governed by and construed in accordance with the laws of your jurisdiction, without regard to its conflict of law principles.</p>
-  </div>
+    <section>
+      <div class="section-title">8. Governing Law</div>
+      <p>These Terms are governed by and construed in accordance with the laws of your jurisdiction, without regard to its conflict of law principles.</p>
+    </section>
+  </main>
 </body>
 </html>

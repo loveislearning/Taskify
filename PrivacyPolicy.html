@@ -1,115 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Policy - Takify</title>
   <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       background-color: #121212;
       color: #E0E0E0;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      padding: 20px;
     }
 
     .container {
-      width: 80%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
       background-color: #1E1E1E;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-      animation: fadeIn 1s ease-in-out;
-      max-height: 80vh;
+      border-radius: 12px;
+      padding: 40px 30px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      animation: fadeIn 0.8s ease-in-out both;
       overflow-y: auto;
+      max-height: 90vh;
     }
 
     h1 {
       text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      animation: slideIn 1s ease-out;
-    }
-
-    p {
-      line-height: 1.6;
-      font-size: 1rem;
-      margin-bottom: 20px;
+      font-size: 2.75rem;
+      margin-bottom: 30px;
+      color: #BB86FC;
+      animation: slideIn 0.6s ease-out;
     }
 
     .section-title {
-      font-size: 1.3rem;
-      font-weight: bold;
-      margin-top: 20px;
-      animation: fadeInUp 1s ease-out;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #FFFFFF;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+      color: #CCCCCC;
+    }
+
+    .container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .container::-webkit-scrollbar-thumb {
+      background-color: #333;
+      border-radius: 10px;
     }
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     @keyframes slideIn {
-      from {
-        transform: translateX(-100%);
-      }
-      to {
-        transform: translateX(0);
-      }
+      from { transform: translateX(-50px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
     }
 
     @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 30px 20px;
       }
-      to {
-        opacity: 1;
-        transform: translateY(0);
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+      }
+
+      p {
+        font-size: 0.95rem;
       }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Privacy Policy</h1>
+  <main class="container" role="main" aria-labelledby="privacy-title">
+    <h1 id="privacy-title">Privacy Policy</h1>
 
     <p>At Takify, your privacy is a top priority. This Privacy Policy explains how we collect, use, and safeguard your information when you use our website and services. Please read it carefully.</p>
 
-    <div class="section-title">1. Information We Collect</div>
-    <p>We collect personal information you provide directly to us, such as when you create an account, fill out a form, or interact with our services. This information may include your name, email address, and other details necessary for service provision.</p>
+    <section>
+      <div class="section-title">1. Information We Collect</div>
+      <p>We collect personal information you provide directly to us, such as when you create an account, fill out a form, or interact with our services. This information may include your name, email address, and other details necessary for service provision.</p>
+    </section>
 
-    <div class="section-title">2. How We Use Your Information</div>
-    <p>Your personal information is used to enhance your experience with our services, provide customer support, send updates, and improve our website. We may use your data for analytics, marketing communications, and to comply with legal obligations.</p>
+    <section>
+      <div class="section-title">2. How We Use Your Information</div>
+      <p>Your personal information is used to enhance your experience with our services, provide customer support, send updates, and improve our website. We may use your data for analytics, marketing communications, and to comply with legal obligations.</p>
+    </section>
 
-    <div class="section-title">3. Data Security</div>
-    <p>We implement reasonable measures to protect your personal information from unauthorized access or disclosure. While no system is completely secure, we strive to protect your information using industry-standard practices.</p>
+    <section>
+      <div class="section-title">3. Data Security</div>
+      <p>We implement reasonable measures to protect your personal information from unauthorized access or disclosure. While no system is completely secure, we strive to protect your information using industry-standard practices.</p>
+    </section>
 
-    <div class="section-title">4. Data Sharing</div>
-    <p>We do not sell, rent, or trade your personal information to third parties. However, we may share your data with trusted third-party service providers to help us operate our business and deliver our services. These providers are bound by strict confidentiality agreements.</p>
+    <section>
+      <div class="section-title">4. Data Sharing</div>
+      <p>We do not sell, rent, or trade your personal information to third parties. However, we may share your data with trusted third-party service providers to help us operate our business and deliver our services. These providers are bound by strict confidentiality agreements.</p>
+    </section>
 
-    <div class="section-title">5. Cookies</div>
-    <p>We use cookies to enhance your user experience by remembering your preferences and activity. You can adjust your browser settings to refuse cookies, but this may limit some functionalities of the website.</p>
+    <section>
+      <div class="section-title">5. Cookies</div>
+      <p>We use cookies to enhance your user experience by remembering your preferences and activity. You can adjust your browser settings to refuse cookies, but this may limit some functionalities of the website.</p>
+    </section>
 
-    <div class="section-title">6. Your Rights</div>
-    <p>You have the right to access, update, or delete your personal information at any time. You can also opt out of receiving marketing communications from us by following the instructions in our emails.</p>
+    <section>
+      <div class="section-title">6. Your Rights</div>
+      <p>You have the right to access, update, or delete your personal information at any time. You can also opt out of receiving marketing communications from us by following the instructions in our emails.</p>
+    </section>
 
-    <div class="section-title">7. Changes to Privacy Policy</div>
-    <p>We reserve the right to update or modify this Privacy Policy at any time. Any changes will be posted on this page, and the date at the bottom of the policy will be updated accordingly.</p>
+    <section>
+      <div class="section-title">7. Changes to Privacy Policy</div>
+      <p>We reserve the right to update or modify this Privacy Policy at any time. Any changes will be posted on this page, and the date at the bottom of the policy will be updated accordingly.</p>
+    </section>
 
-    <div class="section-title">8. Contact Us</div>
-    <p>If you have any questions about this Privacy Policy or our practices, please contact us at support@takify.com.</p>
-  </div>
+    <section>
+      <div class="section-title">8. Contact Us</div>
+      <p>If you have any questions about this Privacy Policy or our practices, please contact us at <a href="mailto:support@takify.com" style="color: #BB86FC; text-decoration: none;">support@takify.com</a>.</p>
+    </section>
+  </main>
 </body>
 </html>
