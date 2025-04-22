@@ -531,6 +531,118 @@
       gap: 15px;
     }
 
+    /* Journal Styles */
+    .journal-container {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .journal-date-picker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    .journal-date-input {
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background: rgba(40, 40, 40, 0.8);
+      color: white;
+      font-size: 1rem;
+    }
+    .journal-date-picker button {
+      background: #333;
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .journal-date-picker button:hover {
+      background: #444;
+    }
+    .journal-mood-rating {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .mood-stars {
+      font-size: 2.5rem;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+    .mood-stars .star {
+      transition: all 0.2s ease;
+      margin: 0 5px;
+    }
+    .mood-stars .star:hover,
+    .mood-stars .star.active {
+      color: #fdcb6e;
+      transform: scale(1.2);
+    }
+    .journal-prompts {
+      margin-bottom: 20px;
+    }
+    .journal-prompts .prompt {
+      margin: 15px 0 8px;
+      color: #00b894;
+      font-weight: 500;
+    }
+    .prompt-response {
+      width: 100%;
+      min-height: 80px;
+      padding: 12px;
+      border-radius: 5px;
+      border: 1px solid #444;
+      background: rgba(40, 40, 40, 0.8);
+      color: white;
+      font-size: 1rem;
+      resize: vertical;
+      margin-bottom: 15px;
+    }
+    .prompt-response:focus {
+      outline: none;
+      border-color: #00b894;
+      box-shadow: 0 0 0 1px #00b894;
+    }
+    .journal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    .journal-btn {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .save-btn {
+      background: #00b894;
+      color: white;
+    }
+    .save-btn:hover {
+      background: #00a884;
+      transform: translateY(-2px);
+    }
+    .clear-btn {
+      background: #333;
+      color: white;
+    }
+    .clear-btn:hover {
+      background: #444;
+      transform: translateY(-2px);
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       #menuToggle {
@@ -603,6 +715,7 @@
         <li><a href="spin_the_wheel.html">🎡 Spin The Wheel</a></li>
         <li><a onclick="showSection('pomodoro')">⏱ Pomodoro Timer</a></li>
         <li><a onclick="showSection('assistant')">🤖 AI Study Assistant</a></li>
+        <li><a onclick="showSection('journal')">📔 Journal</a></li>
         <li><a href="/recycle_bin.html">🗑 Trash</a></li>
       </ul>
     </div>
@@ -789,6 +902,41 @@
           </div>
         </div>
       </div>
+      <div id="journalSection" class="content-box hidden">
+        <h2>📔 Daily Journal</h2>
+        <div class="journal-container">
+          <div class="journal-date-picker">
+            <button id="prevDay">◀</button>
+            <input type="date" id="journalDate" class="journal-date-input">
+            <button id="nextDay">▶</button>
+          </div>
+          <div class="journal-mood-rating">
+            <h3>How was your day?</h3>
+            <div class="mood-stars">
+              <span class="star" data-rating="1">☆</span>
+              <span class="star" data-rating="2">☆</span>
+              <span class="star" data-rating="3">☆</span>
+              <span class="star" data-rating="4">☆</span>
+              <span class="star" data-rating="5">☆</span>
+            </div>
+          </div>
+          <div class="journal-prompts">
+            <h3>Daily Prompts</h3>
+            <div class="prompt">What did you accomplish today?</div>
+            <textarea class="prompt-response" data-prompt="accomplishments" placeholder="Write your response here..."></textarea>
+            <div class="prompt">What challenges did you face?</div>
+            <textarea class="prompt-response" data-prompt="challenges" placeholder="Write your response here..."></textarea>
+            <div class="prompt">What are your goals for tomorrow?</div>
+            <textarea class="prompt-response" data-prompt="goals" placeholder="Write your response here..."></textarea>
+            <div class="prompt">Additional notes</div>
+            <textarea class="prompt-response" data-prompt="notes" placeholder="Any other thoughts..."></textarea>
+          </div>
+          <div class="journal-actions">
+            <button class="journal-btn save-btn">Save Entry</button>
+            <button class="journal-btn clear-btn">Clear</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -858,7 +1006,7 @@
 
     // Section navigation
     function showSection(section) {
-      const sections = ['dashboardSection', 'gradesSection', 'trashSection', 'pomodoroSection', 'assistantSection'];
+      const sections = ['dashboardSection', 'gradesSection', 'trashSection', 'pomodoroSection', 'assistantSection', 'journalSection'];
       sections.forEach(id => document.getElementById(id).classList.add('hidden'));
 
       if (section === 'dashboard') {
@@ -876,6 +1024,9 @@
         document.getElementById('pomodoroSection').classList.remove('hidden');
       } else if (section === 'assistant') {
         document.getElementById('assistantSection').classList.remove('hidden');
+      } else if (section === 'journal') {
+        document.getElementById('journalSection').classList.remove('hidden');
+        initJournal();
       }
     }
 
@@ -1186,6 +1337,121 @@
       // Initialize chart on page load if dashboard is shown by default
       if (document.getElementById('dashboardSection') && !document.getElementById('dashboardSection').classList.contains('hidden')) {
         window.progressChart = initChart();
+      }
+
+      // Journal Functionality
+      let journalEntries = JSON.parse(localStorage.getItem('journalEntries')) || {};
+
+      function initJournal() {
+        const today = new Date();
+        const dateInput = document.getElementById('journalDate');
+        dateInput.valueAsDate = today;
+        
+        loadJournalEntry(today);
+        
+        // Event listeners
+        document.getElementById('prevDay').addEventListener('click', () => navigateDay(-1));
+        document.getElementById('nextDay').addEventListener('click', () => navigateDay(1));
+        document.getElementById('journalDate').addEventListener('change', (e) => {
+          loadJournalEntry(new Date(e.target.value));
+        });
+        
+        // Mood rating
+        document.querySelectorAll('.star').forEach(star => {
+          star.addEventListener('click', setRating);
+        });
+        
+        // Save and clear buttons
+        document.querySelector('.save-btn').addEventListener('click', saveJournalEntry);
+        document.querySelector('.clear-btn').addEventListener('click', clearJournalEntry);
+      }
+
+      function navigateDay(days) {
+        const dateInput = document.getElementById('journalDate');
+        const currentDate = new Date(dateInput.value);
+        currentDate.setDate(currentDate.getDate() + days);
+        dateInput.valueAsDate = currentDate;
+        loadJournalEntry(currentDate);
+      }
+
+      function loadJournalEntry(date) {
+        const dateKey = formatDateKey(date);
+        const entry = journalEntries[dateKey] || {};
+        
+        // Set mood rating
+        if (entry.rating) {
+          document.querySelectorAll('.star').forEach((star, index) => {
+            star.classList.toggle('active', index < entry.rating);
+            star.textContent = index < entry.rating ? '★' : '☆';
+          });
+        } else {
+          document.querySelectorAll('.star').forEach(star => {
+            star.classList.remove('active');
+            star.textContent = '☆';
+          });
+        }
+        
+        // Set prompt responses
+        document.querySelectorAll('.prompt-response').forEach(textarea => {
+          const prompt = textarea.dataset.prompt;
+          textarea.value = entry[prompt] || '';
+        });
+      }
+
+      function saveJournalEntry() {
+        const dateInput = document.getElementById('journalDate');
+        const date = new Date(dateInput.value);
+        const dateKey = formatDateKey(date);
+        
+        // Get mood rating
+        const activeStars = document.querySelectorAll('.star.active');
+        const rating = activeStars.length;
+        
+        // Get prompt responses
+        const prompts = {};
+        document.querySelectorAll('.prompt-response').forEach(textarea => {
+          const prompt = textarea.dataset.prompt;
+          prompts[prompt] = textarea.value;
+        });
+        
+        // Save entry
+        journalEntries[dateKey] = {
+          date: date.toISOString(),
+          rating,
+          ...prompts
+        };
+        
+        localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
+        
+        // Show confirmation
+        alert('Journal entry saved successfully!');
+      }
+
+      function clearJournalEntry() {
+        if (confirm('Are you sure you want to clear this entry? This cannot be undone.')) {
+          document.querySelectorAll('.star').forEach(star => {
+            star.classList.remove('active');
+            star.textContent = '☆';
+          });
+          
+          document.querySelectorAll('.prompt-response').forEach(textarea => {
+            textarea.value = '';
+          });
+        }
+      }
+
+      function setRating(e) {
+        const rating = parseInt(e.target.dataset.rating);
+        const stars = document.querySelectorAll('.star');
+        
+        stars.forEach((star, index) => {
+          star.classList.toggle('active', index < rating);
+          star.textContent = index < rating ? '★' : '☆';
+        });
+      }
+
+      function formatDateKey(date) {
+        return date.toISOString().split('T')[0];
       }
 
       // AI Study Assistant Functionality
