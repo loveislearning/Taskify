@@ -19,6 +19,7 @@
       position: relative;
       width: 400px;
       height: 400px;
+      transform-origin: center center;
     }
     #wheel {
       width: 100%;
@@ -79,6 +80,17 @@
     .input-container button:hover,
     .reset-button:hover { background: #2ecc71; }
 
+    #countdown {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3em;
+      color: #fff;
+      z-index: 10;
+      display: none;
+    }
+
     /* Winner Popup Animation */
     #winnerPopup {
       position: fixed;
@@ -118,18 +130,6 @@
       0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
       100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
     }
-    #winnerPopup button {
-      margin: 15px 10px 0;
-      padding: 12px 24px;
-      background: #27ae60;
-      border: none;
-      color: white;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 18px;
-      transition: background-color 0.3s;
-    }
-    #winnerPopup button:hover { background: #2ecc71; }
 
     /* Confetti */
     .confetti {
@@ -155,80 +155,15 @@
       80% { opacity: 1; }
       100% { transform: translateY(100vh) rotateZ(360deg) scale(0.7); opacity: 0; }
     }
-
-    /* Styling for the description */
-    .description-container {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      max-width: 600px;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      margin-bottom: 30px;
-      font-size: 18px;
-      color: #ddd;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-      max-height: 300px;
-      overflow-y: auto;
-      display: none;
-      transition: transform 0.3s ease, opacity 0.3s ease;
-      z-index: 3; /* Added z-index to make sure it's above other content */
-    }
-    .description-container h2 {
-      color: #fff;
-      font-size: 2em;
-      margin-bottom: 15px;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
-    .description-container p {
-      margin-bottom: 10px;
-    }
-    .description-container p strong {
-      color: #27ae60;
-    }
-
-    .description-button {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background-color: #27ae60;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-      z-index: 4; /* Ensures it's on top of other elements */
-      transition: background-color 0.3s ease;
-    }
-
-    .description-button:hover {
-      background-color: #2ecc71;
-    }
   </style>
 </head>
 <body>
 
-<!-- Description Button -->
-<button class="description-button" onclick="toggleDescription()">Description</button>
-
-<!-- Instructions Popup (hidden initially) -->
-<div class="description-container" id="descriptionContainer">
-  <h2>🎯 How to Use the Spin Wheel</h2>
-  <p>1. Enter a <strong>task</strong> or <strong>name</strong> into the input box and click <strong>Add</strong> to add it to the wheel.</p>
-  <p>2. You can add as many entries as you want — each one will be a segment on the wheel.</p>
-  <p>3. Hit the <strong>Spin</strong> button to randomly select one entry from the wheel.</p>
-  <p>4. After spinning, you'll see the selected entry and can choose to <strong>Remove</strong> or <strong>Keep</strong> it.</p>
-  <p>5. Click <strong>Reset</strong> to clear all tasks and start fresh.</p>
-</div>
-
 <div class="wheel-container">
   <div class="pointer"></div>
   <canvas id="wheel" width="400" height="400"></canvas>
-  <button class="spin-button" onclick="spinWheel()">Spin</button>
+  <button class="spin-button" onclick="startCountdown()">Spin</button>
+  <div id="countdown"></div>
 </div>
 
 <div class="input-container">
@@ -253,11 +188,20 @@
 
   let rotation = 0;
   let spinning = false;
+  let countdownInterval;
+  let countdownTime = 3; // Countdown starts at 3 seconds
 
   const spinSound = document.getElementById("spinSound");
   const winnerPopup = document.getElementById("winnerPopup");
   const confettiContainer = document.getElementById("confetti");
-  const descriptionContainer = document.getElementById("descriptionContainer");
+  const countdownElement = document.getElementById("countdown");
+
+  // Listen for the Enter key to add a task
+  document.getElementById("taskInput").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+      addTask();
+    }
+  });
 
   function drawWheel() {
     const arc = Math.PI * 2 / segments.length;
@@ -288,6 +232,21 @@
     ctx.fill();
   }
 
+  function startCountdown() {
+    if (spinning || segments.length === 0) return;
+    countdownTime = 3; // Reset the countdown
+    countdownElement.style.display = 'block';
+    countdownInterval = setInterval(function() {
+      countdownElement.textContent = countdownTime;
+      countdownTime--;
+      if (countdownTime < 0) {
+        clearInterval(countdownInterval);
+        countdownElement.style.display = 'none';
+        spinWheel();
+      }
+    }, 1000);
+  }
+
   function spinWheel() {
     if (spinning || segments.length === 0) return;
     spinning = true;
@@ -297,16 +256,16 @@
     const spinAngle = Math.floor(3600 + Math.random() * 360);
     rotation += spinAngle;
     canvas.style.transition = 'transform 4s cubic-bezier(.25,1,.5,1)';
-    canvas.style.transform = `rotate(${rotation}deg)`;
+    canvas.style.transform = `rotate(${rotation}deg)`; 
 
     setTimeout(() => {
-      spinning = false;
-      const normalizedRotation = (rotation % 360 + 360) % 360;
-      const arc = 360 / segments.length;
-      const selectedIndex = Math.floor(((360 - normalizedRotation) % 360) / arc);
-      const winner = segments[selectedIndex];
-      showWinnerPopup(winner, selectedIndex);
-      launchConfetti();
+        spinning = false;
+        const normalizedRotation = (rotation % 360 + 360) % 360;
+        const arc = 360 / segments.length;
+        const selectedIndex = Math.floor(((360 - normalizedRotation) % 360) / arc);
+        const winner = segments[selectedIndex];
+        showWinnerPopup(winner, selectedIndex);
+        launchConfetti();
     }, 4000);
   }
 
@@ -339,43 +298,35 @@
     closeWinnerPopup();
   }
 
+  function launchConfetti() {
+    const confettiColors = ['#ffcc00', '#339933', '#9933cc', '#ff3366', '#ff3300'];
+    for (let i = 0; i < 100; i++) {
+      const confetti = document.createElement("div");
+      confetti.classList.add("confetti-piece");
+      confetti.style.backgroundColor = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+      confetti.style.left = Math.random() * 100 + "vw";
+      confetti.style.animationDuration = Math.random() * 2 + 2 + "s";
+      confettiContainer.appendChild(confetti);
+      setTimeout(() => confetti.remove(), 3000);
+    }
+  }
+
   function addTask() {
-    const taskInput = document.getElementById('taskInput');
+    const taskInput = document.getElementById("taskInput");
     const task = taskInput.value.trim();
-    if (task) {
+    if (task && !segments.includes(task)) {
       segments.push(task);
-      taskInput.value = '';
       drawWheel();
+      taskInput.value = '';
     }
   }
 
   function resetTasks() {
     segments = [];
     drawWheel();
-    closeWinnerPopup();
   }
 
-  function launchConfetti() {
-    const numberOfConfetti = 100;
-    for (let i = 0; i < numberOfConfetti; i++) {
-      const conf = document.createElement('div');
-      conf.classList.add('confetti-piece');
-      conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      conf.style.left = Math.random() * 100 + 'vw';
-      conf.style.animationDuration = Math.random() * 2 + 1 + 's';
-      conf.style.animationDelay = Math.random() * 2 + 's';
-      confettiContainer.appendChild(conf);
-    }
-  }
-
-  // Initial setup
   drawWheel();
-
-  // Description Toggle Function
-  function toggleDescription() {
-    const descriptionVisible = descriptionContainer.style.display === "block";
-    descriptionContainer.style.display = descriptionVisible ? "none" : "block";
-  }
 </script>
 
 </body>
