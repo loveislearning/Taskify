@@ -7,79 +7,105 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #121212;
+      background: linear-gradient(135deg, #232526 0%, #1e1e1e 100%);
+      min-height: 100vh;
       margin: 0;
-      padding: 2rem;
+      padding: 0;
       color: #e0e0e0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 95vw;
+      margin: 3rem auto 2rem;
+      background: #181818cc;
+      border-radius: 18px;
+      box-shadow: 0 6px 32px #0006, 0 2px 8px #0003;
+      padding: 2.5rem 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1.5rem;
     }
 
     h2 {
       text-align: center;
-      font-size: 2rem;
-      margin-bottom: 2rem;
-      font-weight: 600;
+      font-size: 2.2rem;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 1px;
       color: #fff;
     }
 
     #search {
       width: 100%;
-      padding: 0.5rem;
-      margin-bottom: 1rem;
-      border-radius: 8px;
-      border: 1px solid #444;
-      background-color: #222;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 10px;
+      border: none;
+      background-color: #262626;
       color: #fff;
+      font-size: 1.05rem;
+      box-shadow: 0 1px 4px #0002;
+      transition: box-shadow 0.2s;
+      outline: none;
+    }
+    #search:focus {
+      box-shadow: 0 2px 12px #388e3c33;
     }
 
     ul.recycle-list {
       list-style: none;
       padding: 0;
+      margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.1rem;
     }
 
     li.recycle-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px dashed #444;
-      padding-bottom: 0.75rem;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      background-color: #1e1e1e;
-      border-radius: 8px;
+      background: #232323;
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 2px 8px #0002;
+      border-bottom: none;
+      transition: background 0.2s, opacity 0.3s, transform 0.3s;
+      position: relative;
+    }
+    li.recycle-item:hover {
+      background: #262b2e;
     }
 
     .fade-out {
       opacity: 0;
       transform: translateX(100px);
     }
-
-    /* ✅ Fade-in animation */
     .fade-in {
       animation: fadeIn 0.3s ease forwards;
     }
-
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateX(-50px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+      from { opacity: 0; transform: translateX(-50px);}
+      to { opacity: 1; transform: translateX(0);}
     }
 
     .item-content {
       flex-grow: 1;
-      font-size: 1.1rem;
+      font-size: 1.13rem;
       color: #fff;
+      letter-spacing: 0.02em;
+      padding-right: 0.5rem;
+      word-break: break-word;
     }
 
     .actions {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.7rem;
       margin-left: 1rem;
     }
 
@@ -87,120 +113,154 @@
       border: none;
       background: none;
       cursor: pointer;
-      font-size: 0.95rem;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      transition: background 0.2s;
+      font-size: 1rem;
+      padding: 0.43rem 1.1rem;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
       color: #e0e0e0;
+      font-weight: 500;
+      box-shadow: 0 1px 2px #0002;
     }
 
     .restore-btn {
       color: #388e3c;
-      border: 1px solid #388e3c;
+      border: 1.5px solid #388e3c;
+      background: #e8f5e90a;
     }
-
     .restore-btn:hover {
       background: #e8f5e9;
+      color: #1b5e20;
+      box-shadow: 0 2px 8px #388e3c33;
     }
 
     .delete-btn {
       color: #d32f2f;
-      border: 1px solid #d32f2f;
+      border: 1.5px solid #d32f2f;
+      background: #fdecea0a;
     }
-
     .delete-btn:hover {
       background: #fdecea;
+      color: #b71c1c;
+      box-shadow: 0 2px 8px #d32f2f33;
     }
 
     .clear-all {
       display: block;
-      margin: 3rem auto 1rem;
-      background-color: #ff7043;
+      margin: 2.5rem auto 0.5rem;
+      background: linear-gradient(90deg, #ff7043 70%, #f4511e 100%);
       color: white;
-      padding: 0.8rem 1.8rem;
+      padding: 1rem 2.2rem;
       border: none;
-      border-radius: 24px;
-      font-size: 1rem;
+      border-radius: 32px;
+      font-size: 1.08rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
       cursor: pointer;
-      transition: background 0.3s;
+      box-shadow: 0 2px 12px #f4511e33;
+      transition: background 0.25s, box-shadow 0.2s;
     }
-
     .clear-all:hover {
-      background-color: #f4511e;
+      background: linear-gradient(90deg, #f4511e 70%, #ff7043 100%);
+      box-shadow: 0 4px 24px #ff704344;
     }
 
     .history {
       max-width: 600px;
-      margin: 0 auto;
-      margin-top: 2rem;
+      margin: 2.5rem auto 2rem;
       background: #222;
-      padding: 1rem;
-      border-radius: 12px;
+      padding: 1.2rem 1.2rem 0.7rem;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px #0003;
     }
 
     .history h3 {
-      margin: 0 0 0.5rem;
-      font-size: 1.2rem;
+      margin: 0 0 0.8rem;
+      font-size: 1.15rem;
       color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      border-bottom: 1px solid #333;
+      padding-bottom: 0.5rem;
     }
 
     .history ul {
       list-style: none;
       padding: 0;
       margin: 0;
+      max-height: 220px;
+      overflow-y: auto;
     }
 
     .history li {
       display: flex;
       justify-content: space-between;
-      padding: 0.4rem 0;
-      border-bottom: 1px solid #444;
+      align-items: center;
+      padding: 0.45rem 0.1rem;
+      border-bottom: 1px solid #333;
       color: #e0e0e0;
+      font-size: 1rem;
+      gap: 0.5rem;
     }
 
     .history button {
-      font-size: 0.8rem;
-      background: none;
+      font-size: 0.85rem;
+      background: #232323;
       border: 1px solid #444;
-      border-radius: 6px;
+      border-radius: 7px;
       cursor: pointer;
-      padding: 0.2rem 0.6rem;
+      padding: 0.2rem 0.7rem;
       color: #e0e0e0;
+      transition: background 0.2s, color 0.2s;
+    }
+    .history button:hover {
+      background: #e8f5e9;
+      color: #388e3c;
+    }
+
+    @media (max-width: 700px) {
+      .container, .history {
+        max-width: 97vw;
+        padding: 1.1rem 0.7rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+      }
+      .clear-all {
+        padding: 0.7rem 1.2rem;
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
 <body>
-
-  <h2>Recycle Bin</h2>
-
-  <!-- Search Bar -->
-  <input type="text" id="search" placeholder="Search items..." />
-
-  <ul class="recycle-list" id="recycleList">
-    <li class="recycle-item">
-      <span class="item-content">🗒 Task: Buy groceries</span>
-      <div class="actions">
-        <button class="restore-btn">Restore</button>
-        <button class="delete-btn">Delete</button>
-      </div>
-    </li>
-    <li class="recycle-item">
-      <span class="item-content">📄 File: report.docx</span>
-      <div class="actions">
-        <button class="restore-btn">Restore</button>
-        <button class="delete-btn">Delete</button>
-      </div>
-    </li>
-    <li class="recycle-item">
-      <span class="item-content">📌 Note: Meeting at 3PM</span>
-      <div class="actions">
-        <button class="restore-btn">Restore</button>
-        <button class="delete-btn">Delete</button>
-      </div>
-    </li>
-  </ul>
-
-  <button class="clear-all" id="clearAllBtn">Clear All</button>
+  <div class="container">
+    <h2>Recycle Bin</h2>
+    <input type="text" id="search" placeholder="Search items..." />
+    <ul class="recycle-list" id="recycleList">
+      <li class="recycle-item">
+        <span class="item-content">🗒 Task: Buy groceries</span>
+        <div class="actions">
+          <button class="restore-btn">Restore</button>
+          <button class="delete-btn">Delete</button>
+        </div>
+      </li>
+      <li class="recycle-item">
+        <span class="item-content">📄 File: report.docx</span>
+        <div class="actions">
+          <button class="restore-btn">Restore</button>
+          <button class="delete-btn">Delete</button>
+        </div>
+      </li>
+      <li class="recycle-item">
+        <span class="item-content">📌 Note: Meeting at 3PM</span>
+        <div class="actions">
+          <button class="restore-btn">Restore</button>
+          <button class="delete-btn">Delete</button>
+        </div>
+      </li>
+    </ul>
+    <button class="clear-all" id="clearAllBtn">Clear All</button>
+  </div>
 
   <div class="history" id="history">
     <h3>History</h3>
@@ -232,7 +292,7 @@
 
       function addToHistory(action, content, elementHTML) {
         const li = document.createElement('li');
-        li.innerHTML = `${action}: ${content} <button>Undo</button>`;
+        li.innerHTML = `<span>${action}: ${content}</span> <button>Undo</button>`;
         const undoBtn = li.querySelector('button');
 
         undoBtn.addEventListener('click', () => {
@@ -284,6 +344,5 @@
       attachListeners();
     });
   </script>
-
 </body>
 </html>
