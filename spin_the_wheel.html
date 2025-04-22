@@ -15,6 +15,27 @@
       height: 100vh;
       font-family: 'Segoe UI', sans-serif;
     }
+    .description {
+      max-width: 500px;
+      background: rgba(44, 62, 80, 0.92);
+      border-radius: 16px;
+      padding: 28px 32px 20px 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+      font-size: 1.08em;
+      line-height: 1.6;
+    }
+    .description h2 {
+      margin-top: 0;
+      font-size: 2em;
+      letter-spacing: 1px;
+      color: #ffcc00;
+      margin-bottom: 10px;
+    }
+    .description ul {
+      margin: 10px 0 10px 20px;
+      padding: 0;
+    }
     .wheel-container {
       position: relative;
       width: 400px;
@@ -158,6 +179,23 @@
   </style>
 </head>
 <body>
+
+<div class="description">
+  <h2>Colorful Spin Wheel</h2>
+  <p>
+    The Colorful Spin Wheel is an interactive tool for making random choices from your custom list of tasks or options. Add your own entries, spin the wheel, and let chance decide!
+  </p>
+  <strong>How to Use:</strong>
+  <ul>
+    <li><b>Add Tasks</b>: Enter a task in the input box and click "Add" or press Enter. Each entry appears as a colored segment on the wheel.</li>
+    <li><b>Spin the Wheel</b>: Click the "Spin" button to randomly select a task. The wheel spins with sound and animation.</li>
+    <li><b>Winner Popup</b>: After spinning, a popup shows the selected task. Remove it from the wheel or keep it for future spins.</li>
+    <li><b>Reset</b>: Click "Reset" to clear all tasks and start over.</li>
+  </ul>
+  <p>
+    Enjoy making decisions in a fun and colorful way!
+  </p>
+</div>
 
 <div class="wheel-container">
   <div class="pointer"></div>
