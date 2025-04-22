@@ -5,12 +5,43 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Recycle Bin</title>
   <style>
+    :root {
+      --bg-color: #121212;
+      --text-color: #e0e0e0;
+      --input-bg: #222;
+      --border-color: #444;
+      --item-bg: #1e1e1e;
+      --restore-border: #388e3c;
+      --delete-border: #d32f2f;
+      --clear-bg: #ff7043;
+      --clear-hover: #f4511e;
+      --restore-hover: #e8f5e9;
+      --delete-hover: #fdecea;
+      --history-bg: #222;
+    }
+
+    .light-theme {
+      --bg-color: #ffffff;
+      --text-color: #121212;
+      --input-bg: #f0f0f0;
+      --border-color: #ccc;
+      --item-bg: #f9f9f9;
+      --restore-border: #2e7d32;
+      --delete-border: #c62828;
+      --clear-bg: #ff7043;
+      --clear-hover: #e64a19;
+      --restore-hover: #c8e6c9;
+      --delete-hover: #ffcdd2;
+      --history-bg: #f4f4f4;
+    }
+
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #121212;
+      background-color: var(--bg-color);
+      color: var(--text-color);
       margin: 0;
       padding: 2rem;
-      color: #e0e0e0;
+      transition: background-color 0.3s, color 0.3s;
     }
 
     h2 {
@@ -18,7 +49,7 @@
       font-size: 2rem;
       margin-bottom: 2rem;
       font-weight: 600;
-      color: #fff;
+      color: var(--text-color);
     }
 
     #search {
@@ -26,9 +57,9 @@
       padding: 0.5rem;
       margin-bottom: 1rem;
       border-radius: 8px;
-      border: 1px solid #444;
-      background-color: #222;
-      color: #fff;
+      border: 1px solid var(--border-color);
+      background-color: var(--input-bg);
+      color: var(--text-color);
     }
 
     ul.recycle-list {
@@ -43,10 +74,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px dashed #444;
+      border-bottom: 1px dashed var(--border-color);
       padding-bottom: 0.75rem;
       transition: opacity 0.3s ease, transform 0.3s ease;
-      background-color: #1e1e1e;
+      background-color: var(--item-bg);
       border-radius: 8px;
     }
 
@@ -58,7 +89,7 @@
     .item-content {
       flex-grow: 1;
       font-size: 1.1rem;
-      color: #fff;
+      color: var(--text-color);
     }
 
     .actions {
@@ -75,31 +106,31 @@
       padding: 0.4rem 0.8rem;
       border-radius: 6px;
       transition: background 0.2s;
-      color: #e0e0e0;
+      color: var(--text-color);
     }
 
     .restore-btn {
-      color: #388e3c;
-      border: 1px solid #388e3c;
+      color: var(--restore-border);
+      border: 1px solid var(--restore-border);
     }
 
     .restore-btn:hover {
-      background: #e8f5e9;
+      background: var(--restore-hover);
     }
 
     .delete-btn {
-      color: #d32f2f;
-      border: 1px solid #d32f2f;
+      color: var(--delete-border);
+      border: 1px solid var(--delete-border);
     }
 
     .delete-btn:hover {
-      background: #fdecea;
+      background: var(--delete-hover);
     }
 
     .clear-all {
       display: block;
       margin: 3rem auto 1rem;
-      background-color: #ff7043;
+      background-color: var(--clear-bg);
       color: white;
       padding: 0.8rem 1.8rem;
       border: none;
@@ -110,14 +141,14 @@
     }
 
     .clear-all:hover {
-      background-color: #f4511e;
+      background-color: var(--clear-hover);
     }
 
     .history {
       max-width: 600px;
       margin: 0 auto;
       margin-top: 2rem;
-      background: #222;
+      background: var(--history-bg);
       padding: 1rem;
       border-radius: 12px;
     }
@@ -125,39 +156,45 @@
     .history h3 {
       margin: 0 0 0.5rem;
       font-size: 1.2rem;
-      color: #fff;
-    }
-
-    .history ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+      color: var(--text-color);
     }
 
     .history li {
       display: flex;
       justify-content: space-between;
       padding: 0.4rem 0;
-      border-bottom: 1px solid #444;
-      color: #e0e0e0;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-color);
     }
 
     .history button {
       font-size: 0.8rem;
       background: none;
-      border: 1px solid #444;
+      border: 1px solid var(--border-color);
       border-radius: 6px;
       cursor: pointer;
       padding: 0.2rem 0.6rem;
-      color: #e0e0e0;
+      color: var(--text-color);
+    }
+
+    #themeToggle {
+      position: absolute;
+      top: 1rem;
+      right: 2rem;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 6px;
+      background: var(--item-bg);
+      color: var(--text-color);
+      cursor: pointer;
+      border: 1px solid var(--border-color);
     }
   </style>
 </head>
 <body>
 
+  <button id="themeToggle">Switch Theme</button>
   <h2>Recycle Bin</h2>
-
-  <!-- Search Bar -->
   <input type="text" id="search" placeholder="Search items..." />
 
   <ul class="recycle-list" id="recycleList">
@@ -195,8 +232,21 @@
     document.addEventListener('DOMContentLoaded', function () {
       const recycleList = document.getElementById('recycleList');
       const searchInput = document.getElementById('search');
+      const themeToggle = document.getElementById('themeToggle');
+      const body = document.body;
 
-      // Filter items based on search input
+      // Load saved theme
+      if (localStorage.getItem('theme') === 'light') {
+        body.classList.add('light-theme');
+      }
+
+      // Theme switcher
+      themeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-theme');
+        localStorage.setItem('theme', body.classList.contains('light-theme') ? 'light' : 'dark');
+      });
+
+      // Search
       searchInput.addEventListener('input', function () {
         const query = this.value.toLowerCase();
         document.querySelectorAll('.recycle-item').forEach(item => {
@@ -205,7 +255,6 @@
         });
       });
 
-      // Your other existing JavaScript functions go here
       function animateAndRemove(element, callback) {
         element.classList.add('fade-out');
         setTimeout(() => {
@@ -223,7 +272,7 @@
           attachListeners();
           li.remove();
         });
-        historyList.prepend(li);
+        document.getElementById('historyList').prepend(li);
       }
 
       function attachListeners() {
