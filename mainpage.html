@@ -913,6 +913,48 @@
         <h2>🤝 Collaboration</h2>
         <p>Invite others, share projects, and collaborate with your peers.</p>
       </div>
+
+      <div id="journalSection" class="content-box hidden">
+        <div class="journal-container">
+          <h2>📔 Journal</h2>
+          
+          <div class="journal-date-picker">
+            <button id="prevDay">◀</button>
+            <input type="date" id="journalDate" class="journal-date-input">
+            <button id="nextDay">▶</button>
+          </div>
+          
+          <div class="journal-mood-rating">
+            <h3>How was your day?</h3>
+            <div class="mood-stars">
+              <span class="star" data-rating="1">☆</span>
+              <span class="star" data-rating="2">☆</span>
+              <span class="star" data-rating="3">☆</span>
+              <span class="star" data-rating="4">☆</span>
+              <span class="star" data-rating="5">☆</span>
+            </div>
+          </div>
+          
+          <div class="journal-prompts">
+            <div class="prompt">What did you accomplish today?</div>
+            <textarea class="prompt-response" data-prompt="accomplishments" placeholder="Write about your achievements..."></textarea>
+            
+            <div class="prompt">What challenges did you face?</div>
+            <textarea class="prompt-response" data-prompt="challenges" placeholder="Describe any difficulties..."></textarea>
+            
+            <div class="prompt">What are you grateful for today?</div>
+            <textarea class="prompt-response" data-prompt="gratitude" placeholder="List things you're thankful for..."></textarea>
+            
+            <div class="prompt">Notes for tomorrow</div>
+            <textarea class="prompt-response" data-prompt="notes" placeholder="Plan for the next day..."></textarea>
+          </div>
+          
+          <div class="journal-actions">
+            <button class="journal-btn save-btn">Save Entry</button>
+            <button class="journal-btn clear-btn">Clear</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -982,7 +1024,7 @@
 
     // Section navigation
     function showSection(section) {
-      const sections = ['dashboardSection', 'gradesSection', 'trashSection', 'pomodoroSection', 'assistantSection','subscriptionSection','collaborationSection'];
+      const sections = ['dashboardSection', 'gradesSection', 'trashSection', 'pomodoroSection', 'assistantSection', 'subscriptionSection', 'collaborationSection', 'journalSection'];
       sections.forEach(id => document.getElementById(id).classList.add('hidden'));
 
       if (section === 'dashboard') {
@@ -1004,6 +1046,8 @@
         document.getElementById('subscriptionSection').classList.remove('hidden');
       } else if (section === 'collaboration') {
         document.getElementById('collaborationSection').classList.remove('hidden');
+      } else if (section === 'journal') {
+        document.getElementById('journalSection').classList.remove('hidden');
       }
     }
 
@@ -1429,6 +1473,11 @@
 
       function formatDateKey(date) {
         return date.toISOString().split('T')[0];
+      }
+
+      // Initialize journal if the section exists
+      if (document.getElementById('journalSection')) {
+        initJournal();
       }
 
       // AI Study Assistant Functionality
