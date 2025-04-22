@@ -1,0 +1,250 @@
+/* styles.css */
+:root {
+    --primary-bg: #121212;
+    --secondary-bg: #1e1e1e;
+    --card-bg: #2a2a2a;
+    --accent-color: #00b4d8;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --border-color: #333333;
+    --success-color: #4caf50;
+    --online-color: #4caf50;
+    --offline-color: #f44336;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--primary-bg);
+    color: var(--text-primary);
+}
+
+.collaborative-workspace {
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: var(--secondary-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.project-header {
+    padding: 20px;
+    background-color: var(--card-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.project-header h2 {
+    font-size: 1.5rem;
+}
+
+.workspace-container {
+    display: flex;
+    height: calc(100vh - 150px);
+}
+
+/* Tasks Section */
+.tasks-section {
+    flex: 2;
+    padding: 20px;
+    overflow-y: auto;
+    border-right: 1px solid var(--border-color);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.task-count {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.task-list {
+    margin-bottom: 20px;
+}
+
+.task-item {
+    background-color: var(--card-bg);
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.task-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.task-item.completed {
+    opacity: 0.7;
+}
+
+.task-item.completed .task-text {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.task-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.task-actions button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+.task-actions button:hover {
+    color: var(--text-primary);
+}
+
+.add-task {
+    display: flex;
+    gap: 10px;
+}
+
+.add-task input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+}
+
+/* Right Sidebar */
+.right-sidebar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.team-members, .team-chat {
+    padding: 20px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.team-members {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.team-members h3, .team-chat h3 {
+    margin-bottom: 15px;
+}
+
+.member {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.member-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.member-status {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-left: auto;
+}
+
+.online {
+    background-color: var(--online-color);
+}
+
+.offline {
+    background-color: var(--offline-color);
+}
+
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.chat-message {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    max-width: 80%;
+}
+
+.chat-message.outgoing {
+    background-color: var(--accent-color);
+    color: white;
+    margin-left: auto;
+}
+
+.chat-message.incoming {
+    background-color: var(--card-bg);
+    margin-right: auto;
+}
+
+.chat-message .message-sender {
+    font-size: 0.8rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.chat-message .message-time {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    text-align: right;
+    margin-top: 5px;
+}
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-primary);
+}
+
+button {
+    padding: 8px 15px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0089a8;
+}
