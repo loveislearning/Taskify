@@ -271,6 +271,158 @@
       font-weight: bold;
     }
 
+    /* AI Study Assistant Styles */
+    .assistant-container {
+      width: 100%;
+      max-width: 800px;
+      padding: 20px;
+    }
+    .chat-container {
+      height: 500px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(30, 30, 30, 0.7);
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .message {
+      max-width: 80%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      line-height: 1.5;
+      position: relative;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .user-message {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #00b894, #00cec9);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+    .assistant-message {
+      align-self: flex-start;
+      background: rgba(60, 60, 60, 0.8);
+      border-bottom-left-radius: 4px;
+    }
+    .message-time {
+      font-size: 0.7rem;
+      opacity: 0.7;
+      margin-top: 5px;
+      text-align: right;
+    }
+    .input-container {
+      display: flex;
+      gap: 10px;
+    }
+    .input-container input {
+      flex: 1;
+      padding: 12px 15px;
+      border: none;
+      border-radius: 25px;
+      background: rgba(60, 60, 60, 0.8);
+      color: white;
+      font-size: 1rem;
+      outline: none;
+    }
+    .input-container input:focus {
+      box-shadow: 0 0 0 2px #00b894;
+    }
+    .input-container button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #00b894, #00cec9);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .input-container button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 200, 150, 0.4);
+    }
+    .input-container button:disabled {
+      background: #444;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .typing-indicator {
+      display: flex;
+      gap: 5px;
+      padding: 12px 16px;
+      background: rgba(60, 60, 60, 0.8);
+      border-radius: 18px;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+    }
+    .typing-dot {
+      width: 8px;
+      height: 8px;
+      background: #aaa;
+      border-radius: 50%;
+      animation: typingAnimation 1.4s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(1) { animation-delay: 0s; }
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes typingAnimation {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-5px); }
+    }
+    .subject-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .subject-btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 20px;
+      background: #333;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .subject-btn:hover {
+      background: #444;
+    }
+    .subject-btn.active {
+      background: #00b894;
+    }
+    .tools-container {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .tool-btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 20px;
+      background: #333;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .tool-btn:hover {
+      background: #444;
+    }
+    .tool-btn.active {
+      background: #0984e3;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       #menuToggle {
@@ -309,6 +461,12 @@
       .chart-container {
         height: 300px;
       }
+      .chat-container {
+        height: 400px;
+      }
+      .message {
+        max-width: 90%;
+      }
     }
   </style>
 </head>
@@ -332,7 +490,7 @@
         <li><a href="Project_Management.htm">📂 Project Manager</a></li>
         <li><a href="spin_the_wheel.html">🎡 Spin The Wheel</a></li>
         <li><a onclick="showSection('pomodoro')">⏱ Pomodoro Timer</a></li>
-        <li><a onclick="showSection('🤖 AI Study Assistant')">🤖 AI Study Assistant</a></li>
+        <li><a onclick="showSection('assistant')">🤖 AI Study Assistant</a></li>
         <li><a href="/recycle_bin.html">🗑 Trash</a></li>
       </ul>
     </div>
@@ -393,6 +551,47 @@
           </div>
           <div class="session-counter">
             Sessions completed: <span>0</span>
+          </div>
+        </div>
+      </div>
+      <div id="assistantSection" class="content-box hidden">
+        <div class="assistant-container">
+          <h2>🤖 AI Study Assistant</h2>
+          
+          <div class="subject-selector">
+            <button class="subject-btn active" data-subject="general">General</button>
+            <button class="subject-btn" data-subject="math">Mathematics</button>
+            <button class="subject-btn" data-subject="science">Science</button>
+            <button class="subject-btn" data-subject="history">History</button>
+            <button class="subject-btn" data-subject="language">Language</button>
+            <button class="subject-btn" data-subject="programming">Programming</button>
+          </div>
+          
+          <div class="tools-container">
+            <button class="tool-btn" data-tool="explain">
+              <span>🔍</span> Explain Concept
+            </button>
+            <button class="tool-btn" data-tool="quiz">
+              <span>❓</span> Generate Quiz
+            </button>
+            <button class="tool-btn" data-tool="summary">
+              <span>📝</span> Create Summary
+            </button>
+            <button class="tool-btn" data-tool="examples">
+              <span>💡</span> Provide Examples
+            </button>
+          </div>
+          
+          <div class="chat-container" id="chatContainer">
+            <div class="message assistant-message">
+              Hello! I'm your AI Study Assistant. How can I help you today?
+              <div class="message-time">Just now</div>
+            </div>
+          </div>
+          
+          <div class="input-container">
+            <input type="text" id="userInput" placeholder="Ask me anything about your studies..." />
+            <button id="sendBtn">Send</button>
           </div>
         </div>
       </div>
@@ -465,7 +664,7 @@
 
     // Section navigation
     function showSection(section) {
-      const sections = ['dashboardSection', 'trashSection', 'pomodoroSection'];
+      const sections = ['dashboardSection', 'trashSection', 'pomodoroSection', 'assistantSection'];
       sections.forEach(id => document.getElementById(id).classList.add('hidden'));
 
       if (section === 'dashboard') {
@@ -480,6 +679,8 @@
         document.getElementById('trashSection').classList.remove('hidden');
       } else if (section === 'pomodoro') {
         document.getElementById('pomodoroSection').classList.remove('hidden');
+      } else if (section === 'assistant') {
+        document.getElementById('assistantSection').classList.remove('hidden');
       }
     }
 
@@ -687,6 +888,157 @@
       if (document.getElementById('dashboardSection') && !document.getElementById('dashboardSection').classList.contains('hidden')) {
         window.progressChart = initChart();
       }
+
+      // AI Study Assistant Functionality
+      const chatContainer = document.getElementById('chatContainer');
+      const userInput = document.getElementById('userInput');
+      const sendBtn = document.getElementById('sendBtn');
+      const subjectButtons = document.querySelectorAll('.subject-btn');
+      const toolButtons = document.querySelectorAll('.tool-btn');
+      
+      let currentSubject = 'general';
+      let currentTool = null;
+      
+      // Subject selection
+      subjectButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          subjectButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentSubject = btn.dataset.subject;
+        });
+      });
+      
+      // Tool selection
+      toolButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          toolButtons.forEach(b => b.classList.remove('active'));
+          if (currentTool === btn.dataset.tool) {
+            currentTool = null;
+          } else {
+            btn.classList.add('active');
+            currentTool = btn.dataset.tool;
+            
+            // Add a predefined prompt based on the tool
+            let prompt = '';
+            switch(currentTool) {
+              case 'explain':
+                prompt = 'Can you explain this concept to me: ';
+                break;
+              case 'quiz':
+                prompt = 'Can you generate a quiz about: ';
+                break;
+              case 'summary':
+                prompt = 'Can you summarize this topic: ';
+                break;
+              case 'examples':
+                prompt = 'Can you provide examples of: ';
+                break;
+            }
+            
+            userInput.value = prompt;
+            userInput.focus();
+          }
+        });
+      });
+      
+      // Send message function
+      function sendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
+        
+        // Add user message to chat
+        addMessage(message, 'user');
+        userInput.value = '';
+        
+        // Show typing indicator
+        showTypingIndicator();
+        
+        // Simulate AI response after a delay
+        setTimeout(() => {
+          removeTypingIndicator();
+          const response = generateAIResponse(message);
+          addMessage(response, 'assistant');
+        }, 1500);
+      }
+      
+      // Add message to chat
+      function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}-message`;
+        
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        messageDiv.innerHTML = `
+          ${text}
+          <div class="message-time">${time}</div>
+        `;
+        
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+      
+      // Show typing indicator
+      function showTypingIndicator() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing-indicator';
+        typingDiv.id = 'typingIndicator';
+        typingDiv.innerHTML = `
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+          <div class="typing-dot"></div>
+        `;
+        chatContainer.appendChild(typingDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
+      
+      // Remove typing indicator
+      function removeTypingIndicator() {
+        const typingIndicator = document.getElementById('typingIndicator');
+        if (typingIndicator) {
+          typingIndicator.remove();
+        }
+      }
+      
+      // Generate AI response (simulated)
+      function generateAIResponse(message) {
+        // In a real implementation, this would call an actual AI API
+        // For this demo, we'll use predefined responses
+        
+        const subjectResponses = {
+          general: "I can help you with a variety of study topics. What specifically would you like to know?",
+          math: "Mathematics is a fascinating subject! Are you working on algebra, calculus, geometry, or another area?",
+          science: "Science covers many disciplines - biology, chemistry, physics, and more. What's your question?",
+          history: "History helps us understand our past. Which period or event are you studying?",
+          language: "Language learning is rewarding! Are you working on grammar, vocabulary, or literature?",
+          programming: "Programming is an essential skill today. Which language or concept are you working on?"
+        };
+        
+        const toolResponses = {
+          explain: `Here's an explanation of "${message}":\n\n[This would be a detailed explanation tailored to the concept you asked about, with clear examples and possibly diagrams if this were a more advanced implementation.]`,
+          quiz: `Here's a short quiz about "${message}":\n\n1. Question 1 about the topic\n2. Question 2 about the topic\n3. Question 3 about the topic\n\nTry to answer these, then ask me to reveal the answers!`,
+          summary: `Summary of "${message}":\n\n[This would be a concise summary of the key points about the topic, organized in a clear structure for easy studying.]`,
+          examples: `Examples of "${message}":\n\n1. Example 1 with explanation\n2. Example 2 with explanation\n3. Example 3 with explanation\n\nThese should help illustrate the concept clearly.`
+        };
+        
+        if (currentTool && toolResponses[currentTool]) {
+          return toolResponses[currentTool];
+        }
+        
+        if (currentSubject && subjectResponses[currentSubject]) {
+          return subjectResponses[currentSubject];
+        }
+        
+        // Default response
+        return `I understand you're asking about "${message}". In a real implementation, I would provide a detailed, helpful response based on your query. This is a simulation to show the interface functionality.`;
+      }
+      
+      // Event listeners for chat
+      sendBtn.addEventListener('click', sendMessage);
+      userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          sendMessage();
+        }
+      });
     });
   </script>
 </body>
