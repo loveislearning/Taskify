@@ -107,7 +107,7 @@
     @keyframes popup-bounce {
       0%   { transform: translate(-50%, -50%) scale(0.7) rotate(-10deg); opacity:0;}
       60%  { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); opacity:1;}
-      80%  { transform: translate(-50%, -50%) scale(0.95) rotate(-2deg);}
+      80%  { transform: translate(-50%, -50%) scale(0.95) rotate(-2deg); }
       100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity:1;}
     }
     @keyframes popup-glow {
@@ -115,8 +115,8 @@
       100% { box-shadow: 0 0 40px #27ae60, 0 0 80px #2ecc71; }
     }
     @keyframes popup-fadeout {
-      0% { opacity: 1; transform: translate(-50%, -50%) scale(1);}
-      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7);}
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
     }
     #winnerPopup button {
       margin: 15px 10px 0;
@@ -151,13 +151,51 @@
       animation: confetti-fall 1.6s linear forwards;
     }
     @keyframes confetti-fall {
-      0% { transform: translateY(-40px) rotateZ(0deg) scale(1);}
-      80% { opacity: 1;}
-      100% { transform: translateY(100vh) rotateZ(360deg) scale(0.7); opacity: 0;}
+      0% { transform: translateY(-40px) rotateZ(0deg) scale(1); }
+      80% { opacity: 1; }
+      100% { transform: translateY(100vh) rotateZ(360deg) scale(0.7); opacity: 0; }
+    }
+
+    /* Styling for the description */
+    .description-container {
+      max-width: 600px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 18px;
+      color: #ddd;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      max-height: 300px;
+      overflow-y: auto; /* Enable vertical scrolling */
+    }
+    .description-container h2 {
+      color: #fff;
+      font-size: 2em;
+      margin-bottom: 15px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .description-container p {
+      margin-bottom: 10px;
+    }
+    .description-container p strong {
+      color: #27ae60;
     }
   </style>
 </head>
 <body>
+
+<!-- Instructions -->
+<div class="description-container">
+  <h2>🎯 How to Use the Spin Wheel</h2>
+  <p>1. Enter a <strong>task</strong> or <strong>name</strong> into the input box and click <strong>Add</strong> to add it to the wheel.</p>
+  <p>2. You can add as many entries as you want — each one will be a segment on the wheel.</p>
+  <p>3. Hit the <strong>Spin</strong> button to randomly select one entry from the wheel.</p>
+  <p>4. After spinning, you'll see the selected entry and can choose to <strong>Remove</strong> or <strong>Keep</strong> it.</p>
+  <p>5. Click <strong>Reset</strong> to clear all tasks and start fresh.</p>
+</div>
 
 <div class="wheel-container">
   <div class="pointer"></div>
