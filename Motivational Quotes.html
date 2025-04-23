@@ -19,10 +19,8 @@
       align-items: center;
       padding: 40px 20px;
       overflow-x: hidden;
-      transition: background 0.5s;
     }
     .container { max-width: 900px; width: 100%; }
-
     header {
       text-align: center;
       margin-bottom: 50px;
@@ -35,7 +33,6 @@
       margin-bottom: 10px;
       color: #6ae3ff;
       text-shadow: 0 0 10px #6ae3ffaa;
-      animation: movingType 3s linear infinite alternate;
     }
     header p {
       font-weight: 400;
@@ -60,50 +57,32 @@
     .quotes {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      align-items: center;
       animation: fadeInUp 1.2s ease forwards;
     }
     .quote-card {
-      background: rgba(35, 39, 43, 0.85);
+      background: none;
       border-radius: 15px;
-      padding: 25px 30px;
+      padding: 0;
       font-size: 1.3rem;
       line-height: 1.5;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      box-shadow: none;
       position: relative;
       cursor: default;
       transition: transform 0.3s ease, box-shadow 0.3s ease;
-      opacity: 0;
-      animation: fadeInQuote 0.8s forwards;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    .quote-card:nth-child(1) { animation-delay: 0.1s; }
-    .quote-card:nth-child(2) { animation-delay: 0.3s; }
-    .quote-card:nth-child(3) { animation-delay: 0.5s; }
-    .quote-card:nth-child(4) { animation-delay: 0.7s; }
-    .quote-card:nth-child(5) { animation-delay: 0.9s; }
-    .quote-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 28px #6ae3ffaa;
-    }
-    .quote-card::before {
-      content: "“";
-      font-size: 4rem;
-      color: #6ae3ff;
-      position: absolute;
-      top: 15px;
-      left: 20px;
-      opacity: 0.15;
-      font-weight: 900;
-      user-select: none;
-    }
-    .quote-author {
+    #quote-img {
+      width: 100%;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
       display: block;
-      margin-top: 18px;
-      font-size: 1rem;
-      color: #a7b1c2;
-      font-style: italic;
-      text-align: right;
-      letter-spacing: 0.05em;
     }
     .stickers-grid {
       display: grid;
@@ -120,13 +99,10 @@
       cursor: pointer;
       transition: transform 0.3s, box-shadow 0.3s;
       user-select: none;
-      position: relative;
-      overflow: hidden;
     }
     .sticker:hover {
-      transform: translateY(-10px) scale(1.08);
+      transform: translateY(-10px) scale(1.05);
       box-shadow: 0 14px 30px #6ae3ffbb;
-      animation: bounce 0.4s;
     }
     .sticker img {
       width: 80px;
@@ -137,20 +113,13 @@
       transition: filter 0.3s;
     }
     .sticker:hover img {
-      filter: drop-shadow(0 0 12px #6ae3ff);
+      filter: drop-shadow(0 0 8px #6ae3ff);
     }
     .sticker-text {
       font-weight: 600;
       font-size: 1.1rem;
       color: #6ae3ff;
       letter-spacing: 0.05em;
-    }
-    .sticker .confetti {
-      pointer-events: none;
-      position: absolute;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      z-index: 2;
     }
     .cta-button {
       display: block;
@@ -168,59 +137,10 @@
       user-select: none;
       text-transform: uppercase;
       letter-spacing: 2px;
-      position: relative;
-      overflow: hidden;
     }
     .cta-button:hover {
       background: #4fc3f7;
       box-shadow: 0 8px 20px #4fc3f7cc;
-    }
-    .cta-button .confetti {
-      pointer-events: none;
-      position: absolute;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      z-index: 2;
-    }
-    .toggle-mode {
-      margin: 20px auto 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-    .toggle-switch {
-      width: 50px;
-      height: 26px;
-      background: #6ae3ff;
-      border-radius: 20px;
-      position: relative;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    .toggle-switch::before {
-      content: '';
-      position: absolute;
-      left: 4px;
-      top: 4px;
-      width: 18px;
-      height: 18px;
-      background: #fff;
-      border-radius: 50%;
-      transition: left 0.3s;
-    }
-    .toggle-switch.active {
-      background: #203a43;
-    }
-    .toggle-switch.active::before {
-      left: 28px;
-      background: #6ae3ff;
-    }
-    .toggle-label {
-      color: #6ae3ff;
-      font-weight: 600;
-      font-size: 1rem;
-      letter-spacing: 1px;
     }
     footer {
       margin-top: 60px;
@@ -247,51 +167,15 @@
       0% { opacity: 0; transform: translateY(20px);}
       100% { opacity: 1; transform: translateY(0);}
     }
-    @keyframes fadeInQuote {
-      0% { opacity: 0; transform: translateY(30px);}
-      100% { opacity: 1; transform: translateY(0);}
-    }
-    @keyframes bounce {
-      0% { transform: translateY(0);}
-      30% { transform: translateY(-12px) scale(1.15);}
-      60% { transform: translateY(0) scale(1.05);}
-      100% { transform: translateY(0) scale(1);}
-    }
-    @keyframes movingType {
-      0% { letter-spacing: 3px; }
-      100% { letter-spacing: 8px; }
-    }
     @media (max-width: 600px) {
       header h1 { font-size: 2.2rem; }
       header p { font-size: 1rem; }
-      .quote-card { font-size: 1.1rem; padding: 18px 22px; }
+      .quote-card { font-size: 1.1rem; padding: 0; }
       .stickers-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 18px; }
       .sticker img { width: 60px; height: 60px; }
       .sticker-text { font-size: 1rem; }
       .cta-button { padding: 12px 30px; font-size: 1rem; }
-    }
-    body.dark-mode {
-      background: linear-gradient(135deg, #232526, #414345);
-      color: #f0f4f8;
-    }
-    body.dark-mode .cta-button {
-      background: #232526;
-      color: #6ae3ff;
-      box-shadow: 0 6px 15px #232526bb;
-    }
-    body.dark-mode .cta-button:hover {
-      background: #414345;
-      color: #6ae3ff;
-      box-shadow: 0 8px 20px #414345cc;
-    }
-    body.dark-mode .toggle-label {
-      color: #fff;
-    }
-    body.dark-mode .sticker-text,
-    body.dark-mode section h2,
-    body.dark-mode header h1 {
-      color: #fff;
-      text-shadow: 0 0 10px #6ae3ff88;
+      #quote-img { max-width: 100%; }
     }
   </style>
 </head>
@@ -302,34 +186,11 @@
       <p>Inspire your day, every day</p>
     </header>
 
-    <div class="toggle-mode">
-      <span class="toggle-label">Light</span>
-      <div class="toggle-switch" tabindex="0" aria-label="Toggle dark mode"></div>
-      <span class="toggle-label">Dark</span>
-    </div>
-
     <section class="quotes-section">
       <h2>Motivational Quotes</h2>
-      <div class="quotes" id="quotes-list">
+      <div class="quotes">
         <div class="quote-card">
-          The only way to do great work is to love what you do.
-          <span class="quote-author">— Steve Jobs</span>
-        </div>
-        <div class="quote-card">
-          Believe you can and you're halfway there.
-          <span class="quote-author">— Theodore Roosevelt</span>
-        </div>
-        <div class="quote-card">
-          The future belongs to those who believe in the beauty of their dreams.
-          <span class="quote-author">— Eleanor Roosevelt</span>
-        </div>
-        <div class="quote-card">
-          The journey of a thousand miles begins with a single step.
-          <span class="quote-author">— Lao Tzu</span>
-        </div>
-        <div class="quote-card">
-          Your time is limited, so don't waste it living someone else's life.
-          <span class="quote-author">— Steve Jobs</span>
+          <img id="quote-img" src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Motivational Quote" />
         </div>
       </div>
     </section>
@@ -368,171 +229,34 @@
       </div>
     </section>
 
-    <button class="cta-button" aria-label="Get more inspiration">Get Inspired!
-      <canvas class="confetti" width="0" height="0" style="display:none;"></canvas>
-    </button>
+    <button class="cta-button" id="generate-quote" aria-label="Get more inspiration">Get Inspired!</button>
   </div>
 
   <footer>
     &copy; 2025 Motivational Corner | Designed with ❤️ by <a href="#" target="_blank" rel="noopener noreferrer">Your Name</a>
   </footer>
   <script>
-    // Quotes for the "Get Inspired!" button
-    const quotes = [
-      {
-        text: "The only way to do great work is to love what you do.",
-        author: "— Steve Jobs"
-      },
-      {
-        text: "Believe you can and you're halfway there.",
-        author: "— Theodore Roosevelt"
-      },
-      {
-        text: "The future belongs to those who believe in the beauty of their dreams.",
-        author: "— Eleanor Roosevelt"
-      },
-      {
-        text: "The journey of a thousand miles begins with a single step.",
-        author: "— Lao Tzu"
-      },
-      {
-        text: "Your time is limited, so don't waste it living someone else's life.",
-        author: "— Steve Jobs"
-      },
-      {
-        text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
-        author: "— Winston Churchill"
-      },
-      {
-        text: "Dream big and dare to fail.",
-        author: "— Norman Vaughan"
-      },
-      {
-        text: "Act as if what you do makes a difference. It does.",
-        author: "— William James"
-      },
-      {
-        text: "Don’t watch the clock; do what it does. Keep going.",
-        author: "— Sam Levenson"
-      }
+    // Array of motivational quote images (Unsplash/Pexels, free to use)
+    const quoteImages = [
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80", // Believe in yourself
+      "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80", // Do what you love
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80", // Dream big
+      "https://images.pexels.com/photos/208349/pexels-photo-208349.jpeg?auto=compress&w=600&q=80",    // Success
+      "https://images.pexels.com/photos/261327/pexels-photo-261327.jpeg?auto=compress&w=600&q=80",    // Keep going
+      "https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=600&q=80", // Stay positive
+      "https://images.pexels.com/photos/713149/pexels-photo-713149.jpeg?auto=compress&w=600&q=80"     // Never give up
     ];
 
-    // Confetti animation for CTA button
-    function launchConfetti(canvas, duration = 700) {
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const W = canvas.width = canvas.offsetWidth;
-      const H = canvas.height = canvas.offsetHeight;
-      const confettiCount = 30;
-      const confettiColors = ['#6ae3ff', '#fff', '#f7e96c', '#ff6b81', '#4fc3f7', '#a0e7e5'];
-      let confetti = [];
-      for (let i = 0; i < confettiCount; i++) {
-        confetti.push({
-          x: Math.random() * W,
-          y: Math.random() * H * 0.3,
-          r: 6 + Math.random() * 7,
-          d: Math.random() * confettiCount,
-          color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
-          tilt: Math.random() * 10 - 10,
-          tiltAngleIncremental: (Math.random() * 0.07) + .05,
-          tiltAngle: 0
-        });
-      }
-      let angle = 0, tiltAngle = 0, animationFrame;
-      function draw() {
-        ctx.clearRect(0, 0, W, H);
-        angle += 0.01;
-        tiltAngle += 0.1;
-        for (let i = 0; i < confettiCount; i++) {
-          let c = confetti[i];
-          c.y += (Math.cos(angle + c.d) + 1 + c.r / 3) * 1.2;
-          c.x += Math.sin(angle);
-          c.tiltAngle += c.tiltAngleIncremental;
-          c.tilt = Math.sin(c.tiltAngle - (i / 3)) * 15;
-          ctx.beginPath();
-          ctx.lineWidth = c.r;
-          ctx.strokeStyle = c.color;
-          ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
-          ctx.lineTo(c.x + c.tilt, c.y + c.tilt + 10);
-          ctx.stroke();
-        }
-      }
-      let start = null;
-      function animateConfetti(ts) {
-        if (!start) start = ts;
-        let elapsed = ts - start;
-        draw();
-        if (elapsed < duration) {
-          animationFrame = requestAnimationFrame(animateConfetti);
-        } else {
-          ctx.clearRect(0, 0, W, H);
-          canvas.style.display = 'none';
-        }
-      }
-      canvas.style.display = 'block';
-      requestAnimationFrame(animateConfetti);
+    function showRandomQuoteImage() {
+      const idx = Math.floor(Math.random() * quoteImages.length);
+      document.getElementById("quote-img").src = quoteImages[idx];
     }
 
-    // CTA Button: Show random quote and confetti
-    const ctaBtn = document.querySelector('.cta-button');
-    const quotesList = document.getElementById('quotes-list');
-    ctaBtn.addEventListener('click', function() {
-      // Confetti
-      const canvas = this.querySelector('.confetti');
-      canvas.width = this.offsetWidth;
-      canvas.height = this.offsetHeight;
-      launchConfetti(canvas);
-
-      // Random quote
-      const idx = Math.floor(Math.random() * quotes.length);
-      const quote = quotes[idx];
-      // Animate quote cards out
-      Array.from(quotesList.children).forEach(card => {
-        card.style.opacity = 0;
-        card.style.transform = 'translateY(40px)';
-      });
-      setTimeout(() => {
-        quotesList.innerHTML = `
-          <div class="quote-card" style="opacity:0; animation:fadeInQuote 0.7s forwards;">
-            ${quote.text}
-            <span class="quote-author">${quote.author}</span>
-          </div>
-        `;
-      }, 400);
-    });
-
-    // Sticker bounce and confetti
-    document.querySelectorAll('.sticker').forEach(sticker => {
-      sticker.addEventListener('click', function(e) {
-        // Confetti effect
-        let confetti = document.createElement('canvas');
-        confetti.className = 'confetti';
-        confetti.width = this.offsetWidth;
-        confetti.height = this.offsetHeight;
-        this.appendChild(confetti);
-        launchConfetti(confetti, 600);
-        setTimeout(() => { if (confetti.parentNode) confetti.parentNode.removeChild(confetti); }, 900);
-      });
-      sticker.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          this.click();
-        }
-      });
-    });
-
-    // Dark/Light mode toggle
-    const toggleSwitch = document.querySelector('.toggle-switch');
-    toggleSwitch.addEventListener('click', function() {
-      document.body.classList.toggle('dark-mode');
-      this.classList.toggle('active');
-    });
-    toggleSwitch.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        this.click();
-      }
-    });
+    // Show a random image on page load and on button click
+    window.onload = function() {
+      showRandomQuoteImage();
+      document.getElementById("generate-quote").addEventListener('click', showRandomQuoteImage);
+    };
   </script>
 </body>
 </html>
