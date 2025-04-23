@@ -1,0 +1,232 @@
+=<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reference Materials: Quick Access</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    header {
+      background: #3f51b5;
+      color: #fff;
+      padding: 1em 0;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: #e8eaf6;
+      border-bottom: 1px solid #c5cae9;
+    }
+    nav button {
+      background: none;
+      border: none;
+      padding: 1em 2em;
+      cursor: pointer;
+      font-size: 1em;
+      color: #3f51b5;
+      transition: background 0.2s;
+    }
+    nav button.active, nav button:hover {
+      background: #c5cae9;
+      font-weight: bold;
+    }
+    main {
+      max-width: 1000px;
+      margin: 2em auto;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      border-radius: 8px;
+      padding: 2em;
+    }
+    section {
+      display: none;
+    }
+    section.active {
+      display: block;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1em;
+    }
+    th, td {
+      border: 1px solid #bdbdbd;
+      padding: 0.5em;
+      text-align: center;
+    }
+    ul {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+    }
+    @media (max-width: 600px) {
+      main { padding: 1em; }
+      nav button { padding: 0.7em 1em; font-size: 0.95em; }
+      table { font-size: 0.95em; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Reference Materials: Quick Access</h1>
+  </header>
+  <nav>
+    <button class="tab active" data-tab="formulas">Formulas</button>
+    <button class="tab" data-tab="grammar">Grammar Rules</button>
+    <button class="tab" data-tab="periodic">Periodic Table</button>
+    <button class="tab" data-tab="dates">Key Dates</button>
+    <button class="tab" data-tab="constants">Science Constants</button>
+    <button class="tab" data-tab="programming">Programming Cheatsheet</button>
+    <button class="tab" data-tab="languages">Language Facts</button>
+  </nav>
+  <main>
+    <!-- Formulas Section -->
+    <section id="formulas" class="active">
+      <h2>Common Formulas</h2>
+      <ul>
+        <li><strong>Area of Circle:</strong> \( A = \pi r^2 \)</li>
+        <li><strong>Quadratic Formula:</strong> \( x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \)</li>
+        <li><strong>Pythagoras Theorem:</strong> \( a^2 + b^2 = c^2 \)</li>
+        <li><strong>Simple Interest:</strong> \( SI = \frac{P \times R \times T}{100} \)</li>
+        <li><strong>Compound Interest:</strong> \( CI = P \left(1 + \frac{R}{100}\right)^T - P \)</li>
+        <li><strong>Slope of a Line:</strong> \( m = \frac{y_2 - y_1}{x_2 - x_1} \)</li>
+        <li><strong>Distance Formula:</strong> \( d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2} \)</li>
+        <li><strong>Newton’s Second Law:</strong> \( F = m \cdot a \)</li>
+        <li><strong>Ohm’s Law:</strong> \( V = I \cdot R \)</li>
+        <li><strong>Speed:</strong> \( v = \frac{d}{t} \)</li>
+        <li><strong>Perimeter of Rectangle:</strong> \( P = 2(l + w) \)</li>
+        <li><strong>Area of Triangle:</strong> \( A = \frac{1}{2} b h \)</li>
+      </ul>
+    </section>
+    <!-- Grammar Section -->
+    <section id="grammar">
+      <h2>Grammar Rules (Quick Reference)</h2>
+      <ul>
+        <li>Capitalize the first word of a sentence and proper nouns.</li>
+        <li>Use a semicolon, not a comma, before “hence” when it introduces an independent clause.</li>
+        <li>Spell out numbers one through nine, except in titles or when followed by a unit.</li>
+        <li>Use “a number of” with a plural verb: “A number of points are...”</li>
+        <li>Capitalize nouns followed by numerals: “Experiment 2,” “Table 6.”</li>
+        <li>Use “fewer” for countable nouns, “less” for uncountable nouns.</li>
+        <li>Place punctuation inside quotation marks in American English.</li>
+        <li>Use “who” for people, “which/that” for things.</li>
+        <li>Use the Oxford comma in lists for clarity.</li>
+        <li>“Its” is possessive; “it’s” means “it is.”</li>
+        <li>Use “affect” as a verb, “effect” as a noun (usually).</li>
+      </ul>
+    </section>
+    <!-- Periodic Table Section -->
+    <section id="periodic">
+      <h2>Periodic Table (First 20 Elements)</h2>
+      <table>
+        <tr>
+          <th>Atomic Number</th>
+          <th>Symbol</th>
+          <th>Name</th>
+        </tr>
+        <tr><td>1</td><td>H</td><td>Hydrogen</td></tr>
+        <tr><td>2</td><td>He</td><td>Helium</td></tr>
+        <tr><td>3</td><td>Li</td><td>Lithium</td></tr>
+        <tr><td>4</td><td>Be</td><td>Beryllium</td></tr>
+        <tr><td>5</td><td>B</td><td>Boron</td></tr>
+        <tr><td>6</td><td>C</td><td>Carbon</td></tr>
+        <tr><td>7</td><td>N</td><td>Nitrogen</td></tr>
+        <tr><td>8</td><td>O</td><td>Oxygen</td></tr>
+        <tr><td>9</td><td>F</td><td>Fluorine</td></tr>
+        <tr><td>10</td><td>Ne</td><td>Neon</td></tr>
+        <tr><td>11</td><td>Na</td><td>Sodium</td></tr>
+        <tr><td>12</td><td>Mg</td><td>Magnesium</td></tr>
+        <tr><td>13</td><td>Al</td><td>Aluminum</td></tr>
+        <tr><td>14</td><td>Si</td><td>Silicon</td></tr>
+        <tr><td>15</td><td>P</td><td>Phosphorus</td></tr>
+        <tr><td>16</td><td>S</td><td>Sulfur</td></tr>
+        <tr><td>17</td><td>Cl</td><td>Chlorine</td></tr>
+        <tr><td>18</td><td>Ar</td><td>Argon</td></tr>
+        <tr><td>19</td><td>K</td><td>Potassium</td></tr>
+        <tr><td>20</td><td>Ca</td><td>Calcium</td></tr>
+      </table>
+    </section>
+    <!-- Key Dates Section -->
+    <section id="dates">
+      <h2>Key Historical Dates</h2>
+      <ul>
+        <li><strong>1066:</strong> Norman Conquest of England</li>
+        <li><strong>1492:</strong> Columbus Discovers America</li>
+        <li><strong>1776:</strong> American Declaration of Independence</li>
+        <li><strong>1789:</strong> French Revolution Begins</li>
+        <li><strong>1869:</strong> Periodic Table Proposed (Mendeleev)</li>
+        <li><strong>1914-1918:</strong> World War I</li>
+        <li><strong>1929:</strong> Wall Street Crash/Great Depression Begins</li>
+        <li><strong>1945:</strong> End of World War II</li>
+        <li><strong>1961:</strong> First Human in Space (Yuri Gagarin)</li>
+        <li><strong>1969:</strong> First Moon Landing</li>
+        <li><strong>1989:</strong> Fall of the Berlin Wall</li>
+        <li><strong>1991:</strong> Dissolution of the Soviet Union</li>
+        <li><strong>2001:</strong> Wikipedia Launched</li>
+        <li><strong>2020:</strong> COVID-19 Pandemic Declared</li>
+      </ul>
+    </section>
+    <!-- Science Constants Section -->
+    <section id="constants">
+      <h2>Fundamental Science Constants</h2>
+      <table>
+        <tr><th>Name</th><th>Symbol</th><th>Value</th><th>Unit</th></tr>
+        <tr><td>Speed of Light</td><td>c</td><td>299,792,458</td><td>m/s</td></tr>
+        <tr><td>Gravitational Constant</td><td>G</td><td>6.674 × 10<sup>-11</sup></td><td>m³/kg·s²</td></tr>
+        <tr><td>Planck’s Constant</td><td>h</td><td>6.626 × 10<sup>-34</sup></td><td>J·s</td></tr>
+        <tr><td>Avogadro’s Number</td><td>N<sub>A</sub></td><td>6.022 × 10<sup>23</sup></td><td>mol<sup>-1</sup></td></tr>
+        <tr><td>Gas Constant</td><td>R</td><td>8.314</td><td>J/mol·K</td></tr>
+        <tr><td>Elementary Charge</td><td>e</td><td>1.602 × 10<sup>-19</sup></td><td>C</td></tr>
+        <tr><td>Boltzmann Constant</td><td>k</td><td>1.381 × 10<sup>-23</sup></td><td>J/K</td></tr>
+      </table>
+    </section>
+    <!-- Programming Cheatsheet Section -->
+    <section id="programming">
+      <h2>Programming Cheatsheet</h2>
+      <ul>
+        <li><strong>Python Print:</strong> <code>print("Hello, World!")</code></li>
+        <li><strong>JavaScript Alert:</strong> <code>alert("Hi!");</code></li>
+        <li><strong>HTML Link:</strong> <code>&lt;a href="url"&gt;Text&lt;/a&gt;</code></li>
+        <li><strong>CSS Selector:</strong> <code>div.classname { color: blue; }</code></li>
+        <li><strong>For Loop (Python):</strong> <code>for i in range(5):</code></li>
+        <li><strong>For Loop (C):</strong> <code>for(int i=0; i&lt;5; i++)</code></li>
+        <li><strong>SQL SELECT:</strong> <code>SELECT * FROM table WHERE condition;</code></li>
+        <li><strong>Git Commit:</strong> <code>git commit -m "message"</code></li>
+      </ul>
+    </section>
+    <!-- Language Facts Section -->
+    <section id="languages">
+      <h2>Language Quick Facts</h2>
+      <ul>
+        <li><strong>Most spoken native language:</strong> Mandarin Chinese</li>
+        <li><strong>Most spoken language (total):</strong> English</li>
+        <li><strong>Longest word in English:</strong> pneumonoultramicroscopicsilicovolcanoconiosis</li>
+        <li><strong>Official UN languages:</strong> Arabic, Chinese, English, French, Russian, Spanish</li>
+        <li><strong>Palindrome example:</strong> “racecar”</li>
+        <li><strong>Shortest English sentence:</strong> “Go.”</li>
+        <li><strong>Word with all vowels:</strong> “Education”</li>
+        <li><strong>Language with no verb “to be”:</strong> Russian (in present tense)</li>
+      </ul>
+    </section>
+  </main>
+  <script>
+    // Tab switching logic
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('main section').forEach(sec => sec.classList.remove('active'));
+        this.classList.add('active');
+        document.getElementById(this.dataset.tab).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
