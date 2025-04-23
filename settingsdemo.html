@@ -21,13 +21,12 @@
       --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
       --neon-glow: 0 0 10px var(--accent-color), 0 0 20px rgba(58, 123, 213, 0.5);
       --glass-effect: rgba(255, 255, 255, 0.05);
-      --glass-border: rgba(255, 255, 255, 0.1);
     }
 
     /* Light theme variables */
     [data-theme="light"] {
-      --bg-color: #f0f0ff;
-      --text-color: #1a1a2e;
+      --bg-color: #f0f5ff;
+      --text-color: #12122b;
       --card-bg: rgba(255, 255, 255, 0.8);
       --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       --glass-effect: rgba(255, 255, 255, 0.7);
@@ -41,15 +40,98 @@
       color: var(--text-color);
       transition: all var(--transition-speed);
       line-height: 1.6;
-      background-image: 
-        radial-gradient(circle at 10% 20%, rgba(123, 44, 191, 0.1) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(123, 44, 191, 0.1) 0%, transparent 20%);
       overflow-x: hidden;
     }
 
     @font-face {
       font-family: 'Orbitron';
       src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+    }
+
+    /* Space Background Animation */
+    .space-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      overflow: hidden;
+    }
+
+    .stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: transparent;
+    }
+
+    .stars::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at center, 
+        rgba(255,255,255,0) 0%, 
+        rgba(255,255,255,0) 40%, 
+        rgba(255,255,255,0.1) 70%, 
+        rgba(255,255,255,0) 100%);
+      background-size: 200% 200%;
+      animation: twinkle 20s infinite linear;
+    }
+
+    @keyframes twinkle {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 100% 100%; }
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: blink 5s infinite ease-in-out;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 1; }
+    }
+
+    .nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.3;
+    }
+
+    .nebula-1 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, var(--accent-color), transparent 70%);
+      top: 20%;
+      left: 10%;
+      animation: float 25s infinite linear;
+    }
+
+    .nebula-2 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #3a7bd5, transparent 70%);
+      bottom: 10%;
+      right: 15%;
+      animation: float 30s infinite linear reverse;
+    }
+
+    @keyframes float {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      25% { transform: translate(50px, 30px) rotate(5deg); }
+      50% { transform: translate(0, 50px) rotate(0deg); }
+      75% { transform: translate(-30px, 20px) rotate(-5deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
     }
 
     .settings-header {
@@ -66,7 +148,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      border-bottom: 1px solid rgba(123, 44, 191, 0.3);
+      border-bottom: 1px solid rgba(58, 123, 213, 0.3);
     }
 
     .header-content {
@@ -93,7 +175,7 @@
       margin: 0;
       font-weight: 700;
       transition: all var(--transition-speed);
-      text-shadow: 0 0 5px rgba(123, 44, 191, 0.5);
+      text-shadow: 0 0 5px rgba(58, 123, 213, 0.5);
       letter-spacing: 1px;
     }
 
@@ -112,7 +194,7 @@
       border-radius: 50%;
       transition: all var(--transition-speed);
       background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(123, 44, 191, 0.3);
+      border: 1px solid rgba(58, 123, 213, 0.3);
     }
 
     .close-container:hover {
@@ -148,7 +230,7 @@
       position: relative;
       z-index: 10;
       transition: all var(--transition-speed);
-      border-right: 1px solid rgba(123, 44, 191, 0.3);
+      border-right: 1px solid rgba(58, 123, 213, 0.3);
     }
 
     .sidebar::before {
@@ -158,7 +240,7 @@
       left: 0;
       right: 0;
       height: 100%;
-      background: linear-gradient(135deg, rgba(123, 44, 191, 0.1) 0%, transparent 100%);
+      background: linear-gradient(135deg, rgba(58, 123, 213, 0.1) 0%, transparent 100%);
       z-index: -1;
     }
 
@@ -195,7 +277,7 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(123, 44, 191, 0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(58, 123, 213, 0.3), transparent);
       transition: all 0.6s ease;
     }
 
@@ -212,10 +294,10 @@
 
     .sidebar button.active, 
     .sidebar button:hover {
-      background: rgba(123, 44, 191, 0.2);
+      background: rgba(58, 123, 213, 0.2);
       color: var(--hover-color);
       transform: translateX(10px);
-      box-shadow: 0 0 15px rgba(123, 44, 191, 0.3);
+      box-shadow: 0 0 15px rgba(58, 123, 213, 0.3);
     }
 
     .sidebar button.active {
@@ -237,17 +319,6 @@
       position: relative;
     }
 
-    .settings-content::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: radial-gradient(circle at center, rgba(123, 44, 191, 0.05) 0%, transparent 70%);
-      z-index: -1;
-    }
-
     .tab-content {
       display: none;
       animation: fadeIn 0.5s ease-out, floatIn 0.8s ease-out;
@@ -258,7 +329,7 @@
       padding: 2.5rem;
       box-shadow: var(--shadow);
       margin-bottom: 3rem;
-      border: 1px solid rgba(123, 44, 191, 0.2);
+      border: 1px solid rgba(58, 123, 213, 0.2);
       position: relative;
       overflow: hidden;
     }
@@ -270,7 +341,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: radial-gradient(circle, rgba(123, 44, 191, 0.1) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(58, 123, 213, 0.1) 0%, transparent 70%);
       z-index: -1;
       pointer-events: none;
     }
@@ -284,7 +355,7 @@
       margin-bottom: 2rem;
       font-weight: 700;
       color: var(--accent-color);
-      text-shadow: 0 0 5px rgba(123, 44, 191, 0.3);
+      text-shadow: 0 0 5px rgba(58, 123, 213, 0.3);
       font-size: 1.8rem;
       position: relative;
       display: inline-block;
@@ -317,9 +388,9 @@
     }
 
     @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(123, 44, 191, 0.4); }
-      70% { box-shadow: 0 0 0 15px rgba(123, 44, 191, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(123, 44, 191, 0); }
+      0% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(58, 123, 213, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0); }
     }
 
     form {
@@ -346,7 +417,7 @@
     form textarea {
       width: 100%;
       padding: 1rem;
-      border: 1px solid rgba(123, 44, 191, 0.3);
+      border: 1px solid rgba(58, 123, 213, 0.3);
       border-radius: var(--border-radius);
       background: rgba(255, 255, 255, 0.1);
       color: var(--text-color);
@@ -358,7 +429,7 @@
     [data-theme="light"] form input,
     [data-theme="light"] form select,
     [data-theme="light"] form textarea {
-      border: 1px solid rgba(123, 44, 191, 0.2);
+      border: 1px solid rgba(58, 123, 213, 0.2);
       background: rgba(255, 255, 255, 0.6);
     }
 
@@ -367,14 +438,14 @@
     form textarea:focus {
       outline: none;
       border-color: var(--accent-color);
-      box-shadow: 0 0 15px rgba(123, 44, 191, 0.2);
+      box-shadow: 0 0 15px rgba(58, 123, 213, 0.2);
       background: rgba(255, 255, 255, 0.15);
     }
 
     form input[type="range"] {
       padding: 0;
       height: 8px;
-      background: rgba(123, 44, 191, 0.2);
+      background: rgba(58, 123, 213, 0.2);
       border-radius: 10px;
       accent-color: var(--accent-color);
     }
@@ -437,13 +508,13 @@
     .btn-primary {
       background: var(--accent-color);
       color: white;
-      box-shadow: 0 0 15px rgba(123, 44, 191, 0.4);
+      box-shadow: 0 0 15px rgba(58, 123, 213, 0.4);
     }
 
     .btn-primary:hover {
       background: var(--hover-color);
       transform: translateY(-3px);
-      box-shadow: 0 0 20px rgba(157, 78, 221, 0.6);
+      box-shadow: 0 0 20px rgba(74, 139, 229, 0.6);
     }
 
     .btn-danger {
@@ -465,16 +536,16 @@
     }
 
     .btn-outline:hover {
-      background: rgba(123, 44, 191, 0.2);
+      background: rgba(58, 123, 213, 0.2);
       transform: translateY(-3px);
-      box-shadow: 0 0 20px rgba(123, 44, 191, 0.3);
+      box-shadow: 0 0 20px rgba(58, 123, 213, 0.3);
     }
 
     .font-preview {
       font-size: 16px;
       margin: 1rem 0 1.5rem;
       padding: 1.5rem;
-      background: rgba(123, 44, 191, 0.1);
+      background: rgba(58, 123, 213, 0.1);
       border-radius: var(--border-radius);
       transition: all var(--transition-speed);
       border-left: 3px solid var(--accent-color);
@@ -488,7 +559,7 @@
       margin-top: 3rem;
       font-size: 1rem;
       color: rgba(224, 224, 255, 0.7);
-      border-top: 1px solid rgba(123, 44, 191, 0.3);
+      border-top: 1px solid rgba(58, 123, 213, 0.3);
     }
 
     .link {
@@ -511,7 +582,7 @@
 
     .link:hover {
       color: var(--hover-color);
-      text-shadow: 0 0 5px rgba(123, 44, 191, 0.5);
+      text-shadow: 0 0 5px rgba(58, 123, 213, 0.5);
     }
 
     .link:hover::after {
@@ -537,8 +608,8 @@
       align-items: center;
       justify-content: center;
       transition: all var(--transition-speed);
-      background: rgba(123, 44, 191, 0.1);
-      box-shadow: 0 0 5px rgba(123, 44, 191, 0.2);
+      background: rgba(58, 123, 213, 0.1);
+      box-shadow: 0 0 5px rgba(58, 123, 213, 0.2);
     }
 
     .custom-checkbox i {
@@ -578,7 +649,7 @@
       cursor: pointer;
       transition: all var(--transition-speed);
       font-weight: 600;
-      box-shadow: 0 0 15px rgba(123, 44, 191, 0.4);
+      box-shadow: 0 0 15px rgba(58, 123, 213, 0.4);
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -587,7 +658,7 @@
     .file-input-button:hover {
       background: var(--hover-color);
       transform: translateY(-2px);
-      box-shadow: 0 0 20px rgba(157, 78, 221, 0.6);
+      box-shadow: 0 0 20px rgba(74, 139, 229, 0.6);
     }
 
     .file-input {
@@ -604,42 +675,6 @@
       margin-left: 1.5rem;
       font-size: 1rem;
       color: rgba(224, 224, 255, 0.7);
-    }
-
-    /* Floating particles background */
-    .particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -2;
-      pointer-events: none;
-    }
-
-    .particle {
-      position: absolute;
-      background: rgba(123, 44, 191, 0.5);
-      border-radius: 50%;
-      filter: blur(1px);
-      animation: float 15s infinite linear;
-    }
-
-    @keyframes float {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 1;
-      }
-      90% {
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-100vh) rotate(360deg);
-        opacity: 0;
-      }
     }
 
     /* Responsive styles */
@@ -731,8 +766,12 @@
   </style>
 </head>
 <body>
-  <!-- Floating particles -->
-  <div class="particles" id="particles"></div>
+  <!-- Space Background Animation -->
+  <div class="space-background">
+    <div class="stars"></div>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+  </div>
 
   <header class="settings-header">
     <div class="header-content">
@@ -1003,40 +1042,36 @@
   </footer>
 
   <script>
-    // Create floating particles
-    function createParticles() {
-      const particlesContainer = document.getElementById('particles');
-      const particleCount = 30;
+    // Create stars for space background
+    function createStars() {
+      const starsContainer = document.querySelector('.stars');
+      const starCount = 200;
       
-      for (let i = 0; i < particleCount; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('div');
+        star.classList.add('star');
         
-        // Random size between 2px and 6px
-        const size = Math.random() * 4 + 2;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
+        // Random size between 1px and 3px
+        const size = Math.random() * 2 + 1;
+        star.style.width = `${size}px`;
+        star.style.height = `${size}px`;
         
         // Random position
-        particle.style.left = `${Math.random() * 100}%`;
-        particle.style.bottom = `-${size}px`;
+        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = `${Math.random() * 100}%`;
         
-        // Random animation duration between 10s and 25s
-        const duration = Math.random() * 15 + 10;
-        particle.style.animationDuration = `${duration}s`;
+        // Random animation duration and delay
+        const duration = Math.random() * 5 + 3;
+        const delay = Math.random() * 5;
+        star.style.animationDuration = `${duration}s`;
+        star.style.animationDelay = `${delay}s`;
         
-        // Random delay
-        particle.style.animationDelay = `${Math.random() * 5}s`;
-        
-        // Random opacity
-        particle.style.opacity = Math.random() * 0.5 + 0.1;
-        
-        particlesContainer.appendChild(particle);
+        starsContainer.appendChild(star);
       }
     }
     
-    // Initialize particles
-    createParticles();
+    // Initialize space background
+    createStars();
 
     // Tab switching
     document.querySelectorAll('.tab-button').forEach(button => {
@@ -1176,7 +1211,7 @@
         const submitBtn = form.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<i class="fas fa-check"></i> OPERATION SUCCESSFUL!';
-        submitBtn.style.boxShadow = '0 0 20px rgba(123, 44, 191, 0.8)';
+        submitBtn.style.boxShadow = '0 0 20px rgba(58, 123, 213, 0.8)';
         
         setTimeout(() => {
           submitBtn.innerHTML = originalText;
