@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Motivational Quotes & Stickers</title>
+  <title>Motivational Quotes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
@@ -84,43 +84,6 @@
       box-shadow: 0 8px 20px rgba(0,0,0,0.3);
       display: block;
     }
-    .stickers-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 25px;
-      animation: fadeInUp 1.4s ease forwards;
-    }
-    .sticker {
-      background: rgba(35, 39, 43, 0.85);
-      border-radius: 20px;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-      cursor: pointer;
-      transition: transform 0.3s, box-shadow 0.3s;
-      user-select: none;
-    }
-    .sticker:hover {
-      transform: translateY(-10px) scale(1.05);
-      box-shadow: 0 14px 30px #6ae3ffbb;
-    }
-    .sticker img {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-      margin-bottom: 12px;
-      filter: drop-shadow(0 0 3px #6ae3ffaa);
-      transition: filter 0.3s;
-    }
-    .sticker:hover img {
-      filter: drop-shadow(0 0 8px #6ae3ff);
-    }
-    .sticker-text {
-      font-weight: 600;
-      font-size: 1.1rem;
-      color: #6ae3ff;
-      letter-spacing: 0.05em;
-    }
     .cta-button {
       display: block;
       margin: 40px auto 0;
@@ -171,9 +134,6 @@
       header h1 { font-size: 2.2rem; }
       header p { font-size: 1rem; }
       .quote-card { font-size: 1.1rem; padding: 0; }
-      .stickers-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 18px; }
-      .sticker img { width: 60px; height: 60px; }
-      .sticker-text { font-size: 1rem; }
       .cta-button { padding: 12px 30px; font-size: 1rem; }
       #quote-img { max-width: 100%; }
     }
@@ -195,40 +155,6 @@
       </div>
     </section>
 
-    <section class="stickers-section">
-      <h2>Stickers</h2>
-      <div class="stickers-grid" aria-label="Motivational stickers">
-        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="Shine Bright sticker">
-          <img src="https://img.icons8.com/fluency/96/000000/star.png" alt="Star Icon" />
-          <div class="sticker-text">Shine Bright!</div>
-        </div>
-        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="You Did It sticker">
-          <img src="https://img.icons8.com/color/96/000000/like--v3.png" alt="Thumbs Up Icon" />
-          <div class="sticker-text">You Did It!</div>
-        </div>
-        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="Keep Going sticker">
-          <img src="https://img.icons8.com/fluency/96/000000/rocket.png" alt="Rocket Icon" />
-          <div class="sticker-text">Keep Going!</div>
-        </div>
-        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="Winner sticker">
-          <img src="https://img.icons8.com/fluency/96/000000/medal.png" alt="Medal Icon" />
-          <div class="sticker-text">Winner!</div>
-        </div>
-        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="Stay Positive sticker">
-          <img src="https://img.icons8.com/color/96/000000/smiling-face.png" alt="Smile Icon" />
-          <div class="sticker-text">Stay Positive</div>
-        </div>
-        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="New Idea sticker">
-          <img src="https://img.icons8.com/clouds/100/000000/idea.png" alt="Idea Icon" />
-          <div class="sticker-text">New Idea!</div>
-        </div>
-        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="Reach Goals sticker">
-          <img src="https://img.icons8.com/plasticine/100/000000/goal.png" alt="Goal Icon" />
-          <div class="sticker-text">Reach Goals</div>
-        </div>
-      </div>
-    </section>
-
     <button class="cta-button" id="generate-quote" aria-label="Get more inspiration">Get Inspired!</button>
   </div>
 
@@ -238,21 +164,19 @@
   <script>
     // Array of motivational quote images (Unsplash/Pexels, free to use)
     const quoteImages = [
-      "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.scoopwhoop.com%2Finothernews%2Fkrishna-quotes%2F&psig=AOvVaw2K7ioCjEaYjOaWR3NO8Osp&ust=1745468016635000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCIjsrJul7YwDFQAAAAAdAAAAABAJ",
-      "https://static.toiimg.com/thumb/imgsize-23456,msid-65580305,width-600,resizemode-4/65580305.jpg",
-      "https://www.google.com/url?sa=i&url=https%3A%2F%2Fhiddenmantra.com%2Fquotes%2Fbhagavad-gita-quote-in-english%2F&psig=AOvVaw3nztA_k-gbADZCmNpVd9vh&ust=1745468249120000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCJj705Km7YwDFQAAAAAdAAAAABAE", 
-      "https://preview.redd.it/what-are-some-good-quotes-from-the-mahabharat-by-bhishma-v0-lt1apobmtugb1.png?auto=webp&s=7df6cde7f8418bda071f5076b5de3328a8458358", 
-      "https://i.pinimg.com/736x/69/b7/8b/69b78ba01dafbe78dd043a83607f5e7a.jpg",
-      "https://www.google.com/url?sa=i&url=https%3A%2F%2Fspiritualquotes.in%2Fhanuman%2F&psig=AOvVaw3hkQmTLEHkP4cNAwrBcqtR&ust=1745468604474000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCOD9grWn7YwDFQAAAAAdAAAAABAE", 
-      "https://images.pexels.com/photos/713149/pexels-photo-713149.jpeg?auto=compress&w=600&q=80"     // Never give up
+      "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80",
+      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80",
+      "https://images.pexels.com/photos/208349/pexels-photo-208349.jpeg?auto=compress&w=600&q=80",
+      "https://images.pexels.com/photos/261327/pexels-photo-261327.jpeg?auto=compress&w=600&q=80",
+      "https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=600&q=80",
+      "https://images.pexels.com/photos/713149/pexels-photo-713149.jpeg?auto=compress&w=600&q=80"
     ];
 
     function showRandomQuoteImage() {
       const idx = Math.floor(Math.random() * quoteImages.length);
       document.getElementById("quote-img").src = quoteImages[idx];
     }
-
-    // Show a random image on page load and on button click
     window.onload = function() {
       showRandomQuoteImage();
       document.getElementById("generate-quote").addEventListener('click', showRandomQuoteImage);
