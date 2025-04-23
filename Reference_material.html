@@ -1,4 +1,4 @@
-=<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,17 +7,22 @@
   <style>
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f9f9f9;
+      background: #f5f7fa;
       margin: 0;
       padding: 0;
       color: #222;
     }
     header {
-      background: #3f51b5;
+      background: linear-gradient(90deg,#3f51b5 60%, #5c6bc0 100%);
       color: #fff;
-      padding: 1em 0;
+      padding: 1.2em 0;
       text-align: center;
       letter-spacing: 1px;
+      box-shadow: 0 2px 6px #3f51b530;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.1em;
     }
     nav {
       display: flex;
@@ -25,72 +30,143 @@
       justify-content: center;
       background: #e8eaf6;
       border-bottom: 1px solid #c5cae9;
+      box-shadow: 0 1px 3px #c5cae930;
     }
     nav button {
       background: none;
       border: none;
-      padding: 1em 2em;
+      padding: 1em 1.6em;
       cursor: pointer;
       font-size: 1em;
       color: #3f51b5;
       transition: background 0.2s;
+      border-radius: 0 0 8px 8px;
+      margin: 0 2px;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
     }
-    nav button.active, nav button:hover {
+    nav button.active, nav button:focus, nav button:hover {
       background: #c5cae9;
       font-weight: bold;
+      outline: none;
     }
     main {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: 2em auto;
       background: #fff;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      border-radius: 8px;
-      padding: 2em;
+      box-shadow: 0 2px 14px rgba(63,81,181,0.07);
+      border-radius: 12px;
+      padding: 2.5em 2em 2em 2em;
     }
     section {
       display: none;
+      margin-bottom: 1.5em;
+      border-radius: 10px;
+      padding: 1.5em 1em;
+      background: #fafbff;
+      box-shadow: 0 1px 4px #3f51b510;
+      border-left: 4px solid #3f51b5;
     }
     section.active {
       display: block;
+      animation: fadeIn 0.4s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px);}
+      to { opacity: 1; transform: none;}
+    }
+    h2 {
+      margin-top: 0;
+      color: #3f51b5;
+      letter-spacing: 1px;
+      font-size: 1.3em;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    ul {
+      margin-top: 0.5em;
+      margin-bottom: 0.5em;
+      padding-left: 1.2em;
+    }
+    li {
+      margin-bottom: 0.4em;
     }
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 1em;
+      background: #f8fafc;
+      border-radius: 6px;
+      overflow: hidden;
     }
     th, td {
       border: 1px solid #bdbdbd;
-      padding: 0.5em;
+      padding: 0.5em 0.6em;
       text-align: center;
     }
-    ul {
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
+    th {
+      background: #e3e6f3;
+      color: #3f51b5;
+    }
+    .search-box {
+      margin: 0.5em 0 1em 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+    .search-box input {
+      padding: 0.4em 0.7em;
+      border: 1px solid #bdbdbd;
+      border-radius: 5px;
+      font-size: 1em;
+      width: 200px;
+    }
+    code {
+      background: #e8eaf6;
+      border-radius: 4px;
+      padding: 2px 5px;
+      font-size: 0.98em;
+    }
+    .icon {
+      font-size: 1.2em;
+      vertical-align: middle;
+    }
+    @media (max-width: 800px) {
+      main { padding: 1em; }
+      nav button { padding: 0.7em 0.8em; font-size: 0.97em; }
+      table { font-size: 0.97em; }
     }
     @media (max-width: 600px) {
-      main { padding: 1em; }
-      nav button { padding: 0.7em 1em; font-size: 0.95em; }
-      table { font-size: 0.95em; }
+      nav { flex-direction: column; }
+      nav button { border-radius: 0; margin: 0; width: 100%; }
+      main { padding: 0.5em; }
     }
   </style>
+  <!-- Icons with Emoji for simplicity, you can use SVG or FontAwesome for more -->
 </head>
 <body>
   <header>
     <h1>Reference Materials: Quick Access</h1>
   </header>
-  <nav>
-    <button class="tab active" data-tab="formulas">Formulas</button>
-    <button class="tab" data-tab="grammar">Grammar Rules</button>
-    <button class="tab" data-tab="periodic">Periodic Table</button>
-    <button class="tab" data-tab="dates">Key Dates</button>
-    <button class="tab" data-tab="constants">Science Constants</button>
-    <button class="tab" data-tab="programming">Programming Cheatsheet</button>
-    <button class="tab" data-tab="languages">Language Facts</button>
+  <nav aria-label="Main navigation">
+    <button class="tab active" data-tab="formulas">🧮 Formulas</button>
+    <button class="tab" data-tab="grammar">✍️ Grammar</button>
+    <button class="tab" data-tab="periodic">🧪 Periodic Table</button>
+    <button class="tab" data-tab="dates">📅 Key Dates</button>
+    <button class="tab" data-tab="constants">⚛️ Constants</button>
+    <button class="tab" data-tab="programming">💻 Programming</button>
+    <button class="tab" data-tab="languages">🌐 Language Facts</button>
+    <button class="tab" data-tab="capitals">🏛️ World Capitals</button>
+    <button class="tab" data-tab="scientists">👩‍🔬 Scientists</button>
+    <button class="tab" data-tab="mathsymbols">∑ Math Symbols</button>
+    <button class="tab" data-tab="physicslaws">⚖️ Physics Laws</button>
   </nav>
   <main>
     <!-- Formulas Section -->
-    <section id="formulas" class="active">
-      <h2>Common Formulas</h2>
+    <section id="formulas" class="active" aria-label="Common Formulas">
+      <h2>🧮 Common Formulas</h2>
       <ul>
         <li><strong>Area of Circle:</strong> \( A = \pi r^2 \)</li>
         <li><strong>Quadratic Formula:</strong> \( x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \)</li>
@@ -104,11 +180,17 @@
         <li><strong>Speed:</strong> \( v = \frac{d}{t} \)</li>
         <li><strong>Perimeter of Rectangle:</strong> \( P = 2(l + w) \)</li>
         <li><strong>Area of Triangle:</strong> \( A = \frac{1}{2} b h \)</li>
+        <li><strong>Volume of Sphere:</strong> \( V = \frac{4}{3}\pi r^3 \)</li>
+        <li><strong>Euler’s Formula:</strong> \( e^{ix} = \cos x + i\sin x \)</li>
+        <li><strong>Binomial Theorem:</strong> \( (a+b)^n = \sum_{k=0}^{n} \binom{n}{k} a^{n-k}b^k \)</li>
+        <li><strong>Ideal Gas Law:</strong> \( PV = nRT \)</li>
+        <li><strong>Einstein’s Mass-Energy:</strong> \( E = mc^2 \)</li>
+        <li><strong>Snell’s Law:</strong> \( n_1\sin\theta_1 = n_2\sin\theta_2 \)</li>
       </ul>
     </section>
     <!-- Grammar Section -->
-    <section id="grammar">
-      <h2>Grammar Rules (Quick Reference)</h2>
+    <section id="grammar" aria-label="Grammar Rules">
+      <h2>✍️ Grammar Rules (Quick Reference)</h2>
       <ul>
         <li>Capitalize the first word of a sentence and proper nouns.</li>
         <li>Use a semicolon, not a comma, before “hence” when it introduces an independent clause.</li>
@@ -121,17 +203,29 @@
         <li>Use the Oxford comma in lists for clarity.</li>
         <li>“Its” is possessive; “it’s” means “it is.”</li>
         <li>Use “affect” as a verb, “effect” as a noun (usually).</li>
+        <li>Use “whom” when it’s the object of a verb or preposition.</li>
+        <li>“Lie” (to recline) vs. “Lay” (to put down).</li>
+        <li>Use “between” for two, “among” for more than two.</li>
+        <li>“Farther” for physical distance, “further” for figurative distance.</li>
+        <li>Use “may” for permission, “can” for ability.</li>
       </ul>
     </section>
     <!-- Periodic Table Section -->
-    <section id="periodic">
-      <h2>Periodic Table (First 20 Elements)</h2>
-      <table>
+    <section id="periodic" aria-label="Periodic Table">
+      <h2>🧪 Periodic Table (First 30 Elements)</h2>
+      <div class="search-box">
+        <label for="ptable-search">🔍 Search: </label>
+        <input id="ptable-search" type="text" placeholder="Name, symbol, or number..." onkeyup="filterTable('ptable', this.value)">
+      </div>
+      <table id="ptable">
+        <thead>
         <tr>
           <th>Atomic Number</th>
           <th>Symbol</th>
           <th>Name</th>
         </tr>
+        </thead>
+        <tbody>
         <tr><td>1</td><td>H</td><td>Hydrogen</td></tr>
         <tr><td>2</td><td>He</td><td>Helium</td></tr>
         <tr><td>3</td><td>Li</td><td>Lithium</td></tr>
@@ -152,13 +246,25 @@
         <tr><td>18</td><td>Ar</td><td>Argon</td></tr>
         <tr><td>19</td><td>K</td><td>Potassium</td></tr>
         <tr><td>20</td><td>Ca</td><td>Calcium</td></tr>
+        <tr><td>21</td><td>Sc</td><td>Scandium</td></tr>
+        <tr><td>22</td><td>Ti</td><td>Titanium</td></tr>
+        <tr><td>23</td><td>V</td><td>Vanadium</td></tr>
+        <tr><td>24</td><td>Cr</td><td>Chromium</td></tr>
+        <tr><td>25</td><td>Mn</td><td>Manganese</td></tr>
+        <tr><td>26</td><td>Fe</td><td>Iron</td></tr>
+        <tr><td>27</td><td>Co</td><td>Cobalt</td></tr>
+        <tr><td>28</td><td>Ni</td><td>Nickel</td></tr>
+        <tr><td>29</td><td>Cu</td><td>Copper</td></tr>
+        <tr><td>30</td><td>Zn</td><td>Zinc</td></tr>
+        </tbody>
       </table>
     </section>
     <!-- Key Dates Section -->
-    <section id="dates">
-      <h2>Key Historical Dates</h2>
+    <section id="dates" aria-label="Key Historical Dates">
+      <h2>📅 Key Historical Dates</h2>
       <ul>
         <li><strong>1066:</strong> Norman Conquest of England</li>
+        <li><strong>1215:</strong> Magna Carta signed</li>
         <li><strong>1492:</strong> Columbus Discovers America</li>
         <li><strong>1776:</strong> American Declaration of Independence</li>
         <li><strong>1789:</strong> French Revolution Begins</li>
@@ -166,17 +272,19 @@
         <li><strong>1914-1918:</strong> World War I</li>
         <li><strong>1929:</strong> Wall Street Crash/Great Depression Begins</li>
         <li><strong>1945:</strong> End of World War II</li>
+        <li><strong>1947:</strong> India gains Independence</li>
         <li><strong>1961:</strong> First Human in Space (Yuri Gagarin)</li>
         <li><strong>1969:</strong> First Moon Landing</li>
         <li><strong>1989:</strong> Fall of the Berlin Wall</li>
         <li><strong>1991:</strong> Dissolution of the Soviet Union</li>
         <li><strong>2001:</strong> Wikipedia Launched</li>
+        <li><strong>2004:</strong> Facebook Founded</li>
         <li><strong>2020:</strong> COVID-19 Pandemic Declared</li>
       </ul>
     </section>
     <!-- Science Constants Section -->
-    <section id="constants">
-      <h2>Fundamental Science Constants</h2>
+    <section id="constants" aria-label="Science Constants">
+      <h2>⚛️ Fundamental Science Constants</h2>
       <table>
         <tr><th>Name</th><th>Symbol</th><th>Value</th><th>Unit</th></tr>
         <tr><td>Speed of Light</td><td>c</td><td>299,792,458</td><td>m/s</td></tr>
@@ -186,11 +294,13 @@
         <tr><td>Gas Constant</td><td>R</td><td>8.314</td><td>J/mol·K</td></tr>
         <tr><td>Elementary Charge</td><td>e</td><td>1.602 × 10<sup>-19</sup></td><td>C</td></tr>
         <tr><td>Boltzmann Constant</td><td>k</td><td>1.381 × 10<sup>-23</sup></td><td>J/K</td></tr>
+        <tr><td>Permittivity of Free Space</td><td>ε₀</td><td>8.854 × 10<sup>-12</sup></td><td>F/m</td></tr>
+        <tr><td>Permeability of Free Space</td><td>μ₀</td><td>4π × 10<sup>-7</sup></td><td>N/A²</td></tr>
       </table>
     </section>
     <!-- Programming Cheatsheet Section -->
-    <section id="programming">
-      <h2>Programming Cheatsheet</h2>
+    <section id="programming" aria-label="Programming Cheatsheet">
+      <h2>💻 Programming Cheatsheet</h2>
       <ul>
         <li><strong>Python Print:</strong> <code>print("Hello, World!")</code></li>
         <li><strong>JavaScript Alert:</strong> <code>alert("Hi!");</code></li>
@@ -200,11 +310,16 @@
         <li><strong>For Loop (C):</strong> <code>for(int i=0; i&lt;5; i++)</code></li>
         <li><strong>SQL SELECT:</strong> <code>SELECT * FROM table WHERE condition;</code></li>
         <li><strong>Git Commit:</strong> <code>git commit -m "message"</code></li>
+        <li><strong>Java Main:</strong> <code>public static void main(String[] args)</code></li>
+        <li><strong>Python List Comprehension:</strong> <code>[x*x for x in range(5)]</code></li>
+        <li><strong>Markdown Link:</strong> <code>[text](url)</code></li>
+        <li><strong>Bash List Files:</strong> <code>ls -la</code></li>
+        <li><strong>JSON Object:</strong> <code>{"key": "value"}</code></li>
       </ul>
     </section>
     <!-- Language Facts Section -->
-    <section id="languages">
-      <h2>Language Quick Facts</h2>
+    <section id="languages" aria-label="Language Facts">
+      <h2>🌐 Language Quick Facts</h2>
       <ul>
         <li><strong>Most spoken native language:</strong> Mandarin Chinese</li>
         <li><strong>Most spoken language (total):</strong> English</li>
@@ -214,6 +329,104 @@
         <li><strong>Shortest English sentence:</strong> “Go.”</li>
         <li><strong>Word with all vowels:</strong> “Education”</li>
         <li><strong>Language with no verb “to be”:</strong> Russian (in present tense)</li>
+        <li><strong>Language with most words:</strong> English</li>
+        <li><strong>Language with fewest sounds:</strong> Rotokas (Papua New Guinea)</li>
+        <li><strong>Language with most cases:</strong> Finnish (15 cases)</li>
+        <li><strong>Language written right-to-left:</strong> Arabic, Hebrew</li>
+      </ul>
+    </section>
+    <!-- World Capitals Section -->
+    <section id="capitals" aria-label="World Capitals">
+      <h2>🏛️ World Capitals</h2>
+      <div class="search-box">
+        <label for="capitals-search">🔍 Search: </label>
+        <input id="capitals-search" type="text" placeholder="Country or capital..." onkeyup="filterTable('capitals-table', this.value)">
+      </div>
+      <table id="capitals-table">
+        <thead>
+        <tr><th>Country</th><th>Capital</th></tr>
+        </thead>
+        <tbody>
+        <tr><td>India</td><td>New Delhi</td></tr>
+        <tr><td>United States</td><td>Washington, D.C.</td></tr>
+        <tr><td>United Kingdom</td><td>London</td></tr>
+        <tr><td>France</td><td>Paris</td></tr>
+        <tr><td>Germany</td><td>Berlin</td></tr>
+        <tr><td>Japan</td><td>Tokyo</td></tr>
+        <tr><td>Russia</td><td>Moscow</td></tr>
+        <tr><td>Australia</td><td>Canberra</td></tr>
+        <tr><td>Brazil</td><td>Brasília</td></tr>
+        <tr><td>Canada</td><td>Ottawa</td></tr>
+        <tr><td>China</td><td>Beijing</td></tr>
+        <tr><td>Egypt</td><td>Cairo</td></tr>
+        <tr><td>Italy</td><td>Rome</td></tr>
+        <tr><td>South Africa</td><td>Pretoria</td></tr>
+        <tr><td>South Korea</td><td>Seoul</td></tr>
+        <tr><td>Spain</td><td>Madrid</td></tr>
+        <tr><td>Turkey</td><td>Ankara</td></tr>
+        <tr><td>Argentina</td><td>Buenos Aires</td></tr>
+        <tr><td>Mexico</td><td>Mexico City</td></tr>
+        <tr><td>Saudi Arabia</td><td>Riyadh</td></tr>
+        </tbody>
+      </table>
+    </section>
+    <!-- Famous Scientists Section -->
+    <section id="scientists" aria-label="Famous Scientists">
+      <h2>👩‍🔬 Famous Scientists</h2>
+      <ul>
+        <li><strong>Isaac Newton (1643–1727):</strong> Laws of motion, gravity</li>
+        <li><strong>Albert Einstein (1879–1955):</strong> Theory of relativity, E=mc²</li>
+        <li><strong>Marie Curie (1867–1934):</strong> Radioactivity, first female Nobel laureate</li>
+        <li><strong>Charles Darwin (1809–1882):</strong> Theory of evolution by natural selection</li>
+        <li><strong>Galileo Galilei (1564–1642):</strong> Father of modern science, astronomy</li>
+        <li><strong>Nikola Tesla (1856–1943):</strong> AC electricity, radio, wireless technology</li>
+        <li><strong>Ada Lovelace (1815–1852):</strong> First computer programmer</li>
+        <li><strong>Rosalind Franklin (1920–1958):</strong> DNA structure discovery</li>
+        <li><strong>Stephen Hawking (1942–2018):</strong> Black holes, cosmology</li>
+        <li><strong>Richard Feynman (1918–1988):</strong> Quantum electrodynamics</li>
+      </ul>
+    </section>
+    <!-- Math Symbols Section -->
+    <section id="mathsymbols" aria-label="Math Symbols">
+      <h2>∑ Common Math Symbols</h2>
+      <table>
+        <tr><th>Symbol</th><th>Name</th><th>Meaning</th></tr>
+        <tr><td>+</td><td>Plus</td><td>Addition</td></tr>
+        <tr><td>−</td><td>Minus</td><td>Subtraction</td></tr>
+        <tr><td>×</td><td>Multiplication</td><td>Multiply</td></tr>
+        <tr><td>÷</td><td>Division</td><td>Divide</td></tr>
+        <tr><td>=</td><td>Equals</td><td>Equality</td></tr>
+        <tr><td>≠</td><td>Not equal</td><td>Inequality</td></tr>
+        <tr><td>&lt;</td><td>Less than</td><td>Comparison</td></tr>
+        <tr><td>&gt;</td><td>Greater than</td><td>Comparison</td></tr>
+        <tr><td>≤</td><td>Less than or equal</td><td>Comparison</td></tr>
+        <tr><td>≥</td><td>Greater than or equal</td><td>Comparison</td></tr>
+        <tr><td>√</td><td>Square root</td><td>Root</td></tr>
+        <tr><td>π</td><td>Pi</td><td>3.14159...</td></tr>
+        <tr><td>∑</td><td>Summation</td><td>Sum</td></tr>
+        <tr><td>∫</td><td>Integral</td><td>Integration</td></tr>
+        <tr><td>∞</td><td>Infinity</td><td>Unlimited</td></tr>
+        <tr><td>Δ</td><td>Delta</td><td>Change</td></tr>
+        <tr><td>θ</td><td>Theta</td><td>Angle</td></tr>
+        <tr><td>∂</td><td>Partial derivative</td><td>Calculus</td></tr>
+      </table>
+    </section>
+    <!-- Physics Laws Section -->
+    <section id="physicslaws" aria-label="Physics Laws">
+      <h2>⚖️ Fundamental Physics Laws</h2>
+      <ul>
+        <li><strong>Newton’s First Law:</strong> An object remains at rest or in uniform motion unless acted upon by a force.</li>
+        <li><strong>Newton’s Second Law:</strong> \( F = m \cdot a \)</li>
+        <li><strong>Newton’s Third Law:</strong> For every action, there is an equal and opposite reaction.</li>
+        <li><strong>Law of Universal Gravitation:</strong> \( F = G \frac{m_1 m_2}{r^2} \)</li>
+        <li><strong>Ohm’s Law:</strong> \( V = I \cdot R \)</li>
+        <li><strong>Faraday’s Law of Induction:</strong> The induced EMF in a circuit is proportional to the rate of change of magnetic flux.</li>
+        <li><strong>Hooke’s Law:</strong> \( F = -kx \)</li>
+        <li><strong>Boyle’s Law:</strong> \( P_1V_1 = P_2V_2 \) (at constant T)</li>
+        <li><strong>Charles’s Law:</strong> \( V_1/T_1 = V_2/T_2 \) (at constant P)</li>
+        <li><strong>First Law of Thermodynamics:</strong> Energy cannot be created or destroyed, only transformed.</li>
+        <li><strong>Second Law of Thermodynamics:</strong> Entropy of an isolated system always increases.</li>
+        <li><strong>Coulomb’s Law:</strong> \( F = k \frac{q_1 q_2}{r^2} \)</li>
       </ul>
     </section>
   </main>
@@ -227,6 +440,17 @@
         document.getElementById(this.dataset.tab).classList.add('active');
       });
     });
+
+    // Table filter function
+    function filterTable(tableId, value) {
+      value = value.toLowerCase();
+      let table = document.getElementById(tableId);
+      let trs = table.querySelectorAll('tbody tr');
+      trs.forEach(tr => {
+        let txt = tr.textContent.toLowerCase();
+        tr.style.display = txt.includes(value) ? '' : 'none';
+      });
+    }
   </script>
 </body>
 </html>
