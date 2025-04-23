@@ -7,19 +7,26 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --primary-color: #4CAF50;
-      --primary-hover: #45a049;
-      --background: #121212;
-      --surface: #1E1E1E;
-      --surface-light: #2E2E2E;
-      --text-primary: #E0E0E0;
-      --text-secondary: #B0B0B0;
-      --border-color: #444;
-      --error-color: #f44336;
-      --success-color: #4CAF50;
-      --transition: all 0.3s ease;
-      --border-radius: 8px;
-      --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      --bg-color: #0a0a1a;
+      --text-color: #e0e0ff;
+      --card-bg: #12122b;
+      --accent-color: #3a7bd5;
+      --hover-color: #4a8be5;
+      --danger-color: #ff2d75;
+      --border-radius: 16px;
+      --transition-speed: 0.4s;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --neon-glow: 0 0 10px var(--accent-color), 0 0 20px rgba(58, 123, 213, 0.5);
+      --glass-effect: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Light theme variables */
+    [data-theme="light"] {
+      --bg-color: #f0f5ff;
+      --text-color: #12122b;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --glass-effect: rgba(255, 255, 255, 0.7);
     }
 
     * {
@@ -29,51 +36,89 @@
     }
 
     body {
-      background-color: var(--background);
-      color: var(--text-primary);
-      font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
       line-height: 1.6;
       min-height: 100vh;
       padding: 20px;
       display: flex;
       flex-direction: column;
+      transition: all var(--transition-speed);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(58, 123, 213, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(58, 123, 213, 0.1) 0%, transparent 20%);
+    }
+
+    @font-face {
+      font-family: 'Orbitron';
+      src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
     }
 
     .header {
       width: 100%;
       max-width: 1400px;
-      margin: 0 auto 20px;
+      margin: 0 auto 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 15px 0;
+      position: relative;
     }
 
     .logo {
       font-size: 1.8rem;
       font-weight: 700;
-      color: var(--primary-color);
+      color: var(--accent-color);
       text-decoration: none;
       display: flex;
       align-items: center;
       gap: 10px;
+      transition: var(--transition-speed);
+      text-shadow: 0 0 5px rgba(58, 123, 213, 0.5);
+    }
+
+    .logo:hover {
+      color: var(--hover-color);
+      text-shadow: var(--neon-glow);
     }
 
     .logo i {
       font-size: 1.5rem;
+      transition: var(--transition-speed);
+    }
+
+    .logo:hover i {
+      transform: rotate(15deg);
     }
 
     .nav-link {
-      color: var(--text-primary);
+      color: var(--text-color);
       text-decoration: none;
       font-weight: 500;
-      padding: 8px 15px;
+      padding: 10px 20px;
       border-radius: var(--border-radius);
-      transition: var(--transition);
+      transition: var(--transition-speed);
+      background: var(--glass-effect);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(58, 123, 213, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .nav-link:hover {
-      background-color: rgba(255, 255, 255, 0.1);
+      background: rgba(58, 123, 213, 0.2);
+      transform: translateX(-5px);
+      border-color: var(--accent-color);
+    }
+
+    .nav-link i {
+      transition: var(--transition-speed);
+    }
+
+    .nav-link:hover i {
+      transform: translateX(-3px);
     }
 
     .main-container {
@@ -86,19 +131,34 @@
       flex-grow: 1;
     }
 
-    .contact-info-section {
-      background-color: var(--surface);
+    .contact-info-section, .contact-form-section {
+      background: var(--glass-effect);
+      backdrop-filter: blur(12px);
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
       padding: 40px;
+      border: 1px solid rgba(58, 123, 213, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-info-section::after, .contact-form-section::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(58, 123, 213, 0.1) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .contact-info-section {
       animation: fadeIn 0.8s ease-out;
     }
 
     .contact-form-section {
-      background-color: var(--surface);
-      border-radius: var(--border-radius);
-      box-shadow: var(--shadow);
-      padding: 40px;
       animation: fadeIn 0.8s ease-out 0.2s;
       animation-fill-mode: both;
     }
@@ -106,10 +166,11 @@
     h1 {
       font-size: 2.2rem;
       margin-bottom: 25px;
-      color: var(--text-primary);
-      font-weight: 600;
+      color: var(--accent-color);
+      font-weight: 700;
       position: relative;
       padding-bottom: 15px;
+      text-shadow: 0 0 5px rgba(58, 123, 213, 0.3);
     }
 
     h1::after {
@@ -119,14 +180,16 @@
       left: 0;
       width: 80px;
       height: 3px;
-      background-color: var(--primary-color);
+      background: var(--accent-color);
+      box-shadow: 0 0 10px var(--accent-color);
       border-radius: 3px;
     }
 
     .intro-text {
-      color: var(--text-secondary);
+      color: var(--text-color);
       margin-bottom: 30px;
       font-size: 1.1rem;
+      opacity: 0.9;
     }
 
     .contact-methods {
@@ -136,25 +199,50 @@
     }
 
     .contact-card {
-      background-color: var(--surface-light);
+      background: rgba(58, 123, 213, 0.1);
       padding: 25px;
       border-radius: var(--border-radius);
-      transition: var(--transition);
+      transition: var(--transition-speed);
       display: flex;
       align-items: flex-start;
       gap: 20px;
+      border: 1px solid rgba(58, 123, 213, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(58, 123, 213, 0.3), transparent);
+      transition: all 0.6s ease;
+    }
+
+    .contact-card:hover::before {
+      left: 100%;
     }
 
     .contact-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 8px 25px rgba(58, 123, 213, 0.2);
+      border-color: var(--accent-color);
     }
 
     .contact-icon {
       font-size: 1.8rem;
-      color: var(--primary-color);
+      color: var(--accent-color);
       margin-top: 5px;
       flex-shrink: 0;
+      transition: var(--transition-speed);
+    }
+
+    .contact-card:hover .contact-icon {
+      transform: scale(1.2);
+      text-shadow: var(--neon-glow);
     }
 
     .contact-content {
@@ -168,16 +256,10 @@
     }
 
     .contact-info {
-      color: var(--text-secondary);
+      color: var(--text-color);
       font-size: 0.95rem;
       line-height: 1.7;
-    }
-
-    .section-title {
-      font-size: 1.3rem;
-      font-weight: 600;
-      margin: 30px 0 15px;
-      color: var(--primary-color);
+      opacity: 0.8;
     }
 
     .form-group {
@@ -194,18 +276,26 @@
     input, textarea, select {
       width: 100%;
       padding: 14px;
-      background-color: var(--surface-light);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      border: 1px solid rgba(58, 123, 213, 0.3);
       border-radius: var(--border-radius);
       font-size: 1rem;
-      transition: var(--transition);
+      transition: var(--transition-speed);
+      backdrop-filter: blur(5px);
+    }
+
+    [data-theme="light"] input,
+    [data-theme="light"] textarea,
+    [data-theme="light"] select {
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(58, 123, 213, 0.2);
     }
 
     input:focus, textarea:focus, select:focus {
       outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 2px rgba(58, 123, 213, 0.3);
     }
 
     textarea {
@@ -216,7 +306,7 @@
     .submit-btn {
       width: 100%;
       padding: 15px;
-      background-color: var(--primary-color);
+      background: var(--accent-color);
       color: white;
       font-size: 1rem;
       font-weight: 600;
@@ -224,21 +314,45 @@
       border: none;
       border-radius: var(--border-radius);
       cursor: pointer;
-      transition: var(--transition);
+      transition: var(--transition-speed);
       margin-top: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(58, 123, 213, 0.4);
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.6s ease;
+    }
+
+    .submit-btn:hover::before {
+      left: 100%;
     }
 
     .submit-btn:hover {
-      background-color: var(--primary-hover);
-      transform: translateY(-2px);
+      background: var(--hover-color);
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(74, 139, 229, 0.6);
     }
 
     .submit-btn i {
       font-size: 1.1rem;
+      transition: var(--transition-speed);
+    }
+
+    .submit-btn:hover i {
+      transform: translateX(3px);
     }
 
     .status-message {
@@ -249,30 +363,85 @@
     }
 
     .status-message.success {
-      background-color: rgba(76, 175, 80, 0.2);
-      border-left: 4px solid var(--success-color);
+      background: rgba(76, 175, 80, 0.2);
+      border-left: 4px solid var(--accent-color);
       display: block;
     }
 
     .status-message.error {
-      background-color: rgba(244, 67, 54, 0.2);
-      border-left: 4px solid var(--error-color);
+      background: rgba(244, 67, 54, 0.2);
+      border-left: 4px solid var(--danger-color);
       display: block;
     }
 
     .footer {
       text-align: center;
       padding: 30px 0;
-      color: var(--text-secondary);
+      color: var(--text-color);
       font-size: 0.9rem;
       margin-top: 40px;
+      opacity: 0.7;
     }
 
+    .footer a {
+      color: var(--accent-color);
+      text-decoration: none;
+      transition: var(--transition-speed);
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+      text-shadow: 0 0 5px rgba(58, 123, 213, 0.5);
+    }
+
+    /* Theme toggle button */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--glass-effect);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(58, 123, 213, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-speed);
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      border-color: var(--accent-color);
+    }
+
+    .theme-toggle i {
+      font-size: 1.2rem;
+      color: var(--text-color);
+      transition: var(--transition-speed);
+    }
+
+    .theme-toggle:hover i {
+      color: var(--accent-color);
+    }
+
+    /* Animations */
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+      from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(58, 123, 213, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0); }
+    }
+
+    /* Responsive styles */
     @media (max-width: 1200px) {
       .main-container {
         grid-template-columns: 1fr;
@@ -292,7 +461,7 @@
       }
 
       .nav-link {
-        padding: 6px 12px;
+        padding: 8px 16px;
       }
 
       h1 {
@@ -301,8 +470,8 @@
     }
 
     @media (max-width: 480px) {
-      .main-container {
-        padding: 0;
+      body {
+        padding: 15px;
       }
 
       .contact-info-section, .contact-form-section {
@@ -321,20 +490,28 @@
   </style>
 </head>
 <body>
+  <!-- Theme toggle button -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
+
   <header class="header">
     <a href="index.html" class="logo">
       <i class="fas fa-tasks"></i>
       <span>Taskify</span>
     </a>
     <nav>
-      <a href="index.html" class="nav-link">Back to App</a>
+      <a href="index.html" class="nav-link">
+        <i class="fas fa-arrow-left"></i>
+        <span>Back to App</span>
+      </a>
     </nav>
   </header>
 
   <div class="main-container">
     <section class="contact-info-section">
-      <h1>Contact Support</h1>
-      <p class="intro-text">Our dedicated support team is available to help you with any questions or issues. Choose your preferred contact method below.</p>
+      <h1>CONTACT SUPPORT</h1>
+      <p class="intro-text">Our dedicated support team is standing by to assist you with any questions or issues. Choose your preferred contact method below for the fastest response.</p>
 
       <div class="contact-methods">
         <div class="contact-card">
@@ -342,7 +519,7 @@
             <i class="fas fa-envelope"></i>
           </div>
           <div class="contact-content">
-            <h3 class="contact-title">Email Support</h3>
+            <h3 class="contact-title">EMAIL SUPPORT</h3>
             <p class="contact-info">For general inquiries and support questions, email us at support@taskify.com. We typically respond within 24 hours.</p>
           </div>
         </div>
@@ -352,7 +529,7 @@
             <i class="fas fa-phone-alt"></i>
           </div>
           <div class="contact-content">
-            <h3 class="contact-title">Phone Support</h3>
+            <h3 class="contact-title">PHONE SUPPORT</h3>
             <p class="contact-info">+1 (800) 123-4567<br>Monday-Friday, 9:00 AM - 5:00 PM EST<br>Immediate assistance for urgent issues</p>
           </div>
         </div>
@@ -362,7 +539,7 @@
             <i class="fas fa-comment-dots"></i>
           </div>
           <div class="contact-content">
-            <h3 class="contact-title">Live Chat</h3>
+            <h3 class="contact-title">LIVE CHAT</h3>
             <p class="contact-info">Available 24/7 through our app or website. Look for the chat icon in the bottom right corner of your screen.</p>
           </div>
         </div>
@@ -372,7 +549,7 @@
             <i class="fas fa-question-circle"></i>
           </div>
           <div class="contact-content">
-            <h3 class="contact-title">Help Center</h3>
+            <h3 class="contact-title">HELP CENTER</h3>
             <p class="contact-info">Browse our extensive knowledge base with tutorials, FAQs, and troubleshooting guides at help.taskify.com</p>
           </div>
         </div>
@@ -380,53 +557,101 @@
     </section>
 
     <section class="contact-form-section">
-      <h1>Quick Message</h1>
-      <p class="intro-text">Fill out this form and we'll get back to you as soon as possible. All fields are required.</p>
+      <h1>SEND US A MESSAGE</h1>
+      <p class="intro-text">Fill out this form and we'll get back to you as soon as possible. All fields are required for faster processing.</p>
 
       <div id="status-message" class="status-message"></div>
 
       <form id="contact-form" action="#" method="POST">
         <div class="form-group">
-          <label for="name">Your Name</label>
+          <label for="name">YOUR NAME</label>
           <input type="text" id="name" name="name" placeholder="Enter your full name" required>
         </div>
 
         <div class="form-group">
-          <label for="email">Email Address</label>
+          <label for="email">EMAIL ADDRESS</label>
           <input type="email" id="email" name="email" placeholder="Enter your email address" required>
         </div>
 
         <div class="form-group">
-          <label for="subject">Subject</label>
+          <label for="subject">SUBJECT</label>
           <select id="subject" name="subject" required>
             <option value="" disabled selected>Select a subject</option>
-            <option value="technical">Technical Support</option>
-            <option value="billing">Billing Inquiry</option>
-            <option value="feature">Feature Request</option>
-            <option value="feedback">Feedback</option>
-            <option value="other">Other</option>
+            <option value="technical">TECHNICAL SUPPORT</option>
+            <option value="billing">BILLING INQUIRY</option>
+            <option value="feature">FEATURE REQUEST</option>
+            <option value="feedback">FEEDBACK</option>
+            <option value="other">OTHER</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label for="message">Your Message</label>
+          <label for="message">YOUR MESSAGE</label>
           <textarea id="message" name="message" placeholder="Please describe your issue or question in detail" required></textarea>
         </div>
 
         <button type="submit" class="submit-btn">
           <i class="fas fa-paper-plane"></i>
-          Send Message
+          SEND MESSAGE
         </button>
       </form>
     </section>
   </div>
 
   <footer class="footer">
-    <p>&copy; 2023 Taskify. All rights reserved.</p>
-    <p><a href="privacy.html" style="color: var(--text-secondary); text-decoration: none;">Privacy Policy</a> | <a href="terms.html" style="color: var(--text-secondary); text-decoration: none;">Terms of Service</a></p>
+    <p>&copy; 2023 TASKIFY SYSTEMS. ALL RIGHTS RESERVED.</p>
+    <p><a href="privacy.html">PRIVACY POLICY</a> | <a href="terms.html">TERMS OF SERVICE</a></p>
   </footer>
 
   <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const icon = themeToggle.querySelector('i');
+    
+    function applyTheme(theme) {
+      if (theme === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        theme = prefersDark ? 'dark' : 'light';
+      }
+      
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      
+      // Update icon
+      if (theme === 'dark') {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      } else {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+      
+      // Add pulse animation
+      themeToggle.style.animation = 'none';
+      setTimeout(() => {
+        themeToggle.style.animation = 'pulse 0.5s ease';
+      }, 10);
+    });
+    
+    // Apply stored theme on load or use system preference
+    const storedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(storedTheme);
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme('system');
+      }
+    });
+
+    // Form submission handler
     document.getElementById('contact-form').addEventListener('submit', function(e) {
       e.preventDefault();
       
@@ -436,12 +661,12 @@
       // Show loading state
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalBtnText = submitBtn.innerHTML;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
       submitBtn.disabled = true;
       
       // Simulate form submission
       setTimeout(() => {
-        statusMessage.textContent = "Your message has been sent successfully! We'll get back to you soon.";
+        statusMessage.textContent = "YOUR MESSAGE HAS BEEN SENT SUCCESSFULLY! OUR TEAM WILL RESPOND WITHIN 24 HOURS.";
         statusMessage.className = "status-message success";
         
         // Reset form and button
@@ -455,6 +680,25 @@
           statusMessage.textContent = "";
         }, 5000);
       }, 1500);
+    });
+
+    // Add animation to contact cards
+    const contactCards = document.querySelectorAll('.contact-card');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    contactCards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = `all 0.6s ease-out ${index * 0.1}s`;
+      observer.observe(card);
     });
   </script>
 </body>
