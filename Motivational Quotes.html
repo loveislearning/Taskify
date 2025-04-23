@@ -1,177 +1,538 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Motivational Quotes & Stickers</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
   <style>
+    * { box-sizing: border-box; }
     body {
-      background: #181c20;
-      color: #f2f2f2;
-      font-family: 'Segoe UI', Arial, sans-serif;
       margin: 0;
       padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #f0f4f8;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      overflow-x: hidden;
+      transition: background 0.5s;
     }
-    .sidebar {
-      width: 230px;
-      background: #1a1f23;
-      height: 100vh;
-      position: fixed;
-      left: 0;
-      top: 0;
-      padding-top: 30px;
-      box-shadow: 2px 0 10px #0004;
-    }
-    .sidebar h2 {
-      color: #fff;
+    .container { max-width: 900px; width: 100%; }
+
+    header {
       text-align: center;
-      margin-bottom: 30px;
-      font-size: 1.7em;
+      margin-bottom: 50px;
+      animation: fadeInDown 1s ease forwards;
+    }
+    header h1 {
+      font-weight: 700;
+      font-size: 3rem;
+      letter-spacing: 3px;
+      margin-bottom: 10px;
+      color: #6ae3ff;
+      text-shadow: 0 0 10px #6ae3ffaa;
+      animation: movingType 3s linear infinite alternate;
+    }
+    header p {
+      font-weight: 400;
+      font-size: 1.25rem;
+      color: #c0d6e4cc;
+      font-style: italic;
       letter-spacing: 1px;
     }
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-    .sidebar ul li {
-      margin: 18px 0;
-      padding-left: 32px;
-      font-size: 1.1em;
-      color: #a7b1c2;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    .sidebar ul li:hover {
+    section h2 {
+      font-weight: 600;
+      font-size: 2rem;
+      margin-bottom: 25px;
+      border-bottom: 3px solid #6ae3ff;
+      padding-bottom: 8px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 2px;
       color: #6ae3ff;
+      text-shadow: 0 0 6px #6ae3ff88;
+      animation: fadeInUp 1s ease forwards;
     }
-    .main-content {
-      margin-left: 250px;
-      padding: 40px 5vw;
-    }
-    .quotes-section, .stickers-section {
-      margin-bottom: 40px;
-    }
-    .quotes-section h3, .stickers-section h3 {
-      color: #6ae3ff;
-      margin-bottom: 18px;
+    .quotes {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      animation: fadeInUp 1.2s ease forwards;
     }
     .quote-card {
-      background: #23272b;
-      border-radius: 10px;
-      margin-bottom: 18px;
-      padding: 18px 22px;
-      font-size: 1.2em;
-      box-shadow: 0 2px 8px #0003;
+      background: rgba(35, 39, 43, 0.85);
+      border-radius: 15px;
+      padding: 25px 30px;
+      font-size: 1.3rem;
+      line-height: 1.5;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
       position: relative;
+      cursor: default;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      animation: fadeInQuote 0.8s forwards;
+    }
+    .quote-card:nth-child(1) { animation-delay: 0.1s; }
+    .quote-card:nth-child(2) { animation-delay: 0.3s; }
+    .quote-card:nth-child(3) { animation-delay: 0.5s; }
+    .quote-card:nth-child(4) { animation-delay: 0.7s; }
+    .quote-card:nth-child(5) { animation-delay: 0.9s; }
+    .quote-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 28px #6ae3ffaa;
     }
     .quote-card::before {
       content: "“";
-      font-size: 2.5em;
+      font-size: 4rem;
       color: #6ae3ff;
       position: absolute;
-      left: 12px;
-      top: 8px;
-      opacity: 0.3;
+      top: 15px;
+      left: 20px;
+      opacity: 0.15;
+      font-weight: 900;
+      user-select: none;
     }
     .quote-author {
       display: block;
-      margin-top: 10px;
+      margin-top: 18px;
+      font-size: 1rem;
       color: #a7b1c2;
-      font-size: 0.95em;
+      font-style: italic;
       text-align: right;
+      letter-spacing: 0.05em;
     }
     .stickers-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 25px;
+      animation: fadeInUp 1.4s ease forwards;
     }
     .sticker {
-      background: #23272b;
-      border-radius: 10px;
-      padding: 14px;
-      width: 130px;
+      background: rgba(35, 39, 43, 0.85);
+      border-radius: 20px;
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 2px 8px #0003;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .sticker:hover {
+      transform: translateY(-10px) scale(1.08);
+      box-shadow: 0 14px 30px #6ae3ffbb;
+      animation: bounce 0.4s;
     }
     .sticker img {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
       object-fit: contain;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      filter: drop-shadow(0 0 3px #6ae3ffaa);
+      transition: filter 0.3s;
+    }
+    .sticker:hover img {
+      filter: drop-shadow(0 0 12px #6ae3ff);
     }
     .sticker-text {
+      font-weight: 600;
+      font-size: 1.1rem;
       color: #6ae3ff;
-      font-size: 1em;
-      font-weight: 500;
+      letter-spacing: 0.05em;
     }
-    @media (max-width: 700px) {
-      .sidebar { display: none; }
-      .main-content { margin-left: 0; padding: 20px 2vw; }
-      .stickers-grid { justify-content: center; }
+    .sticker .confetti {
+      pointer-events: none;
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      z-index: 2;
+    }
+    .cta-button {
+      display: block;
+      margin: 40px auto 0;
+      padding: 15px 40px;
+      background: #6ae3ff;
+      color: #181c20;
+      font-weight: 700;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px #6ae3ffbb;
+      transition: background 0.3s, box-shadow 0.3s;
+      user-select: none;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-button:hover {
+      background: #4fc3f7;
+      box-shadow: 0 8px 20px #4fc3f7cc;
+    }
+    .cta-button .confetti {
+      pointer-events: none;
+      position: absolute;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      z-index: 2;
+    }
+    .toggle-mode {
+      margin: 20px auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .toggle-switch {
+      width: 50px;
+      height: 26px;
+      background: #6ae3ff;
+      border-radius: 20px;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .toggle-switch::before {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 4px;
+      width: 18px;
+      height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: left 0.3s;
+    }
+    .toggle-switch.active {
+      background: #203a43;
+    }
+    .toggle-switch.active::before {
+      left: 28px;
+      background: #6ae3ff;
+    }
+    .toggle-label {
+      color: #6ae3ff;
+      font-weight: 600;
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+    footer {
+      margin-top: 60px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #7a8a9f;
+      user-select: none;
+    }
+    footer a {
+      color: #6ae3ff;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    footer a:hover {
+      color: #4fc3f7;
+      text-decoration: underline;
+    }
+    @keyframes fadeInDown {
+      0% { opacity: 0; transform: translateY(-20px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeInQuote {
+      0% { opacity: 0; transform: translateY(30px);}
+      100% { opacity: 1; transform: translateY(0);}
+    }
+    @keyframes bounce {
+      0% { transform: translateY(0);}
+      30% { transform: translateY(-12px) scale(1.15);}
+      60% { transform: translateY(0) scale(1.05);}
+      100% { transform: translateY(0) scale(1);}
+    }
+    @keyframes movingType {
+      0% { letter-spacing: 3px; }
+      100% { letter-spacing: 8px; }
+    }
+    @media (max-width: 600px) {
+      header h1 { font-size: 2.2rem; }
+      header p { font-size: 1rem; }
+      .quote-card { font-size: 1.1rem; padding: 18px 22px; }
+      .stickers-grid { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 18px; }
+      .sticker img { width: 60px; height: 60px; }
+      .sticker-text { font-size: 1rem; }
+      .cta-button { padding: 12px 30px; font-size: 1rem; }
+    }
+    body.dark-mode {
+      background: linear-gradient(135deg, #232526, #414345);
+      color: #f0f4f8;
+    }
+    body.dark-mode .cta-button {
+      background: #232526;
+      color: #6ae3ff;
+      box-shadow: 0 6px 15px #232526bb;
+    }
+    body.dark-mode .cta-button:hover {
+      background: #414345;
+      color: #6ae3ff;
+      box-shadow: 0 8px 20px #414345cc;
+    }
+    body.dark-mode .toggle-label {
+      color: #fff;
+    }
+    body.dark-mode .sticker-text,
+    body.dark-mode section h2,
+    body.dark-mode header h1 {
+      color: #fff;
+      text-shadow: 0 0 10px #6ae3ff88;
     }
   </style>
 </head>
 <body>
-  <div class="sidebar">
-    <h2>Taskify</h2>
-    <ul>
-      <li>Dashboard</li>
-      <li>Student Planner</li>
-      <li>Motivational Quotes</li>
-      <li>Stickers</li>
-      <li>Task Tracker</li>
-      <li>Pomodoro Timer</li>
-    </ul>
-  </div>
-  <div class="main-content">
+  <div class="container">
+    <header>
+      <h1>Motivational Corner</h1>
+      <p>Inspire your day, every day</p>
+    </header>
+
+    <div class="toggle-mode">
+      <span class="toggle-label">Light</span>
+      <div class="toggle-switch" tabindex="0" aria-label="Toggle dark mode"></div>
+      <span class="toggle-label">Dark</span>
+    </div>
+
     <section class="quotes-section">
-      <h3>Motivational Quotes</h3>
-      <div class="quote-card">
-        Success is stumbling from failure to failure with no loss of enthusiasm.
-        <span class="quote-author">— Winston Churchill</span>
-      </div>
-      <div class="quote-card">
-        Dreams don't work unless you do.
-        <span class="quote-author">— John C. Maxwell</span>
-      </div>
-      <div class="quote-card">
-        Start where you are. Use what you have. Do what you can.
-        <span class="quote-author">— Arthur Ashe</span>
-      </div>
-      <div class="quote-card">
-        If you change the way you look at things, the things you look at change.
-        <span class="quote-author">— Wayne Dyer</span>
-      </div>
-      <div class="quote-card">
-        Hold the vision, trust the process.
-        <span class="quote-author">— Unknown</span>
+      <h2>Motivational Quotes</h2>
+      <div class="quotes" id="quotes-list">
+        <div class="quote-card">
+          The only way to do great work is to love what you do.
+          <span class="quote-author">— Steve Jobs</span>
+        </div>
+        <div class="quote-card">
+          Believe you can and you're halfway there.
+          <span class="quote-author">— Theodore Roosevelt</span>
+        </div>
+        <div class="quote-card">
+          The future belongs to those who believe in the beauty of their dreams.
+          <span class="quote-author">— Eleanor Roosevelt</span>
+        </div>
+        <div class="quote-card">
+          The journey of a thousand miles begins with a single step.
+          <span class="quote-author">— Lao Tzu</span>
+        </div>
+        <div class="quote-card">
+          Your time is limited, so don't waste it living someone else's life.
+          <span class="quote-author">— Steve Jobs</span>
+        </div>
       </div>
     </section>
+
     <section class="stickers-section">
-      <h3>Stickers</h3>
-      <div class="stickers-grid">
-        <div class="sticker">
-          <img src="https://img.icons8.com/fluency/96/000000/star.png" alt="Star Sticker"/>
+      <h2>Stickers</h2>
+      <div class="stickers-grid" aria-label="Motivational stickers">
+        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="Shine Bright sticker">
+          <img src="https://img.icons8.com/fluency/96/000000/star.png" alt="Star Icon" />
           <div class="sticker-text">Shine Bright!</div>
         </div>
-        <div class="sticker">
-          <img src="https://img.icons8.com/color/96/000000/like--v3.png" alt="Thumbs Up Sticker"/>
+        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="You Did It sticker">
+          <img src="https://img.icons8.com/color/96/000000/like--v3.png" alt="Thumbs Up Icon" />
           <div class="sticker-text">You Did It!</div>
         </div>
-        <div class="sticker">
-          <img src="https://img.icons8.com/fluency/96/000000/rocket.png" alt="Rocket Sticker"/>
+        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="Keep Going sticker">
+          <img src="https://img.icons8.com/fluency/96/000000/rocket.png" alt="Rocket Icon" />
           <div class="sticker-text">Keep Going!</div>
         </div>
-        <div class="sticker">
-          <img src="https://img.icons8.com/fluency/96/000000/medal.png" alt="Medal Sticker"/>
+        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="Winner sticker">
+          <img src="https://img.icons8.com/fluency/96/000000/medal.png" alt="Medal Icon" />
           <div class="sticker-text">Winner!</div>
         </div>
-        <div class="sticker">
-          <img src="https://img.icons8.com/color/96/000000/smiling-face.png" alt="Smile Sticker"/>
+        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="Stay Positive sticker">
+          <img src="https://img.icons8.com/color/96/000000/smiling-face.png" alt="Smile Icon" />
           <div class="sticker-text">Stay Positive</div>
+        </div>
+        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="New Idea sticker">
+          <img src="https://img.icons8.com/clouds/100/000000/idea.png" alt="Idea Icon" />
+          <div class="sticker-text">New Idea!</div>
+        </div>
+        <div class="sticker" tabindex="0" role="button" aria-pressed="false" aria-label="Reach Goals sticker">
+          <img src="https://img.icons8.com/plasticine/100/000000/goal.png" alt="Goal Icon" />
+          <div class="sticker-text">Reach Goals</div>
         </div>
       </div>
     </section>
+
+    <button class="cta-button" aria-label="Get more inspiration">Get Inspired!
+      <canvas class="confetti" width="0" height="0" style="display:none;"></canvas>
+    </button>
   </div>
+
+  <footer>
+    &copy; 2025 Motivational Corner | Designed with ❤️ by <a href="#" target="_blank" rel="noopener noreferrer">Your Name</a>
+  </footer>
+  <script>
+    // Quotes for the "Get Inspired!" button
+    const quotes = [
+      {
+        text: "The only way to do great work is to love what you do.",
+        author: "— Steve Jobs"
+      },
+      {
+        text: "Believe you can and you're halfway there.",
+        author: "— Theodore Roosevelt"
+      },
+      {
+        text: "The future belongs to those who believe in the beauty of their dreams.",
+        author: "— Eleanor Roosevelt"
+      },
+      {
+        text: "The journey of a thousand miles begins with a single step.",
+        author: "— Lao Tzu"
+      },
+      {
+        text: "Your time is limited, so don't waste it living someone else's life.",
+        author: "— Steve Jobs"
+      },
+      {
+        text: "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+        author: "— Winston Churchill"
+      },
+      {
+        text: "Dream big and dare to fail.",
+        author: "— Norman Vaughan"
+      },
+      {
+        text: "Act as if what you do makes a difference. It does.",
+        author: "— William James"
+      },
+      {
+        text: "Don’t watch the clock; do what it does. Keep going.",
+        author: "— Sam Levenson"
+      }
+    ];
+
+    // Confetti animation for CTA button
+    function launchConfetti(canvas, duration = 700) {
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width = canvas.offsetWidth;
+      const H = canvas.height = canvas.offsetHeight;
+      const confettiCount = 30;
+      const confettiColors = ['#6ae3ff', '#fff', '#f7e96c', '#ff6b81', '#4fc3f7', '#a0e7e5'];
+      let confetti = [];
+      for (let i = 0; i < confettiCount; i++) {
+        confetti.push({
+          x: Math.random() * W,
+          y: Math.random() * H * 0.3,
+          r: 6 + Math.random() * 7,
+          d: Math.random() * confettiCount,
+          color: confettiColors[Math.floor(Math.random() * confettiColors.length)],
+          tilt: Math.random() * 10 - 10,
+          tiltAngleIncremental: (Math.random() * 0.07) + .05,
+          tiltAngle: 0
+        });
+      }
+      let angle = 0, tiltAngle = 0, animationFrame;
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        angle += 0.01;
+        tiltAngle += 0.1;
+        for (let i = 0; i < confettiCount; i++) {
+          let c = confetti[i];
+          c.y += (Math.cos(angle + c.d) + 1 + c.r / 3) * 1.2;
+          c.x += Math.sin(angle);
+          c.tiltAngle += c.tiltAngleIncremental;
+          c.tilt = Math.sin(c.tiltAngle - (i / 3)) * 15;
+          ctx.beginPath();
+          ctx.lineWidth = c.r;
+          ctx.strokeStyle = c.color;
+          ctx.moveTo(c.x + c.tilt + c.r / 2, c.y);
+          ctx.lineTo(c.x + c.tilt, c.y + c.tilt + 10);
+          ctx.stroke();
+        }
+      }
+      let start = null;
+      function animateConfetti(ts) {
+        if (!start) start = ts;
+        let elapsed = ts - start;
+        draw();
+        if (elapsed < duration) {
+          animationFrame = requestAnimationFrame(animateConfetti);
+        } else {
+          ctx.clearRect(0, 0, W, H);
+          canvas.style.display = 'none';
+        }
+      }
+      canvas.style.display = 'block';
+      requestAnimationFrame(animateConfetti);
+    }
+
+    // CTA Button: Show random quote and confetti
+    const ctaBtn = document.querySelector('.cta-button');
+    const quotesList = document.getElementById('quotes-list');
+    ctaBtn.addEventListener('click', function() {
+      // Confetti
+      const canvas = this.querySelector('.confetti');
+      canvas.width = this.offsetWidth;
+      canvas.height = this.offsetHeight;
+      launchConfetti(canvas);
+
+      // Random quote
+      const idx = Math.floor(Math.random() * quotes.length);
+      const quote = quotes[idx];
+      // Animate quote cards out
+      Array.from(quotesList.children).forEach(card => {
+        card.style.opacity = 0;
+        card.style.transform = 'translateY(40px)';
+      });
+      setTimeout(() => {
+        quotesList.innerHTML = `
+          <div class="quote-card" style="opacity:0; animation:fadeInQuote 0.7s forwards;">
+            ${quote.text}
+            <span class="quote-author">${quote.author}</span>
+          </div>
+        `;
+      }, 400);
+    });
+
+    // Sticker bounce and confetti
+    document.querySelectorAll('.sticker').forEach(sticker => {
+      sticker.addEventListener('click', function(e) {
+        // Confetti effect
+        let confetti = document.createElement('canvas');
+        confetti.className = 'confetti';
+        confetti.width = this.offsetWidth;
+        confetti.height = this.offsetHeight;
+        this.appendChild(confetti);
+        launchConfetti(confetti, 600);
+        setTimeout(() => { if (confetti.parentNode) confetti.parentNode.removeChild(confetti); }, 900);
+      });
+      sticker.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.click();
+        }
+      });
+    });
+
+    // Dark/Light mode toggle
+    const toggleSwitch = document.querySelector('.toggle-switch');
+    toggleSwitch.addEventListener('click', function() {
+      document.body.classList.toggle('dark-mode');
+      this.classList.toggle('active');
+    });
+    toggleSwitch.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.click();
+      }
+    });
+  </script>
 </body>
 </html>
