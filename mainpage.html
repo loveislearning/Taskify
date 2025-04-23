@@ -714,8 +714,8 @@
         <li><a href="Project_Management.htm">📂 Project Manager</a></li>
         <li><a href="spin_the_wheel.html">🎡 Spin The Wheel</a></li>
         <li><a onclick="showSection('pomodoro')">⏱ Pomodoro Timer</a></li>
-        <li><a onclick="showSection('subscription')">💳 Subscription</a></li>
-        <li><a onclick="showSection('collaboration')">🤝 Collaboration</a></li>
+        <li><a href="#" onclick="loadPage('collaborative_project_workspace.html')">🤝 Collaboration</a></li>
+        <li><a href="#" onclick="loadPage('subscription_model.html')">💳 Subscription</a></li>
         <li><a onclick="showSection('assistant')">🤖 AI Study Assistant</a></li>
         <li><a onclick="showSection('journal')">📔 Journal</a></li>
         <li><a href="/recycle_bin.html">🗑 Trash</a></li>
@@ -960,6 +960,25 @@
 
   <script>
     // Initialize Chart
+  function loadPage(page) {
+  const contentDiv = document.querySelector('.main-content');
+  // Optionally show a loading message
+  contentDiv.innerHTML = '<div style="text-align:center;padding:2em;">Loading...</div>';
+  fetch(page)
+    .then(response => {
+      if (!response.ok) throw new Error('Network response was not ok');
+      return response.text();
+    })
+    .then(html => {
+      contentDiv.innerHTML = html;
+      // Optionally, re-initialize scripts for the loaded page here
+    })
+    .catch(error => {
+      contentDiv.innerHTML = '<div style="color:red;">Failed to load content.</div>';
+      console.error('Error loading page:', error);
+    });
+  }
+
     function initChart() {
       const ctx = document.getElementById('progressChart').getContext('2d');
       const gradient = ctx.createLinearGradient(0, 0, 0, 400);
