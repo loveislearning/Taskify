@@ -5,30 +5,78 @@
   <title>Reference Materials: Quick Access</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    :root {
+      --bg: #f5f7fa;
+      --main-bg: #fff;
+      --text: #222;
+      --header-bg: linear-gradient(90deg,#3f51b5 60%, #5c6bc0 100%);
+      --header-text: #fff;
+      --nav-bg: #e8eaf6;
+      --nav-active: #c5cae9;
+      --section-bg: #fafbff;
+      --section-border: #3f51b5;
+      --table-bg: #f8fafc;
+      --table-head: #e3e6f3;
+      --table-head-text: #3f51b5;
+      --code-bg: #e8eaf6;
+    }
+    body.light-mode {
+      /* Default: same as :root */
+    }
+    body.dark-mode {
+      --bg: #181a1b;
+      --main-bg: #23272e;
+      --text: #e0e6ef;
+      --header-bg: linear-gradient(90deg,#23272e 60%, #343a40 100%);
+      --header-text: #ffe082;
+      --nav-bg: #23272e;
+      --nav-active: #343a40;
+      --section-bg: #23272e;
+      --section-border: #ffe082;
+      --table-bg: #23272e;
+      --table-head: #343a40;
+      --table-head-text: #ffe082;
+      --code-bg: #23272e;
+    }
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      background: #f5f7fa;
-      margin: 0;
-      padding: 0;
-      color: #222;
+      background: var(--bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
     }
     header {
-      background: linear-gradient(90deg,#3f51b5 60%, #5c6bc0 100%);
-      color: #fff;
-      padding: 1.2em 0;
+      background: var(--header-bg);
+      color: var(--header-text);
+      position: relative;
+      box-shadow: 0 2px 6px #3f51b530;
+      padding: 1.2em 0 1.2em 0;
       text-align: center;
       letter-spacing: 1px;
-      box-shadow: 0 2px 6px #3f51b530;
     }
     header h1 {
       margin: 0;
       font-size: 2.1em;
     }
+    #theme-toggle {
+      position: absolute;
+      top: 1.2em;
+      right: 2em;
+      font-size: 1.2em;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: inherit;
+      transition: color 0.3s;
+      padding: 0.2em 0.7em;
+      border-radius: 20px;
+    }
+    #theme-toggle:focus {
+      outline: 2px solid var(--section-border);
+    }
     nav {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      background: #e8eaf6;
+      background: var(--nav-bg);
       border-bottom: 1px solid #c5cae9;
       box-shadow: 0 1px 3px #c5cae930;
     }
@@ -38,7 +86,7 @@
       padding: 1em 1.6em;
       cursor: pointer;
       font-size: 1em;
-      color: #3f51b5;
+      color: var(--section-border);
       transition: background 0.2s;
       border-radius: 0 0 8px 8px;
       margin: 0 2px;
@@ -47,14 +95,14 @@
       gap: 0.4em;
     }
     nav button.active, nav button:focus, nav button:hover {
-      background: #c5cae9;
+      background: var(--nav-active);
       font-weight: bold;
       outline: none;
     }
     main {
       max-width: 1100px;
       margin: 2em auto;
-      background: #fff;
+      background: var(--main-bg);
       box-shadow: 0 2px 14px rgba(63,81,181,0.07);
       border-radius: 12px;
       padding: 2.5em 2em 2em 2em;
@@ -64,9 +112,9 @@
       margin-bottom: 1.5em;
       border-radius: 10px;
       padding: 1.5em 1em;
-      background: #fafbff;
+      background: var(--section-bg);
       box-shadow: 0 1px 4px #3f51b510;
-      border-left: 4px solid #3f51b5;
+      border-left: 4px solid var(--section-border);
     }
     section.active {
       display: block;
@@ -78,7 +126,7 @@
     }
     h2 {
       margin-top: 0;
-      color: #3f51b5;
+      color: var(--section-border);
       letter-spacing: 1px;
       font-size: 1.3em;
       display: flex;
@@ -97,7 +145,7 @@
       width: 100%;
       border-collapse: collapse;
       margin-top: 1em;
-      background: #f8fafc;
+      background: var(--table-bg);
       border-radius: 6px;
       overflow: hidden;
     }
@@ -107,8 +155,8 @@
       text-align: center;
     }
     th {
-      background: #e3e6f3;
-      color: #3f51b5;
+      background: var(--table-head);
+      color: var(--table-head-text);
     }
     .search-box {
       margin: 0.5em 0 1em 0;
@@ -122,12 +170,17 @@
       border-radius: 5px;
       font-size: 1em;
       width: 200px;
+      background: var(--main-bg);
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
     }
     code {
-      background: #e8eaf6;
+      background: var(--code-bg);
       border-radius: 4px;
       padding: 2px 5px;
       font-size: 0.98em;
+      color: var(--text);
+      transition: background 0.3s, color 0.3s;
     }
     .icon {
       font-size: 1.2em;
@@ -142,13 +195,14 @@
       nav { flex-direction: column; }
       nav button { border-radius: 0; margin: 0; width: 100%; }
       main { padding: 0.5em; }
+      #theme-toggle { top: 0.5em; right: 1em; }
     }
   </style>
-  <!-- Icons with Emoji for simplicity, you can use SVG or FontAwesome for more -->
 </head>
 <body>
   <header>
     <h1>Reference Materials: Quick Access</h1>
+    <button id="theme-toggle" aria-label="Toggle dark mode">🌙 Dark Mode</button>
   </header>
   <nav aria-label="Main navigation">
     <button class="tab active" data-tab="formulas">🧮 Formulas</button>
@@ -431,6 +485,35 @@
     </section>
   </main>
   <script>
+    // Theme toggle logic with localStorage
+    const toggleBtn = document.getElementById('theme-toggle');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+    const body = document.body;
+
+    function setTheme(theme) {
+      body.classList.remove('light-mode', 'dark-mode');
+      body.classList.add(theme + '-mode');
+      if (theme === 'dark') {
+        toggleBtn.innerHTML = '🌞 Light Mode';
+      } else {
+        toggleBtn.innerHTML = '🌙 Dark Mode';
+      }
+    }
+
+    // Initial theme on load
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else {
+      setTheme(prefersDark ? 'dark' : 'light');
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      const isDark = body.classList.contains('dark-mode');
+      setTheme(isDark ? 'light' : 'dark');
+      localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    });
+
     // Tab switching logic
     document.querySelectorAll('.tab').forEach(btn => {
       btn.addEventListener('click', function() {
