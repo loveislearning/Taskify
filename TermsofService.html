@@ -4,7 +4,31 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Terms of Service - Takify</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --bg-color: #0a0a1a;
+      --text-color: #e0e0ff;
+      --card-bg: #12122b;
+      --accent-color: #3a7bd5;
+      --hover-color: #4a8be5;
+      --danger-color: #ff2d75;
+      --border-radius: 16px;
+      --transition-speed: 0.4s;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --neon-glow: 0 0 10px var(--accent-color), 0 0 20px rgba(58, 123, 213, 0.5);
+      --glass-effect: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Light theme variables */
+    [data-theme="light"] {
+      --bg-color: #f0f5ff;
+      --text-color: #12122b;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --glass-effect: rgba(255, 255, 255, 0.7);
+    }
+
     /* Reset and base styles */
     * {
       box-sizing: border-box;
@@ -13,71 +37,190 @@
     }
 
     body {
-      background-color: #121212;
-      color: #E0E0E0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
       line-height: 1.6;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
       padding: 20px;
+      transition: all var(--transition-speed);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(58, 123, 213, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(58, 123, 213, 0.1) 0%, transparent 20%);
+    }
+
+    @font-face {
+      font-family: 'Orbitron';
+      src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
     }
 
     .container {
-      background-color: #1E1E1E;
-      border-radius: 12px;
+      background: var(--glass-effect);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--border-radius);
       padding: 40px 30px;
       max-width: 900px;
       width: 100%;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      box-shadow: var(--shadow);
       animation: fadeIn 0.8s ease-in-out both;
       overflow-y: auto;
       max-height: 90vh;
+      border: 1px solid rgba(58, 123, 213, 0.2);
+      position: relative;
+    }
+
+    .container::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(58, 123, 213, 0.1) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
     }
 
     h1 {
       text-align: center;
       font-size: 2.75rem;
       margin-bottom: 30px;
-      color: #BB86FC;
+      color: var(--accent-color);
       animation: slideIn 0.6s ease-out;
+      text-shadow: 0 0 5px rgba(58, 123, 213, 0.5);
+      letter-spacing: 1px;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--accent-color);
+      box-shadow: 0 0 10px var(--accent-color);
     }
 
     .section-title {
       font-size: 1.4rem;
       font-weight: 600;
-      color: #FFFFFF;
+      color: var(--text-color);
       margin-top: 30px;
       margin-bottom: 10px;
       animation: fadeInUp 0.6s ease-out;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      box-shadow: 0 0 5px var(--accent-color);
     }
 
     p {
       margin-bottom: 20px;
       font-size: 1rem;
-      color: #CCCCCC;
+      color: var(--text-color);
+      opacity: 0.9;
     }
 
-    /* Scrollbar styling for better UX */
+    /* Theme toggle button */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--glass-effect);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(58, 123, 213, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-speed);
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      border-color: var(--accent-color);
+    }
+
+    .theme-toggle i {
+      font-size: 1.2rem;
+      color: var(--text-color);
+      transition: all var(--transition-speed);
+    }
+
+    .theme-toggle:hover i {
+      color: var(--accent-color);
+    }
+
+    /* Back button */
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background: var(--glass-effect);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(58, 123, 213, 0.3);
+      border-radius: var(--border-radius);
+      color: var(--text-color);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--transition-speed);
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .back-button:hover {
+      transform: translateX(-5px);
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    /* Scrollbar styling */
     .container::-webkit-scrollbar {
       width: 8px;
     }
 
     .container::-webkit-scrollbar-thumb {
-      background-color: #333;
+      background-color: rgba(58, 123, 213, 0.5);
       border-radius: 10px;
+    }
+
+    .container::-webkit-scrollbar-track {
+      background: transparent;
     }
 
     /* Animations */
     @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes slideIn {
-      from { transform: translateX(-50px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     @keyframes fadeInUp {
@@ -85,9 +228,17 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    @media (max-width: 600px) {
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(58, 123, 213, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0); }
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
       .container {
         padding: 30px 20px;
+        max-height: 85vh;
       }
 
       h1 {
@@ -102,53 +253,170 @@
         font-size: 0.95rem;
       }
     }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px 15px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+      }
+
+      .back-button {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+      }
+
+      .theme-toggle {
+        width: 40px;
+        height: 40px;
+      }
+    }
   </style>
 </head>
 <body>
+  <!-- Theme toggle button -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <!-- Back button -->
+  <a href="index.html" class="back-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back</span>
+  </a>
+
   <main class="container" role="main" aria-labelledby="terms-title">
-    <h1 id="terms-title">Terms of Service</h1>
+    <h1 id="terms-title">TERMS OF SERVICE</h1>
 
     <p>Welcome to Takify! Please read these Terms of Service ("Terms", "Terms of Service") carefully before using the Takify website (the "Service") operated by Takify Inc. ("us", "we", or "our").</p>
 
     <section>
-      <div class="section-title">1. Acceptance of Terms</div>
-      <p>By accessing or using the Service, you agree to be bound by these Terms. If you do not agree with any part of the Terms, you must not use the Service.</p>
+      <div class="section-title">1. ACCEPTANCE OF TERMS</div>
+      <p>By accessing or using the Service, you agree to be bound by these Terms. If you do not agree with any part of the Terms, you must not use the Service. These Terms constitute a legally binding agreement between you and Takify regarding your use of the Service.</p>
     </section>
 
     <section>
-      <div class="section-title">2. Use of Service</div>
-      <p>You are granted a non-exclusive, non-transferable license to access and use the Service in accordance with these Terms. You agree not to misuse the Service in any way, including but not limited to attempting to hack, disable, or damage the Service.</p>
+      <div class="section-title">2. USE OF SERVICE</div>
+      <p>You are granted a non-exclusive, non-transferable license to access and use the Service in accordance with these Terms. You agree not to misuse the Service in any way, including but not limited to attempting to hack, disable, or damage the Service. Any unauthorized use of the Service may result in termination of your access.</p>
     </section>
 
     <section>
-      <div class="section-title">3. Privacy</div>
-      <p>Our Privacy Policy governs the collection, use, and sharing of your personal information. By using the Service, you consent to the practices described in the Privacy Policy.</p>
+      <div class="section-title">3. PRIVACY POLICY</div>
+      <p>Our Privacy Policy governs the collection, use, and sharing of your personal information. By using the Service, you consent to the practices described in the Privacy Policy. We are committed to protecting your privacy and handling your data in accordance with applicable laws and regulations.</p>
     </section>
 
     <section>
-      <div class="section-title">4. User Content</div>
-      <p>You retain ownership of any content you create or upload to the Service. By submitting content, you grant Takify a worldwide, royalty-free license to use, modify, and display such content in connection with the Service.</p>
+      <div class="section-title">4. USER CONTENT</div>
+      <p>You retain ownership of any content you create or upload to the Service. By submitting content, you grant Takify a worldwide, royalty-free license to use, modify, and display such content in connection with the Service. You represent and warrant that you have all necessary rights to any content you submit.</p>
     </section>
 
     <section>
-      <div class="section-title">5. Termination</div>
-      <p>We may terminate or suspend your account and access to the Service at any time, without notice, for conduct that we believe violates these Terms or is harmful to other users of the Service.</p>
+      <div class="section-title">5. ACCOUNT TERMINATION</div>
+      <p>We may terminate or suspend your account and access to the Service at any time, without notice, for conduct that we believe violates these Terms or is harmful to other users of the Service. You may terminate your account at any time by contacting our support team.</p>
     </section>
 
     <section>
-      <div class="section-title">6. Limitation of Liability</div>
-      <p>Takify will not be held liable for any damages, losses, or liabilities arising from your use or inability to use the Service. Our liability is limited to the maximum extent allowed by law.</p>
+      <div class="section-title">6. LIMITATION OF LIABILITY</div>
+      <p>Takify will not be held liable for any damages, losses, or liabilities arising from your use or inability to use the Service. Our liability is limited to the maximum extent allowed by law. The Service is provided "as is" without warranties of any kind, either express or implied.</p>
     </section>
 
     <section>
-      <div class="section-title">7. Modifications</div>
-      <p>We reserve the right to modify or update these Terms at any time. Any changes will be effective immediately upon posting on the Service. Your continued use of the Service constitutes acceptance of those changes.</p>
+      <div class="section-title">7. MODIFICATIONS TO TERMS</div>
+      <p>We reserve the right to modify or update these Terms at any time. Any changes will be effective immediately upon posting on the Service. Your continued use of the Service constitutes acceptance of those changes. We will notify users of significant changes through the Service or via email.</p>
     </section>
 
     <section>
-      <div class="section-title">8. Governing Law</div>
-      <p>These Terms are governed by and construed in accordance with the laws of your jurisdiction, without regard to its conflict of law principles.</p>
+      <div class="section-title">8. GOVERNING LAW</div>
+      <p>These Terms are governed by and construed in accordance with the laws of your jurisdiction, without regard to its conflict of law principles. Any disputes arising from these Terms shall be resolved in the courts of the jurisdiction where Takify Inc. is registered.</p>
+    </section>
+
+    <section>
+      <div class="section-title">9. CONTACT INFORMATION</div>
+      <p>If you have any questions about these Terms, please contact us at legal@takify.com. Our support team is available to assist you with any inquiries regarding our Terms of Service or your use of our platform.</p>
     </section>
   </main>
+
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const icon = themeToggle.querySelector('i');
+    
+    function applyTheme(theme) {
+      if (theme === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        theme = prefersDark ? 'dark' : 'light';
+      }
+      
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      
+      // Update icon
+      if (theme === 'dark') {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      } else {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+      
+      // Add pulse animation
+      themeToggle.style.animation = 'none';
+      setTimeout(() => {
+        themeToggle.style.animation = 'pulse 0.5s ease';
+      }, 10);
+    });
+    
+    // Apply stored theme on load or use system preference
+    const storedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(storedTheme);
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme('system');
+      }
+    });
+
+    // Add animation to sections as they come into view
+    const sections = document.querySelectorAll('section');
+    
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    sections.forEach(section => {
+      section.style.opacity = '0';
+      section.style.transform = 'translateY(20px)';
+      section.style.transition = 'all 0.6s ease-out';
+      observer.observe(section);
+    });
+
+    // Add hover effect to back button
+    const backButton = document.querySelector('.back-button');
+    backButton.addEventListener('mouseenter', () => {
+      backButton.querySelector('i').style.transform = 'translateX(-3px)';
+    });
+    backButton.addEventListener('mouseleave', () => {
+      backButton.querySelector('i').style.transform = 'translateX(0)';
+    });
+  </script>
 </body>
 </html>
