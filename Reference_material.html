@@ -6,197 +6,234 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --bg: #f5f7fa;
-      --main-bg: #fff;
-      --text: #222;
-      --header-bg: linear-gradient(90deg,#3f51b5 60%, #5c6bc0 100%);
-      --header-text: #fff;
-      --nav-bg: #e8eaf6;
-      --nav-active: #c5cae9;
-      --section-bg: #fafbff;
-      --section-border: #3f51b5;
-      --table-bg: #f8fafc;
-      --table-head: #e3e6f3;
-      --table-head-text: #3f51b5;
-      --code-bg: #e8eaf6;
-    }
-    body.light-mode {
-      /* Default: same as :root */
-    }
-    body.dark-mode {
-      --bg: #181a1b;
-      --main-bg: #23272e;
-      --text: #e0e6ef;
-      --header-bg: linear-gradient(90deg,#23272e 60%, #343a40 100%);
-      --header-text: #ffe082;
-      --nav-bg: #23272e;
-      --nav-active: #343a40;
-      --section-bg: #23272e;
-      --section-border: #ffe082;
-      --table-bg: #23272e;
-      --table-head: #343a40;
-      --table-head-text: #ffe082;
-      --code-bg: #23272e;
-    }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
-    header {
-      background: var(--header-bg);
-      color: var(--header-text);
-      position: relative;
-      box-shadow: 0 2px 6px #3f51b530;
-      padding: 1.2em 0 1.2em 0;
-      text-align: center;
-      letter-spacing: 1px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2.1em;
-    }
-    #theme-toggle {
-      position: absolute;
-      top: 1.2em;
-      right: 2em;
-      font-size: 1.2em;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: inherit;
-      transition: color 0.3s;
-      padding: 0.2em 0.7em;
-      border-radius: 20px;
-    }
-    #theme-toggle:focus {
-      outline: 2px solid var(--section-border);
-    }
-    nav {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      background: var(--nav-bg);
-      border-bottom: 1px solid #c5cae9;
-      box-shadow: 0 1px 3px #c5cae930;
-    }
-    nav button {
-      background: none;
-      border: none;
-      padding: 1em 1.6em;
-      cursor: pointer;
-      font-size: 1em;
-      color: var(--section-border);
-      transition: background 0.2s;
-      border-radius: 0 0 8px 8px;
-      margin: 0 2px;
-      display: flex;
-      align-items: center;
-      gap: 0.4em;
-    }
-    nav button.active, nav button:focus, nav button:hover {
-      background: var(--nav-active);
-      font-weight: bold;
-      outline: none;
-    }
-    main {
-      max-width: 1100px;
-      margin: 2em auto;
-      background: var(--main-bg);
-      box-shadow: 0 2px 14px rgba(63,81,181,0.07);
-      border-radius: 12px;
-      padding: 2.5em 2em 2em 2em;
-    }
-    section {
-      display: none;
-      margin-bottom: 1.5em;
-      border-radius: 10px;
-      padding: 1.5em 1em;
-      background: var(--section-bg);
-      box-shadow: 0 1px 4px #3f51b510;
-      border-left: 4px solid var(--section-border);
-    }
-    section.active {
-      display: block;
-      animation: fadeIn 0.4s;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px);}
-      to { opacity: 1; transform: none;}
-    }
-    h2 {
-      margin-top: 0;
-      color: var(--section-border);
-      letter-spacing: 1px;
-      font-size: 1.3em;
-      display: flex;
-      align-items: center;
-      gap: 0.5em;
-    }
-    ul {
-      margin-top: 0.5em;
-      margin-bottom: 0.5em;
-      padding-left: 1.2em;
-    }
-    li {
-      margin-bottom: 0.4em;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 1em;
-      background: var(--table-bg);
-      border-radius: 6px;
-      overflow: hidden;
-    }
-    th, td {
-      border: 1px solid #bdbdbd;
-      padding: 0.5em 0.6em;
-      text-align: center;
-    }
-    th {
-      background: var(--table-head);
-      color: var(--table-head-text);
-    }
-    .search-box {
-      margin: 0.5em 0 1em 0;
-      display: flex;
-      align-items: center;
-      gap: 0.5em;
-    }
-    .search-box input {
-      padding: 0.4em 0.7em;
-      border: 1px solid #bdbdbd;
-      border-radius: 5px;
-      font-size: 1em;
-      width: 200px;
-      background: var(--main-bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
-    code {
-      background: var(--code-bg);
-      border-radius: 4px;
-      padding: 2px 5px;
-      font-size: 0.98em;
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
-    .icon {
-      font-size: 1.2em;
-      vertical-align: middle;
-    }
-    @media (max-width: 800px) {
-      main { padding: 1em; }
-      nav button { padding: 0.7em 0.8em; font-size: 0.97em; }
-      table { font-size: 0.97em; }
-    }
-    @media (max-width: 600px) {
-      nav { flex-direction: column; }
-      nav button { border-radius: 0; margin: 0; width: 100%; }
-      main { padding: 0.5em; }
-      #theme-toggle { top: 0.5em; right: 1em; }
-    }
+  --bg: #000;
+  --main-bg: #000;
+  --text: #fff;
+  --header-bg: #111;
+  --header-text: #fff;
+  --nav-bg: #111;
+  --nav-active: #222;
+  --section-bg: #000;
+  --section-border: #0099ff;
+  --table-bg: #000;
+  --table-head: #111;
+  --table-head-text: #0099ff;
+  --code-bg: #111;
+  --accent: #0099ff;
+  --button-bg: #0099ff;
+  --button-hover-bg: #0070cc;
+  --button-text: #fff;
+  --input-bg: #111;
+  --input-text: #fff;
+  --input-border: #0099ff;
+}
+
+body, body.light-mode, body.dark-mode {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  transition: background 0.3s, color 0.3s;
+}
+
+header {
+  background: var(--header-bg);
+  color: var(--header-text);
+  position: relative;
+  box-shadow: none;
+  padding: 1.2em 0 1.2em 0;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.1em;
+  color: var(--header-text);
+}
+
+#theme-toggle {
+  position: absolute;
+  top: 1.2em;
+  right: 2em;
+  font-size: 1.2em;
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  padding: 0.2em 0.7em;
+  border-radius: 20px;
+}
+#theme-toggle:focus {
+  outline: 2px solid var(--section-border);
+}
+
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: var(--nav-bg);
+  border-bottom: 1px solid #222;
+  box-shadow: none;
+}
+
+nav button {
+  background: none;
+  border: none;
+  padding: 1em 1.6em;
+  cursor: pointer;
+  font-size: 1em;
+  color: var(--text);
+  transition: background 0.2s, color 0.2s;
+  border-radius: 0 0 8px 8px;
+  margin: 0 2px;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+nav button.active, nav button:focus, nav button:hover {
+  background: var(--nav-active);
+  color: var(--accent);
+  font-weight: bold;
+  outline: none;
+}
+
+main {
+  max-width: 1100px;
+  margin: 2em auto;
+  background: var(--main-bg);
+  box-shadow: none;
+  border-radius: 12px;
+  padding: 2.5em 2em 2em 2em;
+}
+
+section {
+  display: none;
+  margin-bottom: 1.5em;
+  border-radius: 10px;
+  padding: 1.5em 1em;
+  background: var(--section-bg);
+  box-shadow: none;
+  border-left: 4px solid var(--section-border);
+}
+
+section.active {
+  display: block;
+  animation: fadeIn 0.4s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px);}
+  to { opacity: 1; transform: none;}
+}
+
+h2 {
+  margin-top: 0;
+  color: var(--accent);
+  letter-spacing: 1px;
+  font-size: 1.3em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+ul {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  padding-left: 1.2em;
+}
+
+li {
+  margin-bottom: 0.4em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+  background: var(--table-bg);
+  border-radius: 6px;
+  overflow: hidden;
+  color: var(--text);
+}
+
+th, td {
+  border: 1px solid #222;
+  padding: 0.5em 0.6em;
+  text-align: center;
+}
+
+th {
+  background: var(--table-head);
+  color: var(--table-head-text);
+}
+
+.search-box {
+  margin: 0.5em 0 1em 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.search-box input {
+  padding: 0.4em 0.7em;
+  border: 1px solid var(--input-border);
+  border-radius: 5px;
+  font-size: 1em;
+  width: 200px;
+  background: var(--input-bg);
+  color: var(--input-text);
+  transition: background 0.3s, color 0.3s, border 0.3s;
+}
+.search-box input:focus {
+  outline: none;
+  border: 2px solid var(--accent);
+}
+
+code {
+  background: var(--code-bg);
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 0.98em;
+  color: var(--accent);
+  transition: background 0.3s, color 0.3s;
+}
+
+.icon {
+  font-size: 1.2em;
+  vertical-align: middle;
+}
+
+button, .cta-btn {
+  background: var(--button-bg);
+  color: var(--button-text);
+  border: none;
+  border-radius: 6px;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+
+button:hover, .cta-btn:hover {
+  background: var(--button-hover-bg);
+}
+
+@media (max-width: 800px) {
+  main { padding: 1em; }
+  nav button { padding: 0.7em 0.8em; font-size: 0.97em; }
+  table { font-size: 0.97em; }
+}
+@media (max-width: 600px) {
+  nav { flex-direction: column; }
+  nav button { border-radius: 0; margin: 0; width: 100%; }
+  main { padding: 0.5em; }
+  #theme-toggle { top: 0.5em; right: 1em; }
+}
+
   </style>
 </head>
 <body>
