@@ -618,7 +618,6 @@
       html.setAttribute('data-theme', theme);
       localStorage.setItem('theme', theme);
       
-      // Update icon
       if (theme === 'dark') {
         icon.classList.remove('fa-sun');
         icon.classList.add('fa-moon');
@@ -633,48 +632,40 @@
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       applyTheme(newTheme);
       
-      // Add pulse animation
       themeToggle.style.animation = 'none';
       setTimeout(() => {
         themeToggle.style.animation = 'pulse 0.5s ease';
       }, 10);
     });
     
-    // Apply stored theme on load or use system preference
     const storedTheme = localStorage.getItem('theme') || 'dark';
     applyTheme(storedTheme);
     
-    // Listen for system theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
       if (!localStorage.getItem('theme')) {
         applyTheme('system');
       }
     });
 
-    // Form submission handler
     document.getElementById('contact-form').addEventListener('submit', function(e) {
       e.preventDefault();
       
       const form = e.target;
       const statusMessage = document.getElementById('status-message');
       
-      // Show loading state
       const submitBtn = form.querySelector('button[type="submit"]');
       const originalBtnText = submitBtn.innerHTML;
       submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> SENDING...';
       submitBtn.disabled = true;
       
-      // Simulate form submission
       setTimeout(() => {
         statusMessage.textContent = "YOUR MESSAGE HAS BEEN SENT SUCCESSFULLY! OUR TEAM WILL RESPOND WITHIN 24 HOURS.";
         statusMessage.className = "status-message success";
         
-        // Reset form and button
         form.reset();
         submitBtn.innerHTML = originalBtnText;
         submitBtn.disabled = false;
         
-        // Hide message after 5 seconds
         setTimeout(() => {
           statusMessage.className = "status-message";
           statusMessage.textContent = "";
@@ -682,7 +673,6 @@
       }, 1500);
     });
 
-    // Add animation to contact cards
     const contactCards = document.querySelectorAll('.contact-card');
     
     const observer = new IntersectionObserver((entries) => {
