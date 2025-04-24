@@ -143,21 +143,36 @@ document.addEventListener('DOMContentLoaded', function () {
     function renderMessages() {
         chatMessages.innerHTML = '';
         messages.forEach(message => {
+            const member = members.find(m => m.name === message.sender) || { name: message.sender };
+            const initials = member.name.split(' ').map(n => n[0]).join('');
+            const avatarHtml = `<div class="member-avatar" style="width:28px;height:28px;font-size:0.9em;margin-bottom:3px;">${initials}</div>`;
             const messageElement = document.createElement('div');
             messageElement.className = `chat-message ${message.outgoing ? 'outgoing' : 'incoming'}`;
-
-            messageElement.innerHTML = `
-                <div class="message-sender">${message.sender}</div>
-                <div class="message-text">${message.text}</div>
-                <div class="message-time">${message.time}</div>
+            let content = `
+                <div style="display:flex;align-items:center;gap:8px;">
+                    ${!message.outgoing ? avatarHtml : ''}
+                    <div>
+                        <div class="message-sender">${message.sender}</div>
+                        <div class="message-text">`;
+            if (message.isAttachment) {
+                if (message.fileType.startsWith('image/')) {
+                    content += `<img src="${message.fileURL}" alt="${message.fileName}" style="max-width:120px;max-height:80px;border-radius:4px;display:block;margin-bottom:5px;"><br>`;
+                }
+                content += `<a href="${message.fileURL}" download="${message.fileName}" style="color:var(--accent-color);">${message.fileName}</a>`;
+            } else {
+                content += message.text;
+            }
+            content += `</div>
+                        <div class="message-time">${message.time}</div>
+                    </div>
+                </div>
             `;
-
+            messageElement.innerHTML = content;
             chatMessages.appendChild(messageElement);
         });
-
-        // Scroll to bottom of chat
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
+
 
     function addNewTask() {
         const taskText = newTaskInput.value.trim();
