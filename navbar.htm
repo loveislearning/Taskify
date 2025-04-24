@@ -8,7 +8,7 @@
     body {
       margin: 0;
       background-color: #000;
-      font-family: sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .sidebar {
@@ -43,6 +43,7 @@
     }
 
     .icon {
+      position: relative;
       width: 55px;
       height: 55px;
       aspect-ratio: 1 / 1;
@@ -53,6 +54,7 @@
       background-position: center;
       background-repeat: no-repeat;
       transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .sidebar .icon:last-child {
@@ -64,6 +66,32 @@
       background-color: #333;
       transform: scale(1.05);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Beautiful title text styles */
+    .icon::after {
+      content: attr(title);
+      position: absolute;
+      left: 80px;
+      background: #333;
+      color: #fff;
+      padding: 8px 15px;
+      border-radius: 6px;
+      white-space: nowrap;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      transform: translateX(-10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 100;
+    }
+
+    .icon:hover::after {
+      opacity: 1;
+      transform: translateX(0);
     }
 
     .divider {
@@ -93,6 +121,11 @@
         width: 40px;
         height: 40px;
       }
+      
+      .icon::after {
+        font-size: 12px;
+        padding: 6px 12px;
+      }
     }
 
     @media (max-width: 768px) and (hover: hover) {
@@ -105,36 +138,35 @@
 <body>
 
   <div class="sidebar">
-    <div class="icon" style="background-image: url('/logo.png');" title="my.png" aria-label="Logo"></div>
+    <div class="icon" style="background-image: url('/logo.png');" aria-label="Logo"></div>
 
     <div class="divider"></div>
 
-    <div class="icon" style="background-image: url('/Dashboard.png');" title="my.png" aria-label="User 1"></div>
+    <div class="icon" style="background-image: url('/Dashboard.png');" title="Dashboard" aria-label="Dashboard"></div>
 
-    <div class="icon" style="background-image: url('/Grade.png');" title="my.png" aria-label="My Photo"></div>
+    <div class="icon" style="background-image: url('/Grade.png');" title="Grade Calculator" aria-label="Grade Calculator"></div>
 
-    <div class="icon" style="background-image: url('/SubjectNaotes.png');" title="my.png" aria-label="Custom Icon"></div>
+    <div class="icon" style="background-image: url('/SubjectNaotes.png');" title="Subject Notes" aria-label="Subject Notes"></div>
 
-    <div class="icon" style="background-image: url('/TaskManager.png');" title="my.png" aria-label="Computer"></div>
+    <div class="icon" style="background-image: url('/TaskManager.png');" title="Task Manager" aria-label="Task Manager"></div>
     
-    <div class="icon" style="background-image: url('/ProjectManagement.png');" title="my.png" aria-label="Project Management"></div>
+    <div class="icon" style="background-image: url('/ProjectManagement.png');" title="Project Manager" aria-label="Project Management"></div>
 
-    <div class="icon" style="background-image: url('/SpinTheWheel.png');" title="my.png" aria-label="Spin The Task"></div>
+    <div class="icon" style="background-image: url('/SpinTheWheel.png');" title="Spin The Task" aria-label="Spin The Task"></div>
 
-    <div class="icon" style="background-image: url('/Motivational.png');" title="my.png" aria-label="Duplicate 9"></div>
-
-    <div class="icon" style="background-image: url('/Timer.png');" title="my.png" aria-label="Duplicate 3"></div>
+    <div class="icon" style="background-image: url('/Motivational.png');" title="Inspirational Quotes" aria-label="Quotes"></div>
     
-    <div class="icon" style="background-image: url('/Subscription.png');" title="my.png" aria-label="Duplicate 4"></div>
-
-    <div class="icon" style="background-image: url('/Collaborative.png');" title="my.png" aria-label="Collaboration"></div>
+    <div class="icon" style="background-image: url('/Timer.png');" title="Focus Timer" aria-label="Timer"></div>
     
-    <div class="icon" style="background-image: url('/Ai.png');" title="my.png" aria-label="Duplicate 6"></div>
+    <div class="icon" style="background-image: url('/Subscription.png');" title="Subscriptions" aria-label="Subscription"></div>
     
-    <div class="icon" style="background-image: url('Journal.png');" title="my.png" aria-label="Duplicate 7"></div>
+    <div class="icon" style="background-image: url('/Collaborative.png');" title="Collaboration" aria-label="Collaboration"></div>
     
-    <div class="icon" style="background-image: url('/Trash.png');" title="my.png" aria-label="Duplicate 8"></div>
-  
+    <div class="icon" style="background-image: url('/Ai.png');" title="AI Assistant" aria-label="AI Assistant"></div>
+    
+    <div class="icon" style="background-image: url('/Journal.png');" title="Daily Journal" aria-label="Journal"></div>
+    
+    <div class="icon" style="background-image: url('/Trash.png');" aria-label="Trash"></div>
   </div>
 
 </body>
