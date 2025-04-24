@@ -32,6 +32,32 @@ document.addEventListener('DOMContentLoaded', function () {
     const taskCount = document.querySelector('.task-count');
     const inviteBtn = document.getElementById('invite-btn');
 
+    const attachBtn = document.getElementById('attach-btn');
+    const fileInput = document.getElementById('chat-file-input');
+
+    attachBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            let fileMessage = {
+                sender: 'You',
+                time: timeStr,
+                outgoing: true,
+                isAttachment: true,
+                fileName: file.name,
+                fileType: file.type,
+                fileURL: URL.createObjectURL(file)
+            };
+            messages.push(fileMessage);
+            renderMessages();
+            fileInput.value = '';
+        }
+    });
+
+
     // Emoji Picker Logic
     const emojiBtn = document.getElementById('emoji-btn');
     const emojiPicker = document.getElementById('emoji-picker');
