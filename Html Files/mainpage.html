@@ -120,7 +120,6 @@
       display: none;
     }
 
-    /* Pomodoro Timer Styles */
     .pomodoro-container {
       display: flex;
       flex-direction: column;
@@ -271,7 +270,6 @@
       font-weight: bold;
     }
 
-    /* AI Study Assistant Styles */
     .assistant-container {
       width: 100%;
       max-width: 800px;
@@ -423,7 +421,6 @@
       background: #0984e3;
     }
 
-    /* Grade Calculator Styles */
     .grade-calculator {
       width: 100%;
     }
@@ -531,7 +528,6 @@
       gap: 15px;
     }
 
-    /* Journal Styles */
     .journal-container {
       width: 100%;
       max-width: 800px;
@@ -643,7 +639,6 @@
       transform: translateY(-2px);
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       #menuToggle {
         display: block;
@@ -959,10 +954,9 @@
   </div>
 
   <script>
-    // Initialize Chart
   function loadPage(page) {
   const contentDiv = document.querySelector('.main-content');
-  // Optionally show a loading message
+  
   contentDiv.innerHTML = '<div style="text-align:center;padding:2em;">Loading...</div>';
   fetch(page)
     .then(response => {
@@ -971,7 +965,6 @@
     })
     .then(html => {
       contentDiv.innerHTML = html;
-      // Optionally, re-initialize scripts for the loaded page here
     })
     .catch(error => {
       contentDiv.innerHTML = '<div style="color:red;">Failed to load content.</div>';
@@ -1036,12 +1029,10 @@
       });
     }
 
-    // Sidebar toggle
     document.getElementById('menuToggle').addEventListener('click', () => {
       document.querySelector('.sidebar').classList.toggle('active');
     });
 
-    // Section navigation
     function showSection(section) {
       const sections = ['dashboardSection', 'gradesSection', 'trashSection', 'pomodoroSection', 'assistantSection', 'subscriptionSection', 'collaborationSection', 'journalSection'];
       sections.forEach(id => document.getElementById(id).classList.add('hidden'));
@@ -1070,7 +1061,6 @@
       }
     }
 
-    // Grade Calculator Functionality
     let courses = [];
 
     function addGrade() {
@@ -1174,7 +1164,6 @@
       document.getElementById('predictionResult').textContent = resultText;
     }
 
-    // Pomodoro Timer Functionality
     document.addEventListener('DOMContentLoaded', () => {
       const timerDisplay = document.querySelector('.timer-display');
       const startBtn = document.querySelector('.start-btn');
@@ -1183,15 +1172,12 @@
       const sessionCounter = document.querySelector('.session-counter span');
       const progressCircle = document.querySelector('.progress-ring-circle');
       
-      // Calculate circumference of the circle (2πr)
       const radius = 45;
       const circumference = 2 * Math.PI * radius;
       
-      // Set initial stroke properties
       progressCircle.style.strokeDasharray = circumference;
       progressCircle.style.strokeDashoffset = 0;
 
-      // Timer settings
       let settings = {
         focus: 25,
         shortBreak: 5,
@@ -1200,7 +1186,6 @@
         sessions: 0
       };
 
-      // Timer state
       let state = {
         timeLeft: settings.focus * 60,
         isRunning: false,
@@ -1209,38 +1194,30 @@
         totalSeconds: settings.focus * 60
       };
 
-      // Update the timer display and progress circle
       function updateDisplay() {
         const minutes = Math.floor(state.timeLeft / 60);
         const seconds = state.timeLeft % 60;
         timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         
-        // Calculate progress
         const progress = state.timeLeft / state.totalSeconds;
         const dashOffset = progress * circumference;
         
-        // Update circle progress
         progressCircle.style.strokeDashoffset = dashOffset;
       }
 
-      // Switch timer mode
       function switchMode(mode) {
         state.mode = mode;
         state.totalSeconds = settings[mode] * 60;
         state.timeLeft = state.totalSeconds;
         
-        // Update active mode button
         modeButtons.forEach(btn => btn.classList.remove('active'));
         document.querySelector(`.timer-mode-btn[data-mode="${mode}"]`).classList.add('active');
         
-        // Update display
         updateDisplay();
         
-        // Change circle color based on mode
         progressCircle.style.stroke = mode === 'focus' ? '#00b894' : '#0984e3';
       }
 
-      // Start the timer
       function startTimer() {
         if (state.isRunning) return;
         
@@ -1255,11 +1232,9 @@
             clearInterval(state.interval);
             state.isRunning = false;
             
-            // Play sound
             const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3');
             audio.play();
             
-            // Handle mode switching
             if (state.mode === 'focus') {
               settings.sessions++;
               sessionCounter.textContent = settings.sessions;
@@ -1270,12 +1245,10 @@
                 switchMode('shortBreak');
               }
               
-              // Auto-start break if in focus mode
               setTimeout(() => {
                 startTimer();
               }, 1000);
             } else {
-              // Auto-start focus after break
               setTimeout(() => {
                 switchMode('focus');
                 startTimer();
@@ -1285,14 +1258,12 @@
         }, 1000);
       }
 
-      // Pause the timer
       function pauseTimer() {
         clearInterval(state.interval);
         state.isRunning = false;
         startBtn.textContent = 'Start';
       }
 
-      // Reset the timer
       function resetTimer() {
         pauseTimer();
         state.timeLeft = settings[state.mode] * 60;
@@ -1300,7 +1271,6 @@
         updateDisplay();
       }
 
-      // Event listeners
       startBtn.addEventListener('click', () => {
         if (state.isRunning) {
           pauseTimer();
@@ -1311,7 +1281,6 @@
 
       resetBtn.addEventListener('click', resetTimer);
 
-      // Mode switching
       modeButtons.forEach(btn => {
         btn.addEventListener('click', () => {
           if (state.isRunning) pauseTimer();
@@ -1319,7 +1288,6 @@
         });
       });
 
-      // Time adjustment buttons
       document.querySelectorAll('.increase-focus, .decrease-focus').forEach(btn => {
         btn.addEventListener('click', () => {
           if (btn.classList.contains('increase-focus')) {
@@ -1371,15 +1339,12 @@
         });
       });
 
-      // Initialize
       updateDisplay();
       
-      // Initialize chart on page load if dashboard is shown by default
       if (document.getElementById('dashboardSection') && !document.getElementById('dashboardSection').classList.contains('hidden')) {
         window.progressChart = initChart();
       }
 
-      // Journal Functionality
       let journalEntries = JSON.parse(localStorage.getItem('journalEntries')) || {};
 
       function initJournal() {
@@ -1389,19 +1354,16 @@
         
         loadJournalEntry(today);
         
-        // Event listeners
         document.getElementById('prevDay').addEventListener('click', () => navigateDay(-1));
         document.getElementById('nextDay').addEventListener('click', () => navigateDay(1));
         document.getElementById('journalDate').addEventListener('change', (e) => {
           loadJournalEntry(new Date(e.target.value));
         });
         
-        // Mood rating
         document.querySelectorAll('.star').forEach(star => {
           star.addEventListener('click', setRating);
         });
         
-        // Save and clear buttons
         document.querySelector('.save-btn').addEventListener('click', saveJournalEntry);
         document.querySelector('.clear-btn').addEventListener('click', clearJournalEntry);
       }
@@ -1418,7 +1380,6 @@
         const dateKey = formatDateKey(date);
         const entry = journalEntries[dateKey] || {};
         
-        // Set mood rating
         if (entry.rating) {
           document.querySelectorAll('.star').forEach((star, index) => {
             star.classList.toggle('active', index < entry.rating);
@@ -1431,7 +1392,6 @@
           });
         }
         
-        // Set prompt responses
         document.querySelectorAll('.prompt-response').forEach(textarea => {
           const prompt = textarea.dataset.prompt;
           textarea.value = entry[prompt] || '';
@@ -1443,18 +1403,16 @@
         const date = new Date(dateInput.value);
         const dateKey = formatDateKey(date);
         
-        // Get mood rating
+
         const activeStars = document.querySelectorAll('.star.active');
         const rating = activeStars.length;
         
-        // Get prompt responses
         const prompts = {};
         document.querySelectorAll('.prompt-response').forEach(textarea => {
           const prompt = textarea.dataset.prompt;
           prompts[prompt] = textarea.value;
         });
         
-        // Save entry
         journalEntries[dateKey] = {
           date: date.toISOString(),
           rating,
@@ -1463,7 +1421,6 @@
         
         localStorage.setItem('journalEntries', JSON.stringify(journalEntries));
         
-        // Show confirmation
         alert('Journal entry saved successfully!');
       }
 
@@ -1494,12 +1451,10 @@
         return date.toISOString().split('T')[0];
       }
 
-      // Initialize journal if the section exists
       if (document.getElementById('journalSection')) {
         initJournal();
       }
 
-      // AI Study Assistant Functionality
       const chatContainer = document.getElementById('chatContainer');
       const userInput = document.getElementById('userInput');
       const sendBtn = document.getElementById('sendBtn');
@@ -1509,7 +1464,6 @@
       let currentSubject = 'general';
       let currentTool = null;
       
-      // Subject selection
       subjectButtons.forEach(btn => {
         btn.addEventListener('click', () => {
           subjectButtons.forEach(b => b.classList.remove('active'));
@@ -1518,7 +1472,6 @@
         });
       });
       
-      // Tool selection
       toolButtons.forEach(btn => {
         btn.addEventListener('click', () => {
           toolButtons.forEach(b => b.classList.remove('active'));
@@ -1528,7 +1481,6 @@
             btn.classList.add('active');
             currentTool = btn.dataset.tool;
             
-            // Add a predefined prompt based on the tool
             let prompt = '';
             switch(currentTool) {
               case 'explain':
@@ -1551,19 +1503,15 @@
         });
       });
       
-      // Send message function
       function sendMessage() {
         const message = userInput.value.trim();
         if (!message) return;
         
-        // Add user message to chat
         addMessage(message, 'user');
         userInput.value = '';
         
-        // Show typing indicator
         showTypingIndicator();
         
-        // Simulate AI response after a delay
         setTimeout(() => {
           removeTypingIndicator();
           const response = generateAIResponse(message);
@@ -1571,7 +1519,6 @@
         }, 1500);
       }
       
-      // Add message to chat
       function addMessage(text, sender) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}-message`;
@@ -1587,7 +1534,6 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
       
-      // Show typing indicator
       function showTypingIndicator() {
         const typingDiv = document.createElement('div');
         typingDiv.className = 'typing-indicator';
@@ -1601,7 +1547,6 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }
       
-      // Remove typing indicator
       function removeTypingIndicator() {
         const typingIndicator = document.getElementById('typingIndicator');
         if (typingIndicator) {
@@ -1609,10 +1554,7 @@
         }
       }
       
-      // Generate AI response (simulated)
       function generateAIResponse(message) {
-        // In a real implementation, this would call an actual AI API
-        // For this demo, we'll use predefined responses
         
         const subjectResponses = {
           general: "I can help you with a variety of study topics. What specifically would you like to know?",
@@ -1638,11 +1580,9 @@
           return subjectResponses[currentSubject];
         }
         
-        // Default response
         return `I understand you're asking about "${message}". In a real implementation, I would provide a detailed, helpful response based on your query. This is a simulation to show the interface functionality.`;
       }
       
-      // Event listeners for chat
       sendBtn.addEventListener('click', sendMessage);
       userInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
