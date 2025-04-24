@@ -137,7 +137,8 @@ body {
     flex-direction: column;
 }
 
-.team-members, .team-chat {
+.team-members,
+.team-chat {
     padding: 20px;
     flex: 1;
     overflow-y: auto;
@@ -147,7 +148,8 @@ body {
     border-bottom: 1px solid var(--border-color);
 }
 
-.team-members h3, .team-chat h3 {
+.team-members h3,
+.team-chat h3 {
     margin-bottom: 15px;
 }
 
@@ -247,4 +249,25 @@ button {
 
 button:hover {
     background-color: #0089a8;
+}
+
+.member-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: var(--accent-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    font-size: 1em;
+    margin-right: 8px;
+}
+
+.chat-message img {
+    max-width: 120px;
+    max-height: 80px;
+    border-radius: 4px;
+    margin-bottom: 5px;
 }

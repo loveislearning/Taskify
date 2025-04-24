@@ -1,19 +1,21 @@
 <!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taskify - Collaborative Project</title>
     <link rel="stylesheet" href="collab.css">
 </head>
+
 <body>
     <div class="collaborative-workspace">
         <div class="project-header">
             <h2>📋 Collaborative Project: Team Study</h2>
             <button id="invite-btn">Invite Members</button>
         </div>
-        
+
         <div class="workspace-container">
             <!-- Tasks Section -->
             <div class="tasks-section">
@@ -21,17 +23,17 @@
                     <h3>Team Tasks</h3>
                     <span class="task-count">0 completed / 0 total</span>
                 </div>
-                
+
                 <div class="task-list" id="task-list">
                     <!-- Tasks will be added here by JavaScript -->
                 </div>
-                
+
                 <div class="add-task">
                     <input type="text" id="new-task-input" placeholder="Add a new task...">
                     <button id="add-task-btn">Add Task</button>
                 </div>
             </div>
-            
+
             <!-- Right Sidebar -->
             <div class="right-sidebar">
                 <!-- Team Members -->
@@ -41,7 +43,7 @@
                         <!-- Members will be added here by JavaScript -->
                     </ul>
                 </div>
-                
+
                 <!-- Team Chat -->
                 <div class="team-chat">
                     <h3>Team Chat</h3>
@@ -49,6 +51,24 @@
                         <!-- Messages will be added here by JavaScript -->
                     </div>
                     <div class="chat-input">
+                        <input type="file" id="chat-file-input" style="display:none;"
+                            accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar">
+                        <button id="attach-btn" title="Attach file">📎</button>
+
+
+                        <button id="emoji-btn" title="Add emoji">😊</button>
+                        <div id="emoji-picker"
+                            style="display:none; position:absolute; bottom:50px; right:80px; background:#222; border-radius:6px; padding:10px; z-index:10;">
+                            <span class="emoji-option">😀</span>
+                            <span class="emoji-option">😂</span>
+                            <span class="emoji-option">😍</span>
+                            <span class="emoji-option">👍</span>
+                            <span class="emoji-option">🎉</span>
+                            <span class="emoji-option">😎</span>
+                            <span class="emoji-option">🙏</span>
+
+                        </div>
+
                         <input type="text" id="chat-input" placeholder="Type a message...">
                         <button id="send-message-btn">Send</button>
                     </div>
@@ -59,4 +79,5 @@
 
     <script src="collab.js"></script>
 </body>
+
 </html>
