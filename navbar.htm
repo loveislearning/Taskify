@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Navigation Bar</title>
   <style>
     body {
@@ -21,56 +22,111 @@
       flex-direction: column;
       align-items: center;
       padding: 10px 0;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #333 #111;
+      box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
+      transition: width 0.3s ease-in-out;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: #111;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background-color: #333;
+      border-radius: 10px;
     }
 
     .icon {
-      width: 50px;
-      height: 50px;
+      width: 55px;
+      height: 55px;
+      aspect-ratio: 1 / 1;
       border-radius: 50%;
       margin: 8px 0;
       background-color: #222;
       background-size: cover;
       background-position: center;
+      background-repeat: no-repeat;
       transition: all 0.3s ease;
-      position: relative;
+    }
+
+    .sidebar .icon:last-child {
+      background-size: 120%; 
     }
 
     .icon:hover {
       border-radius: 25%;
       background-color: #333;
       transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
 
     .divider {
       width: 60%;
       height: 2px;
       background-color: #444;
-      margin: 15px 0;
+      margin: 14px 0;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 50px;
+      }
+
+      .icon {
+        width: 45px;
+        height: 45px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .sidebar {
+        width: 40px;
+      }
+
+      .icon {
+        width: 40px;
+        height: 40px;
+      }
+    }
+
+    @media (max-width: 768px) and (hover: hover) {
+      .sidebar:hover {
+        width: 200px;
+      }
     }
   </style>
 </head>
 <body>
 
   <div class="sidebar">
-    <!-- Example with your own image from the web -->
-    <div class="icon" style="background-image: url('/logo.png');">
-    </div>
-    <!-- Example with another online image -->
-    <div class="icon" style="background-image: url('https://images.unsplash.com/photo-1511367461989-f85a21fda167?auto=format&fit=facearea&w=50&h=50');">
-    </div>
-    <!-- Example with a local image (place myphoto.jpg in the same folder as your HTML file) -->
-    <div class="icon" style="background-image: url('myphoto.jpg');"></div>
-    <!-- Example with another custom image -->
-    <div class="icon" style="background-image: url('https://yourdomain.com/yourimage.png');"></div>
-    <!-- Example with a placeholder -->
-    <div class="icon" style="background-image: url('https://via.placeholder.com/50x50.png?text=💻');"></div>
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Logo"></div>
 
     <div class="divider"></div>
 
-    <!-- Utility icons (you can also use your own images here) -->
-    <div class="icon" style="background-image: url('https://via.placeholder.com/50x50.png?text=➕');"></div>
-    <div class="icon" style="background-image: url('https://via.placeholder.com/50x50.png?text=🧭');"></div>
-    <div class="icon" style="background-image: url('https://via.placeholder.com/50x50.png?text=⬇️');"></div>
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="User 1"></div>
+
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="My Photo"></div>
+
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Custom Icon"></div>
+
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Computer"></div>
+    
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Project Management"></div>
+
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Spin The Task"></div>
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Duplicate 9"></div>
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Duplicate 3"></div>
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Duplicate 4"></div>
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Collaboration"></div>
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Duplicate 6"></div>
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Duplicate 7"></div>
+    <div class="icon" style="background-image: url('my.png');" title="my.png" aria-label="Duplicate 8"></div>
   </div>
 
 </body>
