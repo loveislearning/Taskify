@@ -290,6 +290,7 @@ button:hover, .cta-btn:hover {
     <button class="tab" data-tab="studytips">📝 Study Tips</button>
     <button class="tab" data-tab="examqs">❓ Exam Qs</button>
     <button class="tab" data-tab="mentalhealth">🧠 Mental Health</button>   
+    <button class="tab" data-tab="quiz">📝 Pop Quiz</button>
 
   </nav>
   <main>
@@ -753,6 +754,37 @@ button:hover, .cta-btn:hover {
     <li><strong>Peer Support:</strong> Share your wellness plan with a friend or group for support and accountability.</li>
     <li><strong>Resilience Tip:</strong> Remember, setbacks are a part of growth. Reflect on what you learned from each challenge.<br><span style="color:#bbb;">If you need help, talk to a trusted adult or counselor.</span></li>
   </ul>
+</section>
+
+<section id="quiz" aria-label="Pop Quiz">
+  <h2>📝 Pop Quiz</h2>
+  <form id="quiz-form" onsubmit="return checkQuiz()">
+    <div>
+      <strong>1. What is the capital of Japan?</strong><br>
+      <input type="radio" name="q1" value="a" required> Beijing<br>
+      <input type="radio" name="q1" value="b"> Seoul<br>
+      <input type="radio" name="q1" value="c"> Tokyo<br>
+      <input type="radio" name="q1" value="d"> Bangkok<br>
+    </div>
+    <div style="margin-top:1em;">
+      <strong>2. Who wrote 'Romeo and Juliet'?</strong><br>
+      <input type="radio" name="q2" value="a" required> Charles Dickens<br>
+      <input type="radio" name="q2" value="b"> William Shakespeare<br>
+      <input type="radio" name="q2" value="c"> Jane Austen<br>
+      <input type="radio" name="q2" value="d"> Mark Twain<br>
+    </div>
+    <button type="submit" class="cta-btn" style="margin-top:1em;">Check Answers</button>
+    <div id="quiz-result" style="margin-top:1em;font-weight:bold;"></div>
+  </form>
+  <script>
+    function checkQuiz() {
+      let score = 0;
+      if (document.querySelector('input[name="q1"]:checked')?.value === "c") score++;
+      if (document.querySelector('input[name="q2"]:checked')?.value === "b") score++;
+      document.getElementById("quiz-result").innerText = "You got " + score + " out of 2 correct!";
+      return false;
+    }
+  </script>
 </section>
 
   </main>
