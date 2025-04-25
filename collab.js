@@ -1,5 +1,5 @@
 // script.js
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Sample data
     const members = [
         { id: 1, name: 'Alice Johnson', online: true },
@@ -32,6 +32,49 @@ document.addEventListener('DOMContentLoaded', function() {
     const taskCount = document.querySelector('.task-count');
     const inviteBtn = document.getElementById('invite-btn');
 
+    const attachBtn = document.getElementById('attach-btn');
+    const fileInput = document.getElementById('chat-file-input');
+
+    attachBtn.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) {
+            const file = this.files[0];
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            let fileMessage = {
+                sender: 'You',
+                time: timeStr,
+                outgoing: true,
+                isAttachment: true,
+                fileName: file.name,
+                fileType: file.type,
+                fileURL: URL.createObjectURL(file)
+            };
+            messages.push(fileMessage);
+            renderMessages();
+            fileInput.value = '';
+        }
+    });
+
+
+    // Emoji Picker Logic
+    const emojiBtn = document.getElementById('emoji-btn');
+    const emojiPicker = document.getElementById('emoji-picker');
+    emojiBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        emojiPicker.style.display = emojiPicker.style.display === 'none' ? 'block' : 'none';
+    });
+    document.addEventListener('click', () => emojiPicker.style.display = 'none');
+    emojiPicker.querySelectorAll('.emoji-option').forEach(emoji => {
+        emoji.addEventListener('click', () => {
+            chatInput.value += emoji.textContent;
+            emojiPicker.style.display = 'none';
+            chatInput.focus();
+        });
+    });
+
+
     // Render initial data
     renderTasks();
     renderMembers();
@@ -45,11 +88,11 @@ document.addEventListener('DOMContentLoaded', function() {
     sendMessageBtn.addEventListener('click', sendMessage);
     inviteBtn.addEventListener('click', inviteMembers);
 
-    newTaskInput.addEventListener('keypress', function(e) {
+    newTaskInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') addNewTask();
     });
 
-    chatInput.addEventListener('keypress', function(e) {
+    chatInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') sendMessage();
     });
 
@@ -61,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const taskElement = document.createElement('div');
             taskElement.className = `task-item ${task.completed ? 'completed' : ''}`;
             taskElement.dataset.id = task.id;
-            
+
             taskElement.innerHTML = `
                 <div class="task-content">
                     <div class="task-text">${task.text}</div>
@@ -73,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <button class="delete-btn" onclick="deleteTask(${task.id})">🗑️</button>
                 </div>
             `;
-            
+
             taskList.appendChild(taskElement);
         });
     }
@@ -83,16 +126,16 @@ document.addEventListener('DOMContentLoaded', function() {
         members.forEach(member => {
             const memberElement = document.createElement('li');
             memberElement.className = 'member';
-            
+
             // Get initials for avatar
             const initials = member.name.split(' ').map(n => n[0]).join('');
-            
+
             memberElement.innerHTML = `
                 <div class="member-avatar">${initials}</div>
                 <div class="member-name">${member.name}</div>
                 <div class="member-status ${member.online ? 'online' : 'offline'}"></div>
             `;
-            
+
             memberList.appendChild(memberElement);
         });
     }
@@ -100,21 +143,36 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderMessages() {
         chatMessages.innerHTML = '';
         messages.forEach(message => {
+            const member = members.find(m => m.name === message.sender) || { name: message.sender };
+            const initials = member.name.split(' ').map(n => n[0]).join('');
+            const avatarHtml = `<div class="member-avatar" style="width:28px;height:28px;font-size:0.9em;margin-bottom:3px;">${initials}</div>`;
             const messageElement = document.createElement('div');
             messageElement.className = `chat-message ${message.outgoing ? 'outgoing' : 'incoming'}`;
-            
-            messageElement.innerHTML = `
-                <div class="message-sender">${message.sender}</div>
-                <div class="message-text">${message.text}</div>
-                <div class="message-time">${message.time}</div>
+            let content = `
+                <div style="display:flex;align-items:center;gap:8px;">
+                    ${!message.outgoing ? avatarHtml : ''}
+                    <div>
+                        <div class="message-sender">${message.sender}</div>
+                        <div class="message-text">`;
+            if (message.isAttachment) {
+                if (message.fileType.startsWith('image/')) {
+                    content += `<img src="${message.fileURL}" alt="${message.fileName}" style="max-width:120px;max-height:80px;border-radius:4px;display:block;margin-bottom:5px;"><br>`;
+                }
+                content += `<a href="${message.fileURL}" download="${message.fileName}" style="color:var(--accent-color);">${message.fileName}</a>`;
+            } else {
+                content += message.text;
+            }
+            content += `</div>
+                        <div class="message-time">${message.time}</div>
+                    </div>
+                </div>
             `;
-            
+            messageElement.innerHTML = content;
             chatMessages.appendChild(messageElement);
         });
-        
-        // Scroll to bottom of chat
         chatMessages.scrollTop = chatMessages.scrollHeight;
     }
+
 
     function addNewTask() {
         const taskText = newTaskInput.value.trim();
@@ -125,12 +183,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 assignedTo: members[Math.floor(Math.random() * members.length)].id, // Random assignment for demo
                 completed: false
             };
-            
+
             tasks.push(newTask);
             renderTasks();
             updateTaskCount();
             newTaskInput.value = '';
-            
+
             // Simulate collaborative update
             simulateCollaborativeUpdate(`New task added: "${taskText}"`);
         }
@@ -141,14 +199,14 @@ document.addEventListener('DOMContentLoaded', function() {
         if (messageText) {
             const now = new Date();
             const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            
+
             const newMessage = {
                 sender: 'You',
                 text: messageText,
                 time: timeStr,
                 outgoing: true
             };
-            
+
             messages.push(newMessage);
             renderMessages();
             chatInput.value = '';
@@ -191,9 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
             opacity: 0;
             transition: opacity 0.3s;
         `;
-        
+
         document.body.appendChild(notification);
-        
+
         // Show and then hide the notification
         setTimeout(() => notification.style.opacity = '1', 100);
         setTimeout(() => {
@@ -203,33 +261,33 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Make functions available globally (for onclick handlers)
-    window.toggleTaskCompletion = function(taskId) {
+    window.toggleTaskCompletion = function (taskId) {
         const task = tasks.find(t => t.id === taskId);
         if (task) {
             task.completed = !task.completed;
             renderTasks();
             updateTaskCount();
-            
+
             // Simulate collaborative update
             simulateCollaborativeUpdate(`Task "${task.text}" marked as ${task.completed ? 'completed' : 'incomplete'}`);
         }
     };
 
-    window.editTask = function(taskId) {
+    window.editTask = function (taskId) {
         const task = tasks.find(t => t.id === taskId);
         if (task) {
             const newText = prompt('Edit task:', task.text);
             if (newText && newText.trim()) {
                 task.text = newText.trim();
                 renderTasks();
-                
+
                 // Simulate collaborative update
                 simulateCollaborativeUpdate(`Task edited to: "${newText}"`);
             }
         }
     };
 
-    window.deleteTask = function(taskId) {
+    window.deleteTask = function (taskId) {
         const taskIndex = tasks.findIndex(t => t.id === taskId);
         if (taskIndex !== -1) {
             const deletedTask = tasks[taskIndex];
@@ -237,7 +295,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 tasks.splice(taskIndex, 1);
                 renderTasks();
                 updateTaskCount();
-                
+
                 // Simulate collaborative update
                 simulateCollaborativeUpdate(`Task deleted: "${deletedTask.text}"`);
             }
@@ -252,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
             members[randomMemberIndex].online = !members[randomMemberIndex].online;
             renderMembers();
         }
-        
+
         // Occasionally add a new message from a team member
         if (Math.random() > 0.85) {
             const onlineMembers = members.filter(m => m.online && m.name !== 'You');
@@ -260,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const randomMember = onlineMembers[Math.floor(Math.random() * onlineMembers.length)];
                 const now = new Date();
                 const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                
+
                 const messageOptions = [
                     "How's everyone's progress so far?",
                     "I just finished my part of the project.",
@@ -268,16 +326,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     "When is our next meeting?",
                     "I've shared some resources in our folder."
                 ];
-                
+
                 const randomMessage = messageOptions[Math.floor(Math.random() * messageOptions.length)];
-                
+
                 messages.push({
                     sender: randomMember.name,
                     text: randomMessage,
                     time: timeStr,
                     outgoing: false
                 });
-                
+
                 renderMessages();
             }
         }
