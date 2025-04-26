@@ -20,3 +20,16 @@ body {
     font-weight: bold;
     color: #333;
 }
+#relapseBtn {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#relapseBtn:hover {
+    background-color: #0056b3;
+}
