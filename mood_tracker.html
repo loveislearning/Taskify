@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Advanced Mood Tracker</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;400&display=swap" rel="stylesheet">
+    <!-- Emoji Picker Element -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
     <style>
         body {
             margin: 0;
@@ -17,7 +19,6 @@
             min-height: 100vh;
             padding: 20px;
         }
-
         .main-heading {
             text-align: center;
             margin-top: 80px;
@@ -33,7 +34,6 @@
             display: block;
             font-weight: 700;
         }
-
         .desc {
             text-align: center;
             color: #aaa;
@@ -41,7 +41,66 @@
             margin-bottom: 32px;
             margin-top: 24px;
         }
-
+        .custom-mood-form {
+            margin-bottom: 24px;
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            position: relative;
+        }
+        #openEmojiPicker {
+            font-size:1.5rem;
+            background:#181818;
+            color:#fff;
+            border:none;
+            border-radius:8px;
+            padding:10px;
+            cursor:pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        #openEmojiPicker:hover {
+            background:#222;
+            transform: scale(1.06);
+        }
+        #selectedEmoji {
+            font-size:1.7rem;
+            min-width: 2.2em;
+            text-align:center;
+            display:inline-block;
+        }
+        #customMoodName {
+            flex:1;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            border: none;
+            background:#181818;
+            color:#fff;
+            padding:10px;
+        }
+        #addMoodBtn {
+            background:#1e90ff;
+            color:#fff;
+            border:none;
+            border-radius:8px;
+            padding:10px 18px;
+            font-weight:bold;
+            cursor:pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        #addMoodBtn:hover {
+            background:#2575fc;
+            transform: scale(1.06);
+        }
+        #emojiPickerPopover {
+            display:none;
+            position:absolute;
+            top:50px;
+            left:10px;
+            z-index:2000;
+            box-shadow: 0 4px 24px #2228;
+        }
         .tracker {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -50,7 +109,6 @@
             max-width: 800px;
             margin-top: 20px;
         }
-
         .mood {
             background: #181818;
             border-radius: 15px;
@@ -62,7 +120,6 @@
             font-size: 1.3rem;
             border: 2px solid transparent;
         }
-
         .mood:hover {
             transform: scale(1.06);
             background: #222;
@@ -72,7 +129,6 @@
             border: 2px solid #1e90ff;
             background: #111c2b;
         }
-
         .note-input {
             margin-top: 24px;
             width: 100%;
@@ -90,7 +146,6 @@
             color: #fff;
             outline: none;
         }
-
         .save-btn, .clear-btn {
             margin-top: 20px;
             padding: 13px 34px;
@@ -108,7 +163,6 @@
             background-color: #2575fc;
             transform: scale(1.06);
         }
-
         .history {
             margin-top: 48px;
             width: 100%;
@@ -136,7 +190,6 @@
             color: #eee;
             font-size: 1.05rem;
         }
-
         .stats {
             margin-top: 36px;
             width: 100%;
@@ -153,8 +206,6 @@
             font-size: 1.15rem;
             color: #1e90ff;
         }
-
-        /* Success popup styles */
         #successPopup {
             display: none;
             position: fixed;
@@ -172,8 +223,6 @@
             transition: opacity 0.4s;
             pointer-events: none;
         }
-
-        /* Emoji burst container */
         #emojiBurst {
             position: fixed;
             pointer-events: none;
@@ -183,7 +232,6 @@
             width: 0;
             height: 0;
         }
-
         @media (max-width: 600px) {
             .main-heading {
                 font-size: 2.1rem;
@@ -196,7 +244,6 @@
 </head>
 <body>
 
-    <!-- Large heading with blue accent -->
     <h1 class="main-heading">
         Organize Moods <br>
         <span class="blue">Effortlessly</span>
@@ -205,13 +252,17 @@
         Track your feelings, add notes, and see your mood trends in a beautiful dark interface.
     </div>
 
+    <!-- Custom Mood Form with Emoji Picker -->
+    <div class="custom-mood-form">
+        <button id="openEmojiPicker" type="button">😀</button>
+        <span id="selectedEmoji">😀</span>
+        <input type="text" id="customMoodName" maxlength="16" placeholder="Mood name">
+        <button type="button" id="addMoodBtn">Add</button>
+        <div id="emojiPickerPopover"></div>
+    </div>
+
     <div class="tracker" id="tracker">
-        <div class="mood" data-mood="Happy">😊<br>Happy</div>
-        <div class="mood" data-mood="Sad">😢<br>Sad</div>
-        <div class="mood" data-mood="Excited">🤩<br>Excited</div>
-        <div class="mood" data-mood="Angry">😡<br>Angry</div>
-        <div class="mood" data-mood="Calm">😌<br>Calm</div>
-        <div class="mood" data-mood="Tired">😴<br>Tired</div>
+        <!-- Mood buttons will be rendered here -->
     </div>
 
     <div class="note-input">
@@ -239,37 +290,118 @@
         <ul id="historyList"></ul>
     </div>
 
-    <!-- Success popup and emoji burst containers -->
     <div id="successPopup"></div>
     <div id="emojiBurst"></div>
 
     <script>
-        const moods = document.querySelectorAll('.mood');
-        const historyList = document.getElementById('historyList');
-        const noteInput = document.getElementById('moodNote');
-        const statsDiv = document.getElementById('stats');
+        // --- Emoji Picker Integration ---
+        let currentEmoji = "😀"; // Default emoji
+        const openEmojiBtn = document.getElementById('openEmojiPicker');
+        const emojiPopover = document.getElementById('emojiPickerPopover');
+        const selectedEmojiSpan = document.getElementById('selectedEmoji');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadHistory();
-            updateStats();
+        openEmojiBtn.addEventListener('click', function(e) {
+            // Position popover below the button
+            emojiPopover.style.display = "block";
+            if (!emojiPopover.hasChildNodes()) {
+                const picker = document.createElement('emoji-picker');
+                picker.style.background = '#181818';
+                picker.style.color = '#fff';
+                picker.addEventListener('emoji-click', event => {
+                    currentEmoji = event.detail.unicode;
+                    selectedEmojiSpan.textContent = currentEmoji;
+                    emojiPopover.style.display = "none";
+                });
+                emojiPopover.appendChild(picker);
+            }
+        });
+        // Hide picker when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!emojiPopover.contains(e.target) && e.target !== openEmojiBtn) {
+                emojiPopover.style.display = "none";
+            }
         });
 
-        moods.forEach(mood => {
-            mood.addEventListener('click', () => {
-                moods.forEach(m => m.classList.remove('selected'));
-                mood.classList.add('selected');
+        // --- Custom Mood Logic ---
+        function getCustomMoods() {
+            return JSON.parse(localStorage.getItem('customMoods') || '[]');
+        }
+        function saveCustomMoods(moods) {
+            localStorage.setItem('customMoods', JSON.stringify(moods));
+        }
+        function renderMoods() {
+            const tracker = document.getElementById('tracker');
+            tracker.innerHTML = '';
+            // Default moods
+            const defaultMoods = [
+                {emoji: '😊', name: 'Happy'},
+                {emoji: '😢', name: 'Sad'},
+                {emoji: '🤩', name: 'Excited'},
+                {emoji: '😡', name: 'Angry'},
+                {emoji: '😌', name: 'Calm'},
+                {emoji: '😴', name: 'Tired'}
+            ];
+            defaultMoods.forEach(mood => {
+                const div = document.createElement('div');
+                div.className = 'mood';
+                div.setAttribute('data-mood', mood.name);
+                div.innerHTML = `${mood.emoji}<br>${mood.name}`;
+                tracker.appendChild(div);
             });
+            getCustomMoods().forEach(mood => {
+                const div = document.createElement('div');
+                div.className = 'mood';
+                div.setAttribute('data-mood', mood.name);
+                div.innerHTML = `${mood.emoji}<br>${mood.name}`;
+                tracker.appendChild(div);
+            });
+            // Re-attach click listeners for selection
+            document.querySelectorAll('.mood').forEach(moodDiv => {
+                moodDiv.addEventListener('click', () => {
+                    document.querySelectorAll('.mood').forEach(m => m.classList.remove('selected'));
+                    moodDiv.classList.add('selected');
+                });
+            });
+        }
+        document.getElementById('addMoodBtn').addEventListener('click', function() {
+            const emoji = currentEmoji;
+            const name = document.getElementById('customMoodName').value.trim();
+            if (!emoji || !name) {
+                showSuccessPopup('Please select an emoji and enter a mood name!');
+                return;
+            }
+            if (name.length > 16) {
+                showSuccessPopup('Mood name should be 16 characters or less!');
+                return;
+            }
+            // Prevent duplicate names (case-insensitive)
+            const allMoods = [
+                ...['Happy','Sad','Excited','Angry','Calm','Tired'],
+                ...getCustomMoods().map(m => m.name)
+            ].map(n => n.toLowerCase());
+            if (allMoods.includes(name.toLowerCase())) {
+                showSuccessPopup('Mood name already exists!');
+                return;
+            }
+            const newMood = {emoji, name};
+            const moods = getCustomMoods();
+            moods.push(newMood);
+            saveCustomMoods(moods);
+            renderMoods();
+            document.getElementById('customMoodName').value = '';
+            showSuccessPopup(`Added mood: ${emoji} ${name}`);
+            emojiBurst();
         });
 
+        // --- Animation Logic ---
         function showSuccessPopup(message) {
             const popup = document.getElementById('successPopup');
             popup.textContent = message;
             popup.style.display = 'block';
-            setTimeout(() => { popup.style.opacity = '1'; }, 10); // Fade in
-            setTimeout(() => { popup.style.opacity = '0'; }, 1600); // Fade out
+            setTimeout(() => { popup.style.opacity = '1'; }, 10);
+            setTimeout(() => { popup.style.opacity = '0'; }, 1600);
             setTimeout(() => { popup.style.display = 'none'; }, 2000);
         }
-
         function emojiBurst() {
             const burst = document.getElementById('emojiBurst');
             burst.innerHTML = '';
@@ -285,13 +417,11 @@
                 emoji.style.transform = `translate(-50%, -50%) translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0.5)`;
                 emoji.style.opacity = '0';
                 burst.appendChild(emoji);
-
                 setTimeout(() => {
                     emoji.style.transition = 'transform 0.7s cubic-bezier(.22,1.61,.36,1), opacity 0.7s';
                     emoji.style.transform = `translate(-50%, -50%) translate(${Math.cos(angle) * distance * 2}px, ${Math.sin(angle) * distance * 2}px) scale(1.3)`;
                     emoji.style.opacity = '1';
                 }, 10);
-
                 setTimeout(() => {
                     emoji.style.opacity = '0';
                 }, 700);
@@ -299,6 +429,15 @@
             setTimeout(() => { burst.innerHTML = ''; }, 1200);
         }
 
+        // --- Mood Tracker Logic ---
+        const historyList = document.getElementById('historyList');
+        const noteInput = document.getElementById('moodNote');
+        const statsDiv = document.getElementById('stats');
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMoods();
+            loadHistory();
+            updateStats();
+        });
         function saveMood() {
             const selected = document.querySelector('.mood.selected');
             const note = noteInput.value.trim();
@@ -319,25 +458,21 @@
                 showSuccessPopup('Please select a mood before saving!');
             }
         }
-
         function addToHistory(entry) {
             const li = document.createElement('li');
             li.textContent = entry;
             historyList.appendChild(li);
         }
-
         function saveToLocalStorage(entry) {
             let history = JSON.parse(localStorage.getItem('moodHistory')) || [];
             history.push(entry);
             localStorage.setItem('moodHistory', JSON.stringify(history));
         }
-
         function loadHistory() {
             const history = JSON.parse(localStorage.getItem('moodHistory')) || [];
             historyList.innerHTML = '';
             history.forEach(entry => addToHistory(entry));
         }
-
         function clearHistory() {
             if (confirm('Are you sure you want to clear the mood history?')) {
                 localStorage.removeItem('moodHistory');
@@ -345,19 +480,16 @@
                 updateStats();
             }
         }
-
         function updateStats() {
             const history = JSON.parse(localStorage.getItem('moodHistory')) || [];
             let moodCounts = {};
             let total = 0;
-
             history.forEach(entry => {
                 let moodPart = entry.split(' - ')[1];
                 let mood = moodPart.split(':')[0].trim();
                 moodCounts[mood] = (moodCounts[mood] || 0) + 1;
                 total++;
             });
-
             let mostSelectedMood = 'N/A';
             let mostSelectedCount = 0;
             for (const mood in moodCounts) {
@@ -366,7 +498,6 @@
                     mostSelectedCount = moodCounts[mood];
                 }
             }
-
             statsDiv.innerHTML = `
                 <strong>Mood Statistics</strong><br>
                 Most selected mood: ${mostSelectedMood !== 'N/A' ? mostSelectedMood + ' (' + mostSelectedCount + ' time' + (mostSelectedCount > 1 ? 's' : '') + ')' : 'N/A'}<br>
@@ -374,6 +505,5 @@
             `;
         }
     </script>
-
 </body>
 </html>
