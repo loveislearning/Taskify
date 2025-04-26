@@ -96,13 +96,24 @@
             border-radius: 10px;
         }
 
+        /* Statistics section */
+        .stats {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 18px 20px;
+            font-size: 1.15rem;
+            box-sizing: border-box;
+        }
+
         @media (max-width: 500px) {
             h1 {
                 font-size: 2.2rem;
             }
         }
 
-        /* Note input styling */
         .note-input {
             margin-top: 20px;
             width: 100%;
@@ -147,6 +158,13 @@
         <button class="clear-btn" onclick="clearHistory()">Clear History</button>
     </div>
 
+    <!-- Mood statistics section -->
+    <div class="stats" id="stats">
+        <strong>Mood Statistics</strong><br>
+        Most selected mood: N/A<br>
+        Total moods tracked: 0
+    </div>
+
     <div class="history" id="history">
         <h2>Mood History</h2>
         <ul id="historyList"></ul>
@@ -156,9 +174,13 @@
         const moods = document.querySelectorAll('.mood');
         const historyList = document.getElementById('historyList');
         const noteInput = document.getElementById('moodNote');
+        const statsDiv = document.getElementById('stats');
 
         // Load history from localStorage
-        document.addEventListener('DOMContentLoaded', loadHistory);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadHistory();
+            updateStats();
+        });
 
         moods.forEach(mood => {
             mood.addEventListener('click', () => {
@@ -179,6 +201,7 @@
                 }
                 addToHistory(entry);
                 saveToLocalStorage(entry);
+                updateStats();
                 alert(`Mood saved: ${mood}${note ? ' (' + note + ')' : ''}!`);
                 noteInput.value = ''; // Clear note input after saving
             } else {
@@ -200,6 +223,7 @@
 
         function loadHistory() {
             const history = JSON.parse(localStorage.getItem('moodHistory')) || [];
+            historyList.innerHTML = ''; // Clear before loading
             history.forEach(entry => addToHistory(entry));
         }
 
@@ -207,7 +231,40 @@
             if (confirm('Are you sure you want to clear the mood history?')) {
                 localStorage.removeItem('moodHistory');
                 historyList.innerHTML = '';
+                updateStats();
             }
+        }
+
+        // --- Mood Statistics Logic ---
+        function updateStats() {
+            const history = JSON.parse(localStorage.getItem('moodHistory')) || [];
+            let moodCounts = {};
+            let total = 0;
+
+            // Extract mood from each entry (format: time - mood: note)
+            history.forEach(entry => {
+                // Find the part after the first " - " and before the first ":"
+                let moodPart = entry.split(' - ')[1];
+                let mood = moodPart.split(':')[0].trim();
+                moodCounts[mood] = (moodCounts[mood] || 0) + 1;
+                total++;
+            });
+
+            // Find the most selected mood
+            let mostSelectedMood = 'N/A';
+            let mostSelectedCount = 0;
+            for (const mood in moodCounts) {
+                if (moodCounts[mood] > mostSelectedCount) {
+                    mostSelectedMood = mood;
+                    mostSelectedCount = moodCounts[mood];
+                }
+            }
+
+            statsDiv.innerHTML = `
+                <strong>Mood Statistics</strong><br>
+                Most selected mood: ${mostSelectedMood !== 'N/A' ? mostSelectedMood + ' (' + mostSelectedCount + ' time' + (mostSelectedCount > 1 ? 's' : '') + ')' : 'N/A'}<br>
+                Total moods tracked: ${total}
+            `;
         }
     </script>
 
