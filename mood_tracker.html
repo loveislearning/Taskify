@@ -101,6 +101,22 @@
                 font-size: 2.2rem;
             }
         }
+
+        /* Note input styling */
+        .note-input {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+        #moodNote {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
     </style>
 </head>
 <body>
@@ -116,6 +132,16 @@
         <div class="mood" data-mood="Tired">😴<br>Tired</div>
     </div>
 
+    <!-- Note input field -->
+    <div class="note-input">
+        <input 
+            type="text" 
+            id="moodNote" 
+            placeholder="Add a note (optional)" 
+            maxlength="100"
+        >
+    </div>
+
     <div>
         <button class="save-btn" onclick="saveMood()">Save Mood</button>
         <button class="clear-btn" onclick="clearHistory()">Clear History</button>
@@ -129,6 +155,7 @@
     <script>
         const moods = document.querySelectorAll('.mood');
         const historyList = document.getElementById('historyList');
+        const noteInput = document.getElementById('moodNote');
 
         // Load history from localStorage
         document.addEventListener('DOMContentLoaded', loadHistory);
@@ -142,13 +169,18 @@
 
         function saveMood() {
             const selected = document.querySelector('.mood.selected');
+            const note = noteInput.value.trim();
             if (selected) {
                 const mood = selected.getAttribute('data-mood');
                 const time = new Date().toLocaleString();
-                const entry = `${time} - ${mood}`;
+                let entry = `${time} - ${mood}`;
+                if (note) {
+                    entry += `: ${note}`;
+                }
                 addToHistory(entry);
                 saveToLocalStorage(entry);
-                alert(`Mood saved: ${mood}!`);
+                alert(`Mood saved: ${mood}${note ? ' (' + note + ')' : ''}!`);
+                noteInput.value = ''; // Clear note input after saving
             } else {
                 alert('Please select a mood before saving!');
             }
