@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Feedback - Taskify</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #0a0a1a;
+      --text-color: #e0e0ff;
+      --card-bg: #12122b;
+      --accent-color: #3a7bd5;
+      --hover-color: #4a8be5;
+      --danger-color: #ff2d75;
+      --border-radius: 16px;
+      --transition-speed: 0.4s;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --neon-glow: 0 0 10px var(--accent-color), 0 0 20px rgba(58, 123, 213, 0.5);
+      --glass-effect: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Light theme variables */
+    [data-theme="light"] {
+      --bg-color: #f0f5ff;
+      --text-color: #12122b;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --glass-effect: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      transition: all var(--transition-speed);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(58, 123, 213, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(58, 123, 213, 0.1) 0%, transparent 20%);
+    }
+
+    @font-face {
+      font-family: 'Orbitron';
+      src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+    }
+
+    .container {
+      background: var(--glass-effect);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--border-radius);
+      padding: 40px 30px;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: var(--shadow);
+      animation: fadeIn 0.8s ease-in-out both;
+      overflow-y: auto;
+      max-height: 90vh;
+      border: 1px solid rgba(58, 123, 213, 0.2);
+      position: relative;
+    }
+
+    .container::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(58, 123, 213, 0.1) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+      color: var(--accent-color);
+      animation: slideIn 0.6s ease-out;
+      text-shadow: 0 0 5px rgba(58, 123, 213, 0.5);
+      letter-spacing: 1px;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--accent-color);
+      box-shadow: 0 0 10px var(--accent-color);
+    }
+
+    .feedback-form {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      position: relative;
+    }
+
+    label {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text-color);
+      letter-spacing: 0.5px;
+    }
+
+    input, 
+    select,
+    textarea {
+      width: 100%;
+      padding: 1rem;
+      border: 1px solid rgba(58, 123, 213, 0.3);
+      border-radius: var(--border-radius);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      transition: all var(--transition-speed);
+      font-family: 'Segoe UI', sans-serif;
+      backdrop-filter: blur(5px);
+    }
+
+    [data-theme="light"] input,
+    [data-theme="light"] select,
+    [data-theme="light"] textarea {
+      border: 1px solid rgba(58, 123, 213, 0.2);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    input:focus, 
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 15px rgba(58, 123, 213, 0.2);
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all var(--transition-speed);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transform: translateX(-100%);
+      transition: all 0.6s ease;
+      z-index: -1;
+    }
+
+    .btn:hover::before {
+      transform: translateX(100%);
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      color: white;
+      box-shadow: 0 0 15px rgba(58, 123, 213, 0.4);
+    }
+
+    .btn-primary:hover {
+      background: var(--hover-color);
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(74, 139, 229, 0.6);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    .btn-outline:hover {
+      background: rgba(58, 123, 213, 0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 0 20px rgba(58, 123, 213, 0.3);
+    }
+
+    /* Rating stars */
+    .rating-container {
+      display: flex;
+      gap: 0.5rem;
+      margin: 1rem 0;
+    }
+
+    .rating-star {
+      font-size: 2rem;
+      color: rgba(224, 224, 255, 0.3);
+      cursor: pointer;
+      transition: all var(--transition-speed);
+    }
+
+    .rating-star:hover,
+    .rating-star.active {
+      color: #ffd700;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      transform: scale(1.1);
+    }
+
+    /* Theme toggle button */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--glass-effect);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(58, 123, 213, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-speed);
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      border-color: var(--accent-color);
+    }
+
+    .theme-toggle i {
+      font-size: 1.2rem;
+      color: var(--text-color);
+      transition: all var(--transition-speed);
+    }
+
+    .theme-toggle:hover i {
+      color: var(--accent-color);
+    }
+
+    /* Back button */
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background: var(--glass-effect);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(58, 123, 213, 0.3);
+      border-radius: var(--border-radius);
+      color: var(--text-color);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--transition-speed);
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .back-button:hover {
+      transform: translateX(-5px);
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    /* Success message */
+    .success-message {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+      background: rgba(0, 200, 83, 0.2);
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(0, 200, 83, 0.5);
+      margin-top: 2rem;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .success-message i {
+      font-size: 3rem;
+      color: #00c853;
+      margin-bottom: 1rem;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+        max-height: 85vh;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px 15px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .back-button {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+      }
+
+      .theme-toggle {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme toggle button -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <!-- Back button -->
+  <a href="settingsdemo.html" class="back-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back to Settings</span>
+  </a>
+
+  <main class="container" role="main" aria-labelledby="feedback-title">
+    <h1 id="feedback-title">SYSTEM FEEDBACK</h1>
+
+    <form id="feedbackForm" class="feedback-form">
+      <div class="form-group">
+        <label for="feedbackType">FEEDBACK CATEGORY</label>
+        <select id="feedbackType" name="feedbackType" required>
+          <option value="" disabled selected>SELECT FEEDBACK TYPE</option>
+          <option value="bug">SYSTEM MALFUNCTION</option>
+          <option value="feature">FEATURE REQUEST</option>
+          <option value="ui">INTERFACE IMPROVEMENT</option>
+          <option value="performance">PERFORMANCE ISSUE</option>
+          <option value="other">OTHER QUERY</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="feedbackSubject">SUBJECT LINE</label>
+        <input type="text" id="feedbackSubject" name="feedbackSubject" placeholder="ENTER FEEDBACK SUBJECT" required>
+      </div>
+
+      <div class="form-group">
+        <label for="feedbackMessage">DETAILED REPORT</label>
+        <textarea id="feedbackMessage" name="feedbackMessage" placeholder="DESCRIBE YOUR FEEDBACK IN DETAIL..." required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>SYSTEM SATISFACTION RATING</label>
+        <div class="rating-container" id="ratingStars">
+          <i class="fas fa-star rating-star" data-rating="1"></i>
+          <i class="fas fa-star rating-star" data-rating="2"></i>
+          <i class="fas fa-star rating-star" data-rating="3"></i>
+          <i class="fas fa-star rating-star" data-rating="4"></i>
+          <i class="fas fa-star rating-star" data-rating="5"></i>
+        </div>
+        <input type="hidden" id="ratingValue" name="ratingValue" value="0">
+      </div>
+
+      <div class="form-group">
+        <label for="userEmail">COMMUNICATION NODE (OPTIONAL)</label>
+        <input type="email" id="userEmail" name="userEmail" placeholder="ENTER YOUR EMAIL FOR FOLLOW-UP">
+      </div>
+
+      <div class="button-group">
+        <button type="submit" class="btn btn-primary">
+          <i class="fas fa-paper-plane"></i> TRANSMIT FEEDBACK
+        </button>
+        <button type="reset" class="btn btn-outline">
+          <i class="fas fa-eraser"></i> RESET FORM
+        </button>
+      </div>
+    </form>
+
+    <div class="success-message" id="successMessage">
+      <i class="fas fa-check-circle"></i>
+      <h3>FEEDBACK TRANSMISSION SUCCESSFUL</h3>
+      <p>YOUR MESSAGE HAS BEEN RECEIVED BY TASKIFY CENTRAL COMMAND. THANK YOU FOR IMPROVING OUR SYSTEM.</p>
+    </div>
+  </main>
+
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const icon = themeToggle.querySelector('i');
+    
+    function applyTheme(theme) {
+      if (theme === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        theme = prefersDark ? 'dark' : 'light';
+      }
+      
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      
+      // Update icon
+      if (theme === 'dark') {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      } else {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+      
+      // Add pulse animation
+      themeToggle.style.animation = 'none';
+      setTimeout(() => {
+        themeToggle.style.animation = 'pulse 0.5s ease';
+      }, 10);
+    });
+    
+    // Apply stored theme on load or use system preference
+    const storedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(storedTheme);
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme('system');
+      }
+    });
+
+    // Star rating functionality
+    const stars = document.querySelectorAll('.rating-star');
+    const ratingInput = document.getElementById('ratingValue');
+    
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        const rating = parseInt(star.getAttribute('data-rating'));
+        ratingInput.value = rating;
+        
+        stars.forEach((s, index) => {
+          if (index < rating) {
+            s.classList.add('active');
+          } else {
+            s.classList.remove('active');
+          }
+        });
+      });
+      
+      star.addEventListener('mouseover', () => {
+        const rating = parseInt(star.getAttribute('data-rating'));
+        
+        stars.forEach((s, index) => {
+          if (index < rating) {
+            s.style.color = '#ffd700';
+            s.style.textShadow = '0 0 10px rgba(255, 215, 0, 0.5)';
+          }
+        });
+      });
+      
+      star.addEventListener('mouseout', () => {
+        const currentRating = parseInt(ratingInput.value);
+        
+        stars.forEach((s, index) => {
+          if (index >= currentRating) {
+            s.style.color = 'rgba(224, 224, 255, 0.3)';
+            s.style.textShadow = 'none';
+          }
+        });
+      });
+    });
+
+    // Form submission
+    const feedbackForm = document.getElementById('feedbackForm');
+    const successMessage = document.getElementById('successMessage');
+    
+    feedbackForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Simulate form submission
+      setTimeout(() => {
+        feedbackForm.style.display = 'none';
+        successMessage.style.display = 'block';
+        
+        // Reset form after 5 seconds
+        setTimeout(() => {
+          feedbackForm.reset();
+          stars.forEach(star => star.classList.remove('active'));
+          ratingInput.value = '0';
+          feedbackForm.style.display = 'grid';
+          successMessage.style.display = 'none';
+        }, 5000);
+      }, 1000);
+    });
+
+    // Add hover effect to back button
+    const backButton = document.querySelector('.back-button');
+    backButton.addEventListener('mouseenter', () => {
+      backButton.querySelector('i').style.transform = 'translateX(-3px)';
+    });
+    backButton.addEventListener('mouseleave', () => {
+      backButton.querySelector('i').style.transform = 'translateX(0)';
+    });
+  </script>
+</body>
+</html>
