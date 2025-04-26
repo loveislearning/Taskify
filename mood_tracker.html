@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Mood Tracker</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-top: 20px;
+            font-size: 3rem;
+        }
+
+        .tracker {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+            margin-top: 30px;
+        }
+
+        .mood {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+            user-select: none;
+        }
+
+        .mood:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .selected {
+            border: 2px solid #fff;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .save-btn, .clear-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background-color: #fff;
+            color: #2575fc;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            margin-right: 10px;
+        }
+
+        .save-btn:hover, .clear-btn:hover {
+            background-color: #eee;
+            transform: scale(1.05);
+        }
+
+        .history {
+            margin-top: 40px;
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: left;
+        }
+
+        .history h2 {
+            margin-bottom: 10px;
+        }
+
+        .history ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .history li {
+            margin-bottom: 8px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        @media (max-width: 500px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>My Mood Tracker</h1>
+
+    <div class="tracker" id="tracker">
+        <div class="mood" data-mood="Happy">😊<br>Happy</div>
+        <div class="mood" data-mood="Sad">😢<br>Sad</div>
+        <div class="mood" data-mood="Excited">🤩<br>Excited</div>
+        <div class="mood" data-mood="Angry">😡<br>Angry</div>
+        <div class="mood" data-mood="Calm">😌<br>Calm</div>
+        <div class="mood" data-mood="Tired">😴<br>Tired</div>
+    </div>
+
+    <div>
+        <button class="save-btn" onclick="saveMood()">Save Mood</button>
+        <button class="clear-btn" onclick="clearHistory()">Clear History</button>
+    </div>
+
+    <div class="history" id="history">
+        <h2>Mood History</h2>
+        <ul id="historyList"></ul>
+    </div>
+
+    <script>
+        const moods = document.querySelectorAll('.mood');
+        const historyList = document.getElementById('historyList');
+
+        // Load history from localStorage
+        document.addEventListener('DOMContentLoaded', loadHistory);
+
+        moods.forEach(mood => {
+            mood.addEventListener('click', () => {
+                moods.forEach(m => m.classList.remove('selected'));
+                mood.classList.add('selected');
+            });
+        });
+
+        function saveMood() {
+            const selected = document.querySelector('.mood.selected');
+            if (selected) {
+                const mood = selected.getAttribute('data-mood');
+                const time = new Date().toLocaleString();
+                const entry = `${time} - ${mood}`;
+                addToHistory(entry);
+                saveToLocalStorage(entry);
+                alert(`Mood saved: ${mood}!`);
+            } else {
+                alert('Please select a mood before saving!');
+            }
+        }
+
+        function addToHistory(entry) {
+            const li = document.createElement('li');
+            li.textContent = entry;
+            historyList.appendChild(li);
+        }
+
+        function saveToLocalStorage(entry) {
+            let history = JSON.parse(localStorage.getItem('moodHistory')) || [];
+            history.push(entry);
+            localStorage.setItem('moodHistory', JSON.stringify(history));
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('moodHistory')) || [];
+            history.forEach(entry => addToHistory(entry));
+        }
+
+        function clearHistory() {
+            if (confirm('Are you sure you want to clear the mood history?')) {
+                localStorage.removeItem('moodHistory');
+                historyList.innerHTML = '';
+            }
+        }
+    </script>
+
+</body>
+</html>
