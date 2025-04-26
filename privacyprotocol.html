@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Privacy Protocol</title>
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #3498db;
+            margin: 15px 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h2::after {
+            content: '+';
+            font-size: 1.5rem;
+        }
+        h2.active::after {
+            content: '-';
+        }
+        .content {
+            display: none;
+            padding: 10px 0;
+        }
+        .content.active {
+            display: block;
+        }
+        .language-selector {
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <select id="language-selector" class="language-selector">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+        </select>
+
+        <h1 id="title">Data Privacy Protocol</h1>
+        
+        <div class="section">
+            <h2 id="section1-title">1. Data Collection</h2>
+            <div class="content" id="section1-content">
+                <p>We collect only necessary data to provide our services. This includes:</p>
+                <ul>
+                    <li>Account information (name, email)</li>
+                    <li>Usage analytics (anonymous)</li>
+                    <li>Device information (browser type, OS)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 id="section2-title">2. Data Usage</h2>
+            <div class="content" id="section2-content">
+                <p>Your data is used exclusively for:</p>
+                <ul>
+                    <li>Service personalization</li>
+                    <li>Security and fraud prevention</li>
+                    <li>Legal compliance</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 id="section3-title">3. Data Sharing</h2>
+            <div class="content" id="section3-content">
+                <p>We never sell your data. Limited sharing occurs with:</p>
+                <ul>
+                    <li>Trusted service providers</li>
+                    <li>Legal authorities (when required)</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer id="footer">
+            Last updated: January 2023 | Contact: privacy@example.com
+        </footer>
+    </div>
+
+    <script>
+        // Language Translations
+        const translations = {
+            en: {
+                title: "Data Privacy Protocol",
+                section1Title: "1. Data Collection",
+                section1Content: `<p>We collect only necessary data to provide our services. This includes:</p>
+                <ul>
+                    <li>Account information (name, email)</li>
+                    <li>Usage analytics (anonymous)</li>
+                    <li>Device information (browser type, OS)</li>
+                </ul>`,
+                section2Title: "2. Data Usage",
+                section2Content: `<p>Your data is used exclusively for:</p>
+                <ul>
+                    <li>Service personalization</li>
+                    <li>Security and fraud prevention</li>
+                    <li>Legal compliance</li>
+                </ul>`,
+                section3Title: "3. Data Sharing",
+                section3Content: `<p>We never sell your data. Limited sharing occurs with:</p>
+                <ul>
+                    <li>Trusted service providers</li>
+                    <li>Legal authorities (when required)</li>
+                </ul>`,
+                footer: "Last updated: January 2023 | Contact: privacy@example.com"
+            },
+            es: {
+                title: "Protocolo de Privacidad de Datos",
+                section1Title: "1. Recopilación de Datos",
+                section1Content: `<p>Recopilamos solo los datos necesarios para brindar nuestros servicios. Esto incluye:</p>
+                <ul>
+                    <li>Información de la cuenta (nombre, correo electrónico)</li>
+                    <li>Análisis de uso (anónimo)</li>
+                    <li>Información del dispositivo (navegador, sistema operativo)</li>
+                </ul>`,
+                section2Title: "2. Uso de Datos",
+                section2Content: `<p>Tus datos se utilizan exclusivamente para:</p>
+                <ul>
+                    <li>Personalización del servicio</li>
+                    <li>Seguridad y prevención de fraudes</li>
+                    <li>Cumplimiento legal</li>
+                </ul>`,
+                section3Title: "3. Compartir Datos",
+                section3Content: `<p>Nunca vendemos tus datos. El intercambio limitado ocurre con:</p>
+                <ul>
+                    <li>Proveedores de servicios confiables</li>
+                    <li>Autoridades legales (cuando es requerido)</li>
+                </ul>`,
+                footer: "Última actualización: Enero 2023 | Contacto: privacy@example.com"
+            },
+            fr: {
+                title: "Protocole de Confidentialité des Données",
+                section1Title: "1. Collecte de Données",
+                section1Content: `<p>Nous collectons uniquement les données nécessaires pour fournir nos services. Cela inclut :</p>
+                <ul>
+                    <li>Informations de compte (nom, email)</li>
+                    <li>Analyses d'utilisation (anonymes)</li>
+                    <li>Informations sur l'appareil (navigateur, OS)</li>
+                </ul>`,
+                section2Title: "2. Utilisation des Données",
+                section2Content: `<p>Vos données sont utilisées exclusivement pour :</p>
+                <ul>
+                    <li>Personnalisation du service</li>
+                    <li>Sécurité et prévention des fraudes</li>
+                    <li>Conformité légale</li>
+                </ul>`,
+                section3Title: "3. Partage des Données",
+                section3Content: `<p>Nous ne vendons jamais vos données. Un partage limité a lieu avec :</p>
+                <ul>
+                    <li>Prestataires de services de confiance</li>
+                    <li>Autorités légales (si requis)</li>
+                </ul>`,
+                footer: "Dernière mise à jour : Janvier 2023 | Contact : privacy@example.com"
+            },
+            de: {
+                title: "Datenschutzprotokoll",
+                section1Title: "1. Datenerfassung",
+                section1Content: `<p>Wir erfassen nur die für unsere Dienste notwendigen Daten. Dazu gehören:</p>
+                <ul>
+                    <li>Kontoinformationen (Name, E-Mail)</li>
+                    <li>Nutzungsanalysen (anonym)</li>
+                    <li>Geräteinformationen (Browsertyp, Betriebssystem)</li>
+                </ul>`,
+                section2Title: "2. Datennutzung",
+                section2Content: `<p>Ihre Daten werden ausschließlich verwendet für:</p>
+                <ul>
+                    <li>Dienstpersonalisierung</li>
+                    <li>Sicherheit und Betrugsprävention</li>
+                    <li>Rechtliche Compliance</li>
+                </ul>`,
+                section3Title: "3. Datenweitergabe",
+                section3Content: `<p>Wir verkaufen Ihre Daten niemals. Begrenzte Weitergabe erfolgt an:</p>
+                <ul>
+                    <li>Vertrauenswürdige Dienstleister</li>
+                    <li>Behörden (bei Erforderlichkeit)</li>
+                </ul>`,
+                footer: "Zuletzt aktualisiert: Januar 2023 | Kontakt: privacy@example.com"
+            }
+        };
+
+        // Language Switching
+        document.getElementById('language-selector').addEventListener('change', function() {
+            const lang = this.value;
+            const t = translations[lang];
+            
+            document.getElementById('title').textContent = t.title;
+            document.getElementById('section1-title').textContent = t.section1Title;
+            document.getElementById('section1-content').innerHTML = t.section1Content;
+            document.getElementById('section2-title').textContent = t.section2Title;
+            document.getElementById('section2-content').innerHTML = t.section2Content;
+            document.getElementById('section3-title').textContent = t.section3Title;
+            document.getElementById('section3-content').innerHTML = t.section3Content;
+            document.getElementById('footer').textContent = t.footer;
+        });
+
+        // Collapsible Sections
+        document.querySelectorAll('h2').forEach(header => {
+            header.addEventListener('click', () => {
+                header.classList.toggle('active');
+                header.nextElementSibling.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
