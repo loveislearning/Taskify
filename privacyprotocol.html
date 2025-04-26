@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Privacy Protocol - Takify</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #0a0a1a;
+      --text-color: #e0e0ff;
+      --card-bg: #12122b;
+      --accent-color: #3a7bd5;
+      --hover-color: #4a8be5;
+      --danger-color: #ff2d75;
+      --border-radius: 16px;
+      --transition-speed: 0.4s;
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --neon-glow: 0 0 10px var(--accent-color), 0 0 20px rgba(58, 123, 213, 0.5);
+      --glass-effect: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Light theme variables */
+    [data-theme="light"] {
+      --bg-color: #f0f5ff;
+      --text-color: #12122b;
+      --card-bg: rgba(255, 255, 255, 0.8);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --glass-effect: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: 'Orbitron', 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      transition: all var(--transition-speed);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(58, 123, 213, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(58, 123, 213, 0.1) 0%, transparent 20%);
+    }
+
+    @font-face {
+      font-family: 'Orbitron';
+      src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+    }
+
+    .container {
+      background: var(--glass-effect);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: var(--border-radius);
+      padding: 40px 30px;
+      max-width: 900px;
+      width: 100%;
+      box-shadow: var(--shadow);
+      animation: fadeIn 0.8s ease-in-out both;
+      overflow-y: auto;
+      max-height: 90vh;
+      border: 1px solid rgba(58, 123, 213, 0.2);
+      position: relative;
+    }
+
+    .container::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(58, 123, 213, 0.1) 0%, transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.75rem;
+      margin-bottom: 30px;
+      color: var(--accent-color);
+      animation: slideIn 0.6s ease-out;
+      text-shadow: 0 0 5px rgba(58, 123, 213, 0.5);
+      letter-spacing: 1px;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--accent-color);
+      box-shadow: 0 0 10px var(--accent-color);
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-top: 30px;
+      margin-bottom: 10px;
+      animation: fadeInUp 0.6s ease-out;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all var(--transition-speed);
+    }
+
+    .section-title:hover {
+      color: var(--accent-color);
+    }
+
+    .section-title::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--accent-color);
+      border-radius: 50%;
+      box-shadow: 0 0 5px var(--accent-color);
+      transition: all var(--transition-speed);
+    }
+
+    .section-title:hover::before {
+      transform: scale(1.3);
+    }
+
+    .section-title.active::after {
+      content: '-';
+    }
+
+    .section-content {
+      display: none;
+      padding: 15px 0 15px 20px;
+      border-left: 2px solid rgba(58, 123, 213, 0.3);
+      margin-left: 3px;
+    }
+
+    .section-content.active {
+      display: block;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    p {
+      margin-bottom: 20px;
+      font-size: 1rem;
+      color: var(--text-color);
+      opacity: 0.9;
+    }
+
+    ul {
+      margin-bottom: 20px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    li::before {
+      content: '•';
+      color: var(--accent-color);
+      position: absolute;
+      left: -15px;
+    }
+
+    /* Theme toggle button */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--glass-effect);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(58, 123, 213, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-speed);
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      border-color: var(--accent-color);
+    }
+
+    .theme-toggle i {
+      font-size: 1.2rem;
+      color: var(--text-color);
+      transition: all var(--transition-speed);
+    }
+
+    .theme-toggle:hover i {
+      color: var(--accent-color);
+    }
+
+    /* Back button */
+    .back-button {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      padding: 10px 20px;
+      background: var(--glass-effect);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(58, 123, 213, 0.3);
+      border-radius: var(--border-radius);
+      color: var(--text-color);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all var(--transition-speed);
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .back-button:hover {
+      transform: translateX(-5px);
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+
+    /* Language selector */
+    .language-selector {
+      position: absolute;
+      top: 20px;
+      right: 90px;
+      padding: 8px 15px;
+      background: var(--glass-effect);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(58, 123, 213, 0.3);
+      border-radius: var(--border-radius);
+      color: var(--text-color);
+      cursor: pointer;
+      transition: all var(--transition-speed);
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .language-selector:hover {
+      border-color: var(--accent-color);
+    }
+
+    /* Scrollbar styling */
+    .container::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .container::-webkit-scrollbar-thumb {
+      background-color: rgba(58, 123, 213, 0.5);
+      border-radius: 10px;
+    }
+
+    .container::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0.4); }
+      70% { box-shadow: 0 0 0 15px rgba(58, 123, 213, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(58, 123, 213, 0); }
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 20px;
+        max-height: 85vh;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      .section-title {
+        font-size: 1.2rem;
+      }
+
+      p {
+        font-size: 0.95rem;
+      }
+
+      .language-selector {
+        right: 80px;
+        padding: 6px 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 25px 15px;
+      }
+
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .section-title {
+        font-size: 1.1rem;
+      }
+
+      .back-button {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+      }
+
+      .theme-toggle {
+        width: 40px;
+        height: 40px;
+      }
+
+      .language-selector {
+        right: 70px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme toggle button -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <!-- Language selector -->
+  <select class="language-selector" id="languageSelector">
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="fr">Français</option>
+    <option value="de">Deutsch</option>
+  </select>
+
+  <!-- Back button -->
+  <a href="settingsdemo.html" class="back-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>Back</span>
+  </a>
+
+  <main class="container" role="main" aria-labelledby="privacy-title">
+    <h1 id="privacy-title">DATA PRIVACY PROTOCOL</h1>
+
+    <p id="intro-text">At Takify, we are committed to protecting your privacy. This protocol outlines how we collect, use, and safeguard your personal information.</p>
+
+    <section>
+      <div class="section-title" id="section1-title">1. DATA COLLECTION</div>
+      <div class="section-content" id="section1-content">
+        <p>We collect only necessary data to provide our services. This includes:</p>
+        <ul>
+          <li>Account information (name, email)</li>
+          <li>Usage analytics (anonymous)</li>
+          <li>Device information (browser type, OS)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title" id="section2-title">2. DATA USAGE</div>
+      <div class="section-content" id="section2-content">
+        <p>Your data is used exclusively for:</p>
+        <ul>
+          <li>Service personalization</li>
+          <li>Security and fraud prevention</li>
+          <li>Legal compliance</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title" id="section3-title">3. DATA SHARING</div>
+      <div class="section-content" id="section3-content">
+        <p>We never sell your data. Limited sharing occurs with:</p>
+        <ul>
+          <li>Trusted service providers</li>
+          <li>Legal authorities (when required)</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title" id="section4-title">4. DATA SECURITY</div>
+      <div class="section-content" id="section4-content">
+        <p>We implement industry-standard measures to protect your data:</p>
+        <ul>
+          <li>End-to-end encryption</li>
+          <li>Regular security audits</li>
+          <li>Access controls</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title" id="section5-title">5. YOUR RIGHTS</div>
+      <div class="section-content" id="section5-content">
+        <p>You have the right to:</p>
+        <ul>
+          <li>Access your personal data</li>
+          <li>Request corrections</li>
+          <li>Delete your account</li>
+          <li>Opt-out of marketing</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title" id="section6-title">6. COOKIES</div>
+      <div class="section-content" id="section6-content">
+        <p>We use cookies to:</p>
+        <ul>
+          <li>Maintain sessions</li>
+          <li>Analyze traffic</li>
+          <li>Improve user experience</li>
+        </ul>
+        <p>You can manage cookies in your browser settings.</p>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title" id="section7-title">7. POLICY UPDATES</div>
+      <div class="section-content" id="section7-content">
+        <p>We may update this policy periodically. Significant changes will be:</p>
+        <ul>
+          <li>Posted on our website</li>
+          <li>Communicated via email</li>
+          <li>Highlighted in the app</li>
+        </ul>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title" id="section8-title">8. CONTACT US</div>
+      <div class="section-content" id="section8-content">
+        <p>For privacy concerns or requests:</p>
+        <ul>
+          <li>Email: privacy@takify.com</li>
+          <li>Support Center: help.takify.com</li>
+          <li>Phone: +1 (555) 123-4567</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Theme toggle functionality
+    const themeToggle = document.getElementById('themeToggle');
+    const html = document.documentElement;
+    const icon = themeToggle.querySelector('i');
+    
+    function applyTheme(theme) {
+      if (theme === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        theme = prefersDark ? 'dark' : 'light';
+      }
+      
+      html.setAttribute('data-theme', theme);
+      localStorage.setItem('theme', theme);
+      
+      // Update icon
+      if (theme === 'dark') {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      } else {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      }
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = html.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      applyTheme(newTheme);
+      
+      // Add pulse animation
+      themeToggle.style.animation = 'none';
+      setTimeout(() => {
+        themeToggle.style.animation = 'pulse 0.5s ease';
+      }, 10);
+    });
+    
+    // Apply stored theme on load or use system preference
+    const storedTheme = localStorage.getItem('theme') || 'dark';
+    applyTheme(storedTheme);
+    
+    // Listen for system theme changes
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem('theme')) {
+        applyTheme('system');
+      }
+    });
+
+    // Collapsible sections
+    document.querySelectorAll('.section-title').forEach(title => {
+      title.addEventListener('click', () => {
+        title.classList.toggle('active');
+        title.nextElementSibling.classList.toggle('active');
+      });
+    });
+
+    // Add hover effect to back button
+    const backButton = document.querySelector('.back-button');
+    backButton.addEventListener('mouseenter', () => {
+      backButton.querySelector('i').style.transform = 'translateX(-3px)';
+    });
+    backButton.addEventListener('mouseleave', () => {
+      backButton.querySelector('i').style.transform = 'translateX(0)';
+    });
+
+    // Language translations
+    const translations = {
+      en: {
+        title: "DATA PRIVACY PROTOCOL",
+        introText: "At Takify, we are committed to protecting your privacy. This protocol outlines how we collect, use, and safeguard your personal information.",
+        section1Title: "1. DATA COLLECTION",
+        section1Content: `<p>We collect only necessary data to provide our services. This includes:</p>
+        <ul>
+          <li>Account information (name, email)</li>
+          <li>Usage analytics (anonymous)</li>
+          <li>Device information (browser type, OS)</li>
+        </ul>`,
+        section2Title: "2. DATA USAGE",
+        section2Content: `<p>Your data is used exclusively for:</p>
+        <ul>
+          <li>Service personalization</li>
+          <li>Security and fraud prevention</li>
+          <li>Legal compliance</li>
+        </ul>`,
+        section3Title: "3. DATA SHARING",
+        section3Content: `<p>We never sell your data. Limited sharing occurs with:</p>
+        <ul>
+          <li>Trusted service providers</li>
+          <li>Legal authorities (when required)</li>
+        </ul>`,
+        section4Title: "4. DATA SECURITY",
+        section4Content: `<p>We implement industry-standard measures to protect your data:</p>
+        <ul>
+          <li>End-to-end encryption</li>
+          <li>Regular security audits</li>
+          <li>Access controls</li>
+        </ul>`,
+        section5Title: "5. YOUR RIGHTS",
+        section5Content: `<p>You have the right to:</p>
+        <ul>
+          <li>Access your personal data</li>
+          <li>Request corrections</li>
+          <li>Delete your account</li>
+          <li>Opt-out of marketing</li>
+        </ul>`,
+        section6Title: "6. COOKIES",
+        section6Content: `<p>We use cookies to:</p>
+        <ul>
+          <li>Maintain sessions</li>
+          <li>Analyze traffic</li>
+          <li>Improve user experience</li>
+        </ul>
+        <p>You can manage cookies in your browser settings.</p>`,
+        section7Title: "7. POLICY UPDATES",
+        section7Content: `<p>We may update this policy periodically. Significant changes will be:</p>
+        <ul>
+          <li>Posted on our website</li>
+          <li>Communicated via email</li>
+          <li>Highlighted in the app</li>
+        </ul>`,
+        section8Title: "8. CONTACT US",
+        section8Content: `<p>For privacy concerns or requests:</p>
+        <ul>
+          <li>Email: privacy@takify.com</li>
+          <li>Support Center: help.takify.com</li>
+          <li>Phone: +1 (555) 123-4567</li>
+        </ul>`
+      },
+      es: {
+        title: "PROTOCOLO DE PRIVACIDAD",
+        introText: "En Takify, nos comprometemos a proteger su privacidad. Este protocolo describe cómo recopilamos, usamos y protegemos su información personal.",
+        section1Title: "1. RECOPILACIÓN DE DATOS",
+        section1Content: `<p>Recopilamos solo los datos necesarios para brindar nuestros servicios. Esto incluye:</p>
+        <ul>
+          <li>Información de cuenta (nombre, correo electrónico)</li>
+          <li>Análisis de uso (anónimo)</li>
+          <li>Información del dispositivo (navegador, sistema operativo)</li>
+        </ul>`,
+        section2Title: "2. USO DE DATOS",
+        section2Content: `<p>Sus datos se utilizan exclusivamente para:</p>
+        <ul>
+          <li>Personalización del servicio</li>
+          <li>Seguridad y prevención de fraudes</li>
+          <li>Cumplimiento legal</li>
+        </ul>`,
+        section3Title: "3. COMPARTIR DATOS",
+        section3Content: `<p>Nunca vendemos sus datos. El intercambio limitado ocurre con:</p>
+        <ul>
+          <li>Proveedores de servicios confiables</li>
+          <li>Autoridades legales (cuando es requerido)</li>
+        </ul>`,
+        section4Title: "4. SEGURIDAD DE DATOS",
+        section4Content: `<p>Implementamos medidas estándar de la industria para proteger sus datos:</p>
+        <ul>
+          <li>Encriptación de extremo a extremo</li>
+          <li>Auditorías de seguridad regulares</li>
+          <li>Controles de acceso</li>
+        </ul>`,
+        section5Title: "5. SUS DERECHOS",
+        section5Content: `<p>Usted tiene derecho a:</p>
+        <ul>
+          <li>Acceder a sus datos personales</li>
+          <li>Solicitar correcciones</li>
+          <li>Eliminar su cuenta</li>
+          <li>Optar por no recibir marketing</li>
+        </ul>`,
+        section6Title: "6. COOKIES",
+        section6Content: `<p>Usamos cookies para:</p>
+        <ul>
+          <li>Mantener sesiones</li>
+          <li>Analizar tráfico</li>
+          <li>Mejorar la experiencia del usuario</li>
+        </ul>
+        <p>Puede administrar cookies en la configuración de su navegador.</p>`,
+        section7Title: "7. ACTUALIZACIONES",
+        section7Content: `<p>Podemos actualizar esta política periódicamente. Los cambios importantes serán:</p>
+        <ul>
+          <li>Publicados en nuestro sitio web</li>
+          <li>Comunicados por correo electrónico</li>
+          <li>Destacados en la aplicación</li>
+        </ul>`,
+        section8Title: "8. CONTÁCTENOS",
+        section8Content: `<p>Para consultas o solicitudes de privacidad:</p>
+        <ul>
+          <li>Email: privacy@takify.com</li>
+          <li>Centro de soporte: help.takify.com</li>
+          <li>Teléfono: +1 (555) 123-4567</li>
+        </ul>`
+      },
+      fr: {
+        title: "PROTOCOLE DE CONFIDENTIALITÉ",
+        introText: "Chez Takify, nous nous engageons à protéger votre vie privée. Ce protocole décrit comment nous collectons, utilisons et protégeons vos informations personnelles.",
+        section1Title: "1. COLLECTE DE DONNÉES",
+        section1Content: `<p>Nous collectons uniquement les données nécessaires pour fournir nos services. Cela inclut:</p>
+        <ul>
+          <li>Informations de compte (nom, email)</li>
+          <li>Analyses d'utilisation (anonymes)</li>
+          <li>Informations sur l'appareil (navigateur, système d'exploitation)</li>
+        </ul>`,
+        section2Title: "2. UTILISATION DES DONNÉES",
+        section2Content: `<p>Vos données sont utilisées exclusivement pour:</p>
+        <ul>
+          <li>Personnalisation du service</li>
+          <li>Sécurité et prévention des fraudes</li>
+          <li>Conformité légale</li>
+        </ul>`,
+        section3Title: "3. PARTAGE DE DONNÉES",
+        section3Content: `<p>Nous ne vendons jamais vos données. Un partage limité a lieu avec:</p>
+        <ul>
+          <li>Prestataires de services de confiance</li>
+          <li>Autorités légales (si requis)</li>
+        </ul>`,
+        section4Title: "4. SÉCURITÉ DES DONNÉES",
+        section4Content: `<p>Nous mettons en œuvre des mesures standard de l'industrie pour protéger vos données:</p>
+        <ul>
+          <li>Chiffrement de bout en bout</li>
+          <li>Audits de sécurité réguliers</li>
+          <li>Contrôles d'accès</li>
+        </ul>`,
+        section5Title: "5. VOS DROITS",
+        section5Content: `<p>Vous avez le droit de:</p>
+        <ul>
+          <li>Accéder à vos données personnelles</li>
+          <li>Demander des corrections</li>
+          <li>Supprimer votre compte</li>
+          <li>Vous désinscrire du marketing</li>
+        </ul>`,
+        section6Title: "6. COOKIES",
+        section6Content: `<p>Nous utilisons des cookies pour:</p>
+        <ul>
+          <li>Maintenir les sessions</li>
+          <li>Analyser le trafic</li>
+          <li>Améliorer l'expérience utilisateur</li>
+        </ul>
+        <p>Vous pouvez gérer les cookies dans les paramètres de votre navigateur.</p>`,
+        section7Title: "7. MISES À JOUR",
+        section7Content: `<p>Nous pouvons mettre à jour cette politique périodiquement. Les changements importants seront:</p>
+        <ul>
+          <li>Publiés sur notre site web</li>
+          <li>Communiqués par email</li>
+          <li>Mis en avant dans l'application</li>
+        </ul>`,
+        section8Title: "8. CONTACTEZ-NOUS",
+        section8Content: `<p>Pour des questions ou demandes relatives à la confidentialité:</p>
+        <ul>
+          <li>Email : privacy@takify.com</li>
+          <li>Centre d'aide : help.takify.com</li>
+          <li>Téléphone : +1 (555) 123-4567</li>
+        </ul>`
+      },
+      de: {
+        title: "DATENSCHUTZPROTOKOLL",
+        introText: "Bei Takify sind wir dem Schutz Ihrer Privatsphäre verpflichtet. Dieses Protokoll beschreibt, wie wir Ihre persönlichen Daten erfassen, nutzen und schützen.",
+        section1Title: "1. DATENERFASSUNG",
+        section1Content: `<p>Wir erfassen nur die für unsere Dienste notwendigen Daten. Dazu gehören:</p>
+        <ul>
+          <li>Kontoinformationen (Name, E-Mail)</li>
+          <li>Nutzungsanalysen (anonym)</li>
+          <li>Geräteinformationen (Browsertyp, Betriebssystem)</li>
+        </ul>`,
+        section2Title: "2. DATENNUTZUNG",
+        section2Content: `<p>Ihre Daten werden ausschließlich verwendet für:</p>
+        <ul>
+          <li>Dienstpersonalisierung</li>
+          <li>Sicherheit und Betrugsprävention</li>
+          <li>Rechtliche Compliance</li>
+        </ul>`,
+        section3Title: "3. DATENWEITERGABE",
+        section3Content: `<p>Wir verkaufen Ihre Daten niemals. Begrenzte Weitergabe erfolgt an:</p>
+        <ul>
+          <li>Vertrauenswürdige Dienstleister</li>
+          <li>Behörden (bei Erforderlichkeit)</li>
+        </ul>`,
+        section4Title: "4. DATENSICHERHEIT",
+        section4Content: `<p>Wir implementieren branchenübliche Maßnahmen zum Schutz Ihrer Daten:</p>
+        <ul>
+          <li>Ende-zu-Ende-Verschlüsselung</li>
+          <li>Regelmäßige Sicherheitsaudits</li>
+          <li>Zugriffskontrollen</li>
+        </ul>`,
+        section5Title: "5. IHRE RECHTE",
+        section5Content: `<p>Sie haben das Recht auf:</p>
+        <ul>
+          <li>Zugriff auf Ihre personenbezogenen Daten</li>
+          <li>Berichtigung</li>
+          <li>Löschung Ihres Kontos</li>
+          <li>Widerspruch gegen Marketing</li>
+        </ul>`,
+        section6Title: "6. COOKIES",
+        section6Content: `<p>Wir verwenden Cookies für:</p>
+        <ul>
+          <li>Sitzungsverwaltung</li>
+          <li>Verkehrsanalyse</li>
+          <li>Verbesserung der Benutzererfahrung</li>
+        </ul>
+        <p>Sie können Cookies in Ihren Browser-Einstellungen verwalten.</p>`,
+        section7Title: "7. RICHTLINIENAKTUALISIERUNGEN",
+        section7Content: `<p>Wir können diese Richtlinie regelmäßig aktualisieren. Wesentliche Änderungen werden:</p>
+        <ul>
+          <li>Auf unserer Website veröffentlicht</li>
+          <li>Per E-Mail mitgeteilt</li>
+          <li>In der App hervorgehoben</li>
+        </ul>`,
+        section8Title: "8. KONTAKTIEREN SIE UNS",
+        section8Content: `<p>Bei Datenschutzanfragen oder -anliegen:</p>
+        <ul>
+          <li>E-Mail: privacy@takify.com</li>
+          <li>Support-Center: help.takify.com</li>
+          <li>Telefon: +1 (555) 123-4567</li>
+        </ul>`
+      }
+    };
+
+    // Language switching
+    document.getElementById('languageSelector').addEventListener('change', function() {
+      const lang = this.value;
+      const t = translations[lang];
+      
+      document.getElementById('privacy-title').textContent = t.title;
+      document.getElementById('intro-text').innerHTML = t.introText;
+      
+      for (let i = 1; i <= 8; i++) {
+        document.getElementById(`section${i}-title`).textContent = t[`section${i}Title`];
+        document.getElementById(`section${i}-content`).innerHTML = t[`section${i}Content`];
+      }
+    });
+
+    // Auto-animate sections on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('section').forEach(section => {
+      section.style.opacity = '0';
+      section.style.transform = 'translateY(20px)';
+      section.style.transition = 'all 0.6s ease-out';
+      observer.observe(section);
+    });
+  </script>
+</body>
+</html>
