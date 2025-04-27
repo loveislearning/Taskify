@@ -7,33 +7,35 @@
   <link rel="stylesheet" href="relapse.css"/>
 </head>
 <body>
-  <div class="background-glow"></div>
-  <div class="main-card">
-    <header>
-      <div class="logo-circle">
-        <span>⏱️</span>
+  <div class="split-container">
+    <div class="left-panel">
+      <div class="centered-message">
+        <h1>
+          Keep Your Streak,<br>
+          <span class="blue">Everyday</span>
+        </h1>
+        <p class="motivation-quote" id="quote"></p>
+        <button id="newQuoteBtn" class="motivation-btn">New Motivation</button>
       </div>
-      <h1>Relapse Timer</h1>
-      <p class="subtitle">Keep your productivity streak alive!</p>
-    </header>
-    <section class="timer-section">
-      <div class="streak-label">Current Streak</div>
-      <div class="streak-days"><span id="days">0</span> <span class="unit">days</span></div>
-      <div class="timer-box" id="timer">00:00:00:00</div>
-      <button id="relapseBtn" class="relapse-btn">Relapse</button>
-    </section>
-    <section class="motivation-section">
-      <div class="motivation-glow"></div>
-      <blockquote id="quote"></blockquote>
-      <button id="newQuoteBtn" class="motivation-btn">New Motivation</button>
-    </section>
-    <section class="history-section">
-      <h2>Relapse History</h2>
-      <ul id="historyList"></ul>
-    </section>
-    <footer>
-      <small>Made with 💙 to help you stay on track</small>
-    </footer>
+    </div>
+    <div class="right-panel">
+      <div class="content">
+        <h2 class="section-title">Relapse Timer</h2>
+        <div class="streak-info">
+          <div class="streak-label">Current Streak</div>
+          <div class="streak-days"><span id="days">0</span> <span class="unit">days</span></div>
+          <div class="timer-box" id="timer">00:00:00:00</div>
+        </div>
+        <button id="relapseBtn" class="relapse-btn">Relapse</button>
+        <div class="history-section">
+          <h3>Relapse History</h3>
+          <ul id="historyList"></ul>
+        </div>
+        <footer>
+          <small>Made with 💙 to help you stay on track</small>
+        </footer>
+      </div>
+    </div>
   </div>
   <script src="relapse.js"></script>
 </body>

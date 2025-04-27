@@ -16,7 +16,6 @@ const quotes = [
     "Every day is a chance to get better."
   ];
   
-  // DOM elements
   const timerEl = document.getElementById('timer');
   const relapseBtn = document.getElementById('relapseBtn');
   const daysEl = document.getElementById('days');
@@ -24,17 +23,14 @@ const quotes = [
   const newQuoteBtn = document.getElementById('newQuoteBtn');
   const historyList = document.getElementById('historyList');
   
-  // Persistent storage
   let startTime = localStorage.getItem('relapseStartTime');
   let history = JSON.parse(localStorage.getItem('relapseHistory') || '[]');
   
-  // Initialize timer
   if (!startTime) {
     startTime = Date.now();
     localStorage.setItem('relapseStartTime', startTime);
   }
   
-  // Timer update function
   function updateTimer() {
     const now = Date.now();
     const diff = now - startTime;
@@ -53,9 +49,7 @@ const quotes = [
   setInterval(updateTimer, 1000);
   updateTimer();
   
-  // Relapse button functionality
   relapseBtn.addEventListener('click', () => {
-    // Save relapse to history
     const now = new Date();
     const diff = Date.now() - startTime;
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -64,17 +58,14 @@ const quotes = [
       streak: days
     };
     history.unshift(relapseRecord);
-    if (history.length > 10) history.pop(); // Limit history length
+    if (history.length > 10) history.pop();
     localStorage.setItem('relapseHistory', JSON.stringify(history));
-  
-    // Reset timer
     startTime = Date.now();
     localStorage.setItem('relapseStartTime', startTime);
     updateTimer();
     renderHistory();
   });
   
-  // Render relapse history
   function renderHistory() {
     historyList.innerHTML = '';
     if (history.length === 0) {
@@ -88,7 +79,6 @@ const quotes = [
   }
   renderHistory();
   
-  // Motivation
   function newQuote() {
     const idx = Math.floor(Math.random() * quotes.length);
     quoteEl.textContent = quotes[idx];
@@ -96,7 +86,6 @@ const quotes = [
   newQuoteBtn.addEventListener('click', newQuote);
   newQuote();
   
-  // Optional: Show a new quote every day
   const lastQuoteDay = localStorage.getItem('lastQuoteDay');
   const today = new Date().toDateString();
   if (lastQuoteDay !== today) {
