@@ -4,10 +4,257 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Relapse Timer – Streak Tracker</title>
-  <link rel="stylesheet" href="relapse.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue: #00baff;
+      --blue-dark: #009fff;
+      --blue-gradient: linear-gradient(90deg, #00baff 0%, #009fff 100%);
+      --black: #0f0f0f;
+      --panel-bg: #181818;
+      --card-bg: #222;
+      --gray: #b0c7e6;
+      --white: #f7fafd;
+      --input-bg: #191b1e;
+      --input-border: #444;
+    }
+    * { box-sizing: border-box; }
+
+    body {
+      background: var(--black);
+      font-family: 'Poppins', Arial, sans-serif;
+      color: var(--white);
+      margin: 0;
+      min-height: 100vh;
+    }
+
+    .split-container {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .left-panel, .right-panel {
+      width: 50vw;
+      height: 100vh;
+      min-width: 0;
+      min-height: 0;
+      position: relative;
+      overflow: auto;
+      transition: none;
+    }
+
+    .left-panel {
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 3vw;
+    }
+
+    .centered-message h1 {
+      font-size: 3vw;
+      font-weight: 900;
+      line-height: 1.15;
+      color: var(--white);
+      letter-spacing: -1px;
+      margin: 0;
+    }
+    .centered-message .blue {
+      color: var(--blue);
+      font-size: 3.5vw;
+      font-weight: 900;
+      display: block;
+      margin-top: 0.5vw;
+    }
+
+    .right-panel {
+      background: var(--panel-bg);
+      display: flex;
+      align-items: stretch;
+      justify-content: stretch;
+      padding: 0;
+    }
+
+    .timer-card {
+      width: 100%;
+      max-width: none;
+      min-height: 100vh;
+      background: var(--card-bg);
+      border-radius: 0;
+      box-shadow: none;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      padding: 3.5rem 2.5rem 2.5rem 2.5rem;
+      /* Remove margin so it fills the right half */
+      margin: 0;
+      justify-content: flex-start;
+    }
+
+    .section-title {
+      font-size: 2.3rem;
+      color: var(--blue);
+      margin-bottom: 1.2rem;
+      text-align: left;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+
+    .streak-label {
+      text-align: left;
+      font-size: 1.07rem;
+      color: var(--gray);
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .streak-days {
+      font-size: 2.5rem;
+      color: var(--blue);
+      text-align: left;
+      margin: 0 0 1.2rem 0;
+      font-weight: 900;
+    }
+
+    .timer-box {
+      font-size: 1.6rem;
+      font-family: 'Roboto Mono', monospace;
+      background: var(--input-bg);
+      color: var(--white);
+      padding: 1.1rem;
+      border-radius: 10px;
+      margin-bottom: 1.7rem;
+      text-align: left;
+      border: 2px solid var(--input-border);
+      width: 100%;
+      box-sizing: border-box;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
+
+    .relapse-btn, .motivation-btn, .clear-history-btn {
+      width: 100%;
+      padding: 1.1rem 0;
+      border: none;
+      background: var(--blue-gradient);
+      color: white;
+      font-size: 1.13rem;
+      font-weight: 900;
+      border-radius: 10px;
+      margin-bottom: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      outline: none;
+      text-align: center;
+    }
+    .relapse-btn:hover, .motivation-btn:hover, .clear-history-btn:hover {
+      background: linear-gradient(90deg, #009fff 0%, #00baff 100%);
+      box-shadow: 0 4px 16px rgba(0,186,255,0.08);
+    }
+
+    .motivation-section {
+      background: var(--input-bg);
+      padding: 1rem;
+      border-radius: 10px;
+      text-align: left;
+      margin-bottom: 1.4rem;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .motivation-quote {
+      color: var(--gray);
+      font-style: italic;
+      margin-bottom: 0.7rem;
+      min-height: 2.2em;
+      font-weight: 700;
+      font-size: 1.05rem;
+      text-align: left;
+    }
+
+    .history-section {
+      background: var(--input-bg);
+      padding: 1rem;
+      border-radius: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 0.5rem;
+      text-align: left;
+    }
+
+    .history-section h3 {
+      color: var(--blue);
+      font-size: 1.18rem;
+      margin-bottom: 0.7rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      text-align: left;
+    }
+
+    #historyList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #historyList li {
+      padding: 0.5rem 0;
+      color: var(--gray);
+      border-bottom: 1px solid #333;
+      font-size: 1rem;
+      font-weight: 700;
+      text-align: left;
+    }
+
+    #historyList li:last-child {
+      border-bottom: none;
+    }
+
+    .clear-history-btn {
+      margin-bottom: 1rem;
+      background: linear-gradient(90deg, #232526 0%, #414345 100%);
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 900;
+      border-radius: 10px;
+      transition: background 0.2s;
+      margin-top: 0.2rem;
+      text-align: center;
+    }
+    .clear-history-btn:hover {
+      background: linear-gradient(90deg, #ff512f 0%, #dd2476 100%);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .split-container {
+        flex-direction: column;
+        height: auto;
+      }
+      .left-panel, .right-panel {
+        width: 100vw;
+        min-width: 0;
+        min-height: 0;
+        height: auto;
+      }
+      .left-panel {
+        display: none;
+      }
+      .right-panel {
+        padding: 0;
+      }
+      .timer-card {
+        min-height: 100vh;
+        border-radius: 0;
+        padding: 2rem 1rem 1.5rem 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="split-container">
@@ -32,11 +279,120 @@
         </div>
         <div class="history-section">
           <h3>Relapse History</h3>
+          <button id="clearHistoryBtn" class="clear-history-btn">Clear History</button>
           <ul id="historyList"></ul>
         </div>
       </div>
     </div>
   </div>
-  <script src="relapse.js"></script>
+  <script>
+    const quotes = [
+      "Be stronger than your strongest excuse.",
+      "It always seems impossible until it’s done. – Nelson Mandela",
+      "If we are facing in the right direction, all we have to do is keep on walking. – Zen Proverb",
+      "Recovery is a process. It takes time. It takes patience. It takes everything you’ve got.",
+      "No matter how dark the moment, love and hope are always possible. – George Chakiris",
+      "Hardships often prepare ordinary people for an extraordinary destiny. – C.S. Lewis",
+      "The best time to plant a tree was 20 years ago. The second best time is now. – Chinese Proverb",
+      "You can come out of the furnace of trouble two ways: if you let it consume you, you come out a cinder; but there is a kind of metal which refuses to be consumed, and comes out a star. – Jean Church",
+      "Whether you think you can or you think you can’t, you’re right. – Henry Ford",
+      "It is often in the darkest skies that we see the brightest stars. – Richard Evans"
+    ];
+
+    const timerEl = document.getElementById('timer');
+    const relapseBtn = document.getElementById('relapseBtn');
+    const daysEl = document.getElementById('days');
+    const quoteEl = document.getElementById('quote');
+    const newQuoteBtn = document.getElementById('newQuoteBtn');
+    const historyList = document.getElementById('historyList');
+    const clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+    // Fetch or initialize timer and history from localStorage
+    let startTime = localStorage.getItem('relapseStartTime');
+    let history = JSON.parse(localStorage.getItem('relapseHistory') || '[]');
+
+    if (!startTime) {
+      startTime = Date.now();
+      localStorage.setItem('relapseStartTime', startTime);
+    }
+
+    function updateTimer() {
+      const now = Date.now();
+      const diff = now - startTime;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      daysEl.textContent = `${days}`;
+      timerEl.textContent =
+        `${String(days).padStart(2, '0')}:` +
+        `${String(hours).padStart(2, '0')}:` +
+        `${String(minutes).padStart(2, '0')}:` +
+        `${String(seconds).padStart(2, '0')}`;
+    }
+
+    setInterval(updateTimer, 1000);
+    updateTimer();
+
+    relapseBtn.addEventListener('click', () => {
+      const now = new Date();
+      const diff = Date.now() - startTime;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const relapseRecord = {
+        date: now.toLocaleString(),
+        streak: days
+      };
+      history.unshift(relapseRecord);
+      if (history.length > 10) history.pop();
+      localStorage.setItem('relapseHistory', JSON.stringify(history));
+      startTime = Date.now();
+      localStorage.setItem('relapseStartTime', startTime);
+      updateTimer();
+      renderHistory();
+    });
+
+    clearHistoryBtn.addEventListener('click', () => {
+      if (confirm('Are you sure you want to clear all relapse history?')) {
+        history = [];
+        localStorage.removeItem('relapseHistory');
+        renderHistory();
+      }
+    });
+
+    function renderHistory() {
+      historyList.innerHTML = '';
+      if (history.length === 0) {
+        historyList.innerHTML = '<li>No relapses yet! Keep going! 💪</li>';
+        return;
+      }
+      history.forEach(item => {
+        historyList.innerHTML += `
+          <li>
+            <strong>${item.streak} day${item.streak !== 1 ? 's' : ''}</strong> streak ended<br>
+            <span>${item.date}</span>
+          </li>`;
+      });
+    }
+    renderHistory();
+
+    function newQuote() {
+      const idx = Math.floor(Math.random() * quotes.length);
+      quoteEl.textContent = quotes[idx];
+    }
+
+    newQuoteBtn.addEventListener('click', newQuote);
+
+    // Daily new quote logic
+    const lastQuoteDay = localStorage.getItem('lastQuoteDay');
+    const today = new Date().toDateString();
+
+    if (lastQuoteDay !== today) {
+      newQuote();
+      localStorage.setItem('lastQuoteDay', today);
+    } else {
+      if (quoteEl.textContent.trim() === "") newQuote();
+    }
+  </script>
 </body>
 </html>
