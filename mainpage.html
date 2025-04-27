@@ -104,6 +104,9 @@
       background-repeat: no-repeat;
       transition: all 0.3s ease;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .icon-compact:hover {
       border-radius: 25%;
@@ -146,6 +149,7 @@
       align-items: center;
       padding: 15px 20px;
       margin-bottom: 10px;
+      position: relative;
     }
     .logo-icon-img {
       max-height: 50px;
@@ -168,38 +172,54 @@
       height: 1px;
       background-color: #444;
       margin: 14px auto;
+      position: relative;
     }
-    .toggle-btn {
+      .toggle-btn {
+  position: absolute;
+  top: 10px;
+  right: -15px;
+  background: #222;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #444;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  z-index: 1001;
+}
+
+.toggle-btn:hover {
+  color: #fff;
+  background: #333;
+  transform: scale(1.1);
+}
+
+.sidebar.expanded .toggle-btn {
+  right: -15px;
+}
+
+.sidebar.compact .toggle-btn {
+  right: -15px;
+}
+    .close-sidebar {
       position: absolute;
-      top: 75px; 
-      left: 50%;
-      transform: translateX(-50%);
-      width: 30px;
-      height: 30px;
-      background-color: #333;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      top: 15px;
+      right: 15px;
+      color: #aaa;
       cursor: pointer;
-      transition: all 0.3s ease;
+      font-size: 20px;
+      display: none;
     }
-    .toggle-btn:hover {
-      background-color: #444;
-      transform: scale(1.1) translateX(-50%);
+    .expanded .close-sidebar {
+      display: block;
     }
-    .toggle-arrow {
-      width: 12px;
-      height: 12px;
-      border-right: 2px solid white;
-      border-bottom: 2px solid white;
-      transition: all 0.3s ease;
-    }
-    .compact .toggle-arrow {
-      transform: rotate(-45deg);
-    }
-    .expanded .toggle-arrow {
-      transform: rotate(135deg);
+    .close-sidebar:hover {
+      color: #fff;
     }
 
     .main-content {
@@ -819,14 +839,9 @@
   </div>
 
   <div class="sidebar compact" id="sidebar">
-    <div class="icon-compact" style="background-image: url('logo.png');" title="Logo"></div>
-
-    <div class="divider"></div>
-
-    <div class="toggle-btn compact" id="toggleBtn">
-      <div class="toggle-arrow"></div>
+    <div class="divider">
+      <button class="toggle-btn" id="toggleBtn">--></button>
     </div>
-
     <div class="icon-compact" onclick="showSection('dashboard')" style="background-image: url('Dashboard.png');" title="Dashboard"></div>
     <div class="icon-compact" onclick="showSection('grades')" style="background-image: url('Grade.png');" title="Grade Calculator"></div>
     <div class="icon-compact" onclick="window.location.href='subject_notes.html'" style="background-image: url('SubjectNaotes.png');" title="Subject Notes"></div>
@@ -842,10 +857,8 @@
     <div class="icon-compact" onclick="window.location.href='/recycle_bin.html'" style="background-image: url('Trash.png');" title="Trash Bin"></div>
 
     <div class="logo-item" id="logoItem">
-      <img src="logo1.png" class="logo-icon-img" alt="My App Logo">
     </div>
 
-    <div class="divider" style="display: none;"></div>
 
     <!-- Expanded nav items -->
     <div class="nav-item" onclick="showSection('dashboard')" style="display: none;"><div class="nav-icon" style="background-image: url('Dashboard.png');"></div><div class="nav-text">Dashboard</div></div>
@@ -1103,6 +1116,7 @@
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const toggleBtn = document.getElementById('toggleBtn');
+      const closeSidebar = document.getElementById('closeSidebar');
       const sidebar = document.getElementById('sidebar');
       const body = document.body;
       const compactIcons = document.querySelectorAll('.icon-compact');
@@ -1110,27 +1124,28 @@
       const dividers = document.querySelectorAll('.divider');
       const logoItem = document.getElementById('logoItem');
       const mainContent = document.querySelector('.main-content');
+        function toggleSidebar() {
+          sidebar.classList.toggle('compact');
+          sidebar.classList.toggle('expanded');
 
-      function toggleSidebar() {
-        sidebar.classList.toggle('compact');
-        sidebar.classList.toggle('expanded');
+          if (sidebar.classList.contains('expanded')) {
+            mainContent.style.marginLeft = '250px';
+            navItems.forEach(item => item.style.display = 'flex');
+            dividers.forEach(div => div.style.display = 'block');
+            logoItem.style.display = 'flex';
+            compactIcons.forEach(icon => icon.style.display = 'none');
+            toggleBtn.textContent = '◀'; d
+          } else {
+            mainContent.style.marginLeft = '70px';
+            navItems.forEach(item => item.style.display = 'none');
+            dividers.forEach(div => div.style.display = 'none');
+            logoItem.style.display = 'none';
+            compactIcons.forEach(icon => icon.style.display = 'block');
+            toggleBtn.textContent = '-->'; 
+          }
 
-        if (sidebar.classList.contains('expanded')) {
-          mainContent.style.marginLeft = '250px';
-          navItems.forEach(item => item.style.display = 'flex');
-          dividers.forEach(div => div.style.display = 'block');
-          logoItem.style.display = 'flex';
-          compactIcons.forEach(icon => icon.style.display = 'none');
-        } else {
-          mainContent.style.marginLeft = '70px';
-          navItems.forEach(item => item.style.display = 'none');
-          dividers.forEach(div => div.style.display = 'none');
-          logoItem.style.display = 'none';
-          compactIcons.forEach(icon => icon.style.display = 'block');
+          localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
         }
-
-        localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
-      }
 
       if (localStorage.getItem('sidebarExpanded') === 'true') {
         toggleSidebar();
@@ -1144,6 +1159,12 @@
       }
 
       toggleBtn.addEventListener('click', toggleSidebar);
+      closeSidebar.addEventListener('click', toggleSidebar);
+
+      document.getElementById('menuToggle').addEventListener('click', () => {
+        document.querySelector('.sidebar').classList.toggle('active');
+      });
+
     });
 
     function loadPage(page) {
@@ -1220,10 +1241,6 @@
         }
       });
     }
-
-    document.getElementById('menuToggle').addEventListener('click', () => {
-      document.querySelector('.sidebar').classList.toggle('active');
-    });
 
     function showSection(section) {
       const sections = ['dashboardSection', 'gradesSection', 'trashSection', 'pomodoroSection', 'assistantSection', 'subscriptionSection', 'collaborationSection', 'journalSection'];
