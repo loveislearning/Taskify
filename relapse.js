@@ -9,7 +9,11 @@ const quotes = [
     "The best time to plant a tree was 20 years ago. The second best time is now. – Chinese Proverb",
     "You can come out of the furnace of trouble two ways: if you let it consume you, you come out a cinder; but there is a kind of metal which refuses to be consumed, and comes out a star. – Jean Church",
     "Whether you think you can or you think you can’t, you’re right. – Henry Ford",
-    "It is often in the darkest skies that we see the brightest stars. – Richard Evans"
+    "It is often in the darkest skies that we see the brightest stars. – Richard Evans",
+    "Success is the sum of small efforts, repeated day in and day out. – Robert Collier",
+    "You are capable of amazing things.",
+    "Don’t let yesterday take up too much of today. – Will Rogers",
+    "Every day is a chance to get better."
   ];
   
   // DOM elements
@@ -40,7 +44,7 @@ const quotes = [
     const seconds = Math.floor((diff / 1000) % 60);
   
     daysEl.textContent = days;
-    timerEl.textContent = 
+    timerEl.textContent =
       `${String(days).padStart(2, '0')}:` +
       `${String(hours).padStart(2, '0')}:` +
       `${String(minutes).padStart(2, '0')}:` +
@@ -74,12 +78,12 @@ const quotes = [
   function renderHistory() {
     historyList.innerHTML = '';
     if (history.length === 0) {
-      historyList.innerHTML = '<li>No relapses yet! Keep going!</li>';
+      historyList.innerHTML = '<li>No relapses yet! Keep going! 💪</li>';
       return;
     }
     history.forEach(item => {
-      historyList.innerHTML += 
-        `<li><strong>${item.streak} day${item.streak !== 1 ? 's' : ''}</strong> streak ended on<br>${item.date}</li>`;
+      historyList.innerHTML +=
+        `<li><strong>${item.streak} day${item.streak !== 1 ? 's' : ''}</strong> streak ended<br><span style="color:#6ad6ff">${item.date}</span></li>`;
     });
   }
   renderHistory();
