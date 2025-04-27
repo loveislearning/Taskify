@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IDEA FORGE - Collaboration Nexus</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.min.js" defer></script>
     <style>
         :root {
-            --bg-color: #101014;
+            --bg-color: #0c1221;
             --text-color: #f3f3f3;
-            --card-bg: #18181c;
+            --card-bg: #0f1a2c;
+            --card-dark: #081019;
             --accent-color: #0d2b4a;
             --accent-light: #1a4a80;
-            --hover-color: #23232b;
+            --hover-color: #162842;
+            --border-color: #1c3050;
             --danger-color: #ff2d75;
             --success-color: #00e676;
             --border-radius: 16px;
@@ -23,11 +23,17 @@
             --header-height: 90px;
             --shadow: 0 8px 32px rgba(0,0,0,0.7);
             --neon-glow: 0 0 10px #23232b, 0 0 20px rgba(34,34,47,0.3);
-            --glass-effect: rgba(20, 20, 28, 0.7);
-            --input-bg: #1e1e24;
-            --input-border: #2a2a35;
+            --glass-effect: rgba(10, 17, 33, 0.7);
+            --input-bg: #101c2e;
+            --input-border: #1c3050;
             --button-bg: #1a3050;
             --button-hover: #224872;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
@@ -96,7 +102,7 @@
         .nebula-1 {
             width: 300px;
             height: 300px;
-            background: radial-gradient(circle, #23232b, transparent 70%);
+            background: radial-gradient(circle, #1a4a80, transparent 70%);
             top: 20%;
             left: 10%;
             animation: float 25s infinite linear;
@@ -104,7 +110,7 @@
         .nebula-2 {
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, #18181c, transparent 70%);
+            background: radial-gradient(circle, #0d2b4a, transparent 70%);
             bottom: 10%;
             right: 15%;
             animation: float 30s infinite linear reverse;
@@ -130,7 +136,7 @@
             position: sticky;
             top: 0;
             z-index: 100;
-            border-bottom: 1px solid #23232b;
+            border-bottom: 1px solid var(--border-color);
         }
         .header-content {
             display: flex;
@@ -168,7 +174,7 @@
             position: relative;
             z-index: 10;
             transition: all var(--transition-speed);
-            border-right: 1px solid #23232b;
+            border-right: 1px solid var(--border-color);
         }
 
         .sidebar-menu {
@@ -200,7 +206,7 @@
             background: var(--hover-color);
             color: #fff;
             transform: translateX(10px);
-            box-shadow: 0 0 15px #14141a;
+            box-shadow: 0 0 15px var(--card-dark);
         }
         .sidebar button.active {
             font-weight: 600;
@@ -232,10 +238,11 @@
             grid-template-columns: 1fr 350px;
             gap: 2rem;
         }
+        .content-section > div,
         .right-panel {
-            display: grid;
+            display: flex;
+            flex-direction: column;
             gap: 2rem;
-            align-content: start;
         }
         .widget {
             background: var(--card-bg);
@@ -243,7 +250,7 @@
             border-radius: var(--border-radius);
             padding: 1.5rem;
             box-shadow: var(--shadow);
-            border: 1px solid #23232b;
+            border: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
         }
@@ -252,6 +259,17 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .widget-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-light);
+            box-shadow: 0 0 8px var(--accent-light);
         }
         .widget h2 {
             margin: 0;
@@ -261,16 +279,6 @@
             position: relative;
             display: inline-block;
         }
-        .widget h2::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background: var(--accent-light);
-            box-shadow: 0 0 8px var(--accent-light);
-        }
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -279,40 +287,48 @@
         .stat-card {
             padding: 1.5rem;
             border-radius: var(--border-radius);
-            background: linear-gradient(135deg, var(--accent-color) 0%, var(--card-bg) 100%);
+            background: var(--card-dark);
             text-align: center;
             transition: all var(--transition-speed);
+            border: 1px solid var(--border-color);
         }
         .stat-card h3 {
             font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-            opacity: 0.8;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            text-transform: uppercase;
         }
         .stat-value {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
+            color: white;
         }
         .timeline {
             display: grid;
-            gap: 1rem;
+            gap: 0;
+            position: relative;
+            padding-left: 2rem;
+        }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 3px;
+            background: var(--accent-light);
+            box-shadow: 0 0 8px var(--accent-light);
         }
         .milestone {
-            padding: 1.2rem;
-            border-left: 3px solid var(--accent-color);
-            background: #18181c;
+            padding: 1.5rem 0;
             position: relative;
-            border-radius: 0 var(--border-radius) var(--border-radius) 0;
             transition: all var(--transition-speed);
-        }
-        .milestone:hover {
-            background: #23232b;
-            transform: translateX(5px);
         }
         .milestone::before {
             content: "";
             position: absolute;
-            left: -8px;
-            top: 50%;
+            left: -2rem;
+            top: 2rem;
             width: 14px;
             height: 14px;
             background: var(--accent-light);
@@ -322,7 +338,7 @@
         }
         .milestone h4 {
             margin: 0 0 0.3rem 0;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: var(--accent-light);
         }
         .milestone p {
@@ -340,11 +356,11 @@
             gap: 1rem;
             padding: 1rem;
             border-radius: var(--border-radius);
-            background: #18181c;
+            background: var(--card-dark);
             transition: all var(--transition-speed);
         }
         .member:hover {
-            background: #23232b;
+            background: var(--hover-color);
             transform: translateX(5px);
         }
         .member-avatar {
@@ -393,7 +409,7 @@
             border-bottom-right-radius: 0;
         }
         .message.incoming {
-            background: #18181c;
+            background: var(--card-dark);
             justify-self: start;
             border-bottom-left-radius: 0;
         }
@@ -449,9 +465,33 @@
             right: 0;
             z-index: 10;
             display: none;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
         }
         .emoji-picker.active {
             display: block;
+        }
+        .emoji-selector {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 15px;
+            background: var(--card-dark);
+            border-radius: var(--border-radius);
+        }
+        .emoji-selector button {
+            font-size: 20px;
+            padding: 8px;
+            background: var(--card-bg);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .emoji-selector button:hover {
+            transform: scale(1.2);
+            background: var(--hover-color);
         }
         
         .file-grid {
@@ -463,14 +503,14 @@
             padding: 1rem;
             text-align: center;
             border-radius: var(--border-radius);
-            background: #18181c;
+            background: var(--card-dark);
             transition: all var(--transition-speed);
             cursor: pointer;
         }
         .file-card:hover {
-            background: #23232b;
+            background: var(--hover-color);
             transform: translateY(-5px);
-            box-shadow: 0 5px 15px #18181c;
+            box-shadow: 0 5px 15px var(--card-dark);
         }
         .file-card i {
             font-size: 2rem;
@@ -536,6 +576,12 @@
         textarea {
             min-height: 100px;
             resize: vertical;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         
         @media (max-width: 1200px) {
@@ -611,15 +657,15 @@
             <div id="dashboard-section" class="content-section active">
                 <div>
                     <div class="stats-grid">
-                        <div class="widget stat-card">
+                        <div class="stat-card">
                             <h3>ACTIVE MEMBERS</h3>
                             <div class="stat-value">42</div>
                         </div>
-                        <div class="widget stat-card">
+                        <div class="stat-card">
                             <h3>ONGOING PROJECTS</h3>
                             <div class="stat-value">15</div>
                         </div>
-                        <div class="widget stat-card">
+                        <div class="stat-card">
                             <h3>COMPLETION RATE</h3>
                             <div class="stat-value">84%</div>
                         </div>
@@ -719,16 +765,16 @@
                             <button id="emoji-btn" class="emoji-button"><i class="far fa-smile"></i></button>
                             <div class="emoji-picker" id="emoji-picker">
                                 <div class="emoji-selector">
-                                    <button class="emoji-option" data-emoji="😊">😊</button>
-                                    <button class="emoji-option" data-emoji="👍">👍</button>
-                                    <button class="emoji-option" data-emoji="🚀">🚀</button>
-                                    <button class="emoji-option" data-emoji="✅">✅</button>
-                                    <button class="emoji-option" data-emoji="⭐">⭐</button>
-                                    <button class="emoji-option" data-emoji="🔥">🔥</button>
-                                    <button class="emoji-option" data-emoji="💯">💯</button>
-                                    <button class="emoji-option" data-emoji="👨‍💻">👨‍💻</button>
-                                    <button class="emoji-option" data-emoji="🎉">🎉</button>
-                                    <button class="emoji-option" data-emoji="👏">👏</button>
+                                    <button data-emoji="😊">😊</button>
+                                    <button data-emoji="👍">👍</button>
+                                    <button data-emoji="🚀">🚀</button>
+                                    <button data-emoji="✅">✅</button>
+                                    <button data-emoji="⭐">⭐</button>
+                                    <button data-emoji="🔥">🔥</button>
+                                    <button data-emoji="💯">💯</button>
+                                    <button data-emoji="👨‍💻">👨‍💻</button>
+                                    <button data-emoji="🎉">🎉</button>
+                                    <button data-emoji="👏">👏</button>
                                 </div>
                             </div>
                             <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
@@ -920,78 +966,52 @@
             });
         });
 
-        // Emoji picker functionality
-        document.getElementById('emoji-btn').addEventListener('click', function() {
-            const picker = document.getElementById('emoji-picker');
-            picker.classList.toggle('active');
+        // Fixed emoji picker functionality that properly closes
+        const emojiBtn = document.getElementById('emoji-btn');
+        const emojiPicker = document.getElementById('emoji-picker');
+        
+        function closeEmojiPicker(e) {
+            // If picker is not visible, do nothing
+            if (!emojiPicker.classList.contains('active')) return;
+            // If click is inside picker or emoji button, do nothing
+            if (
+                emojiPicker.contains(e.target) ||
+                emojiBtn.contains(e.target)
+            ) return;
+            // Otherwise, close picker
+            emojiPicker.classList.remove('active');
+            document.removeEventListener('mousedown', closeEmojiPicker);
+        }
+        
+        // Open picker and add listener
+        emojiBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            emojiPicker.classList.toggle('active');
+            if (emojiPicker.classList.contains('active')) {
+                setTimeout(() => {
+                    document.addEventListener('mousedown', closeEmojiPicker);
+                }, 0);
+            } else {
+                document.removeEventListener('mousedown', closeEmojiPicker);
+            }
         });
 
-        // Add emoji selector
-        const emojiPicker = document.getElementById('emoji-picker');
-        if (!emojiPicker.querySelector('.emoji-selector')) {
-            const emojiSelector = document.createElement('div');
-            emojiSelector.classList.add('emoji-selector');
-            emojiSelector.style.display = 'grid';
-            emojiSelector.style.gridTemplateColumns = 'repeat(5, 1fr)';
-            emojiSelector.style.gap = '10px';
-            emojiSelector.style.padding = '10px';
-            emojiSelector.style.background = '#1e1e24';
-            emojiSelector.style.borderRadius = '12px';
-            emojiSelector.style.boxShadow = '0 5px 15px rgba(0,0,0,0.3)';
-            
-            const emojis = ['😊', '👍', '🚀', '✅', '⭐', '🔥', '💯', '👨‍💻', '🎉', '👏'];
-            
-            emojis.forEach(emoji => {
-                const btn = document.createElement('button');
-                btn.textContent = emoji;
-                btn.style.border = 'none';
-                btn.style.background = 'none';
-                btn.style.fontSize = '20px';
-                btn.style.cursor = 'pointer';
-                btn.style.padding = '5px';
-                btn.style.borderRadius = '5px';
-                btn.style.transition = 'all 0.3s';
-                
-                btn.addEventListener('mouseover', () => {
-                    btn.style.background = '#2a2a35';
-                    btn.style.transform = 'scale(1.2)';
-                });
-                
-                btn.addEventListener('mouseout', () => {
-                    btn.style.background = 'none';
-                    btn.style.transform = 'scale(1)';
-                });
-                
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const input = document.getElementById('chat-input-field');
-                    input.value += emoji;
-                    emojiPicker.classList.remove('active');
-                    input.focus();
-                });
-                
-                emojiSelector.appendChild(btn);
-            });
-            
-            emojiPicker.innerHTML = '';
-            emojiPicker.appendChild(emojiSelector);
-        }
-
         // Handle emoji selection
-        document.querySelectorAll('.emoji-option').forEach(option => {
-            option.addEventListener('click', function() {
+        document.querySelectorAll('.emoji-selector button').forEach(button => {
+            button.addEventListener('click', function() {
                 const emoji = this.getAttribute('data-emoji');
                 const input = document.getElementById('chat-input-field');
                 input.value += emoji;
-                document.getElementById('emoji-picker').classList.remove('active');
+                emojiPicker.classList.remove('active');
+                document.removeEventListener('mousedown', closeEmojiPicker);
                 input.focus();
             });
         });
 
-        // Chat functionality (only in dashboard section)
+        // Chat functionality 
         function setupChat() {
-            const chatInput = document.querySelector('#chat-input-field');
-            const sendBtn = document.querySelector('#send-btn');
+            const chatInput = document.getElementById('chat-input-field');
+            const sendBtn = document.getElementById('send-btn');
             const chatMessages = document.querySelector('.chat-messages');
             
             if (!chatInput || !sendBtn) return;
@@ -1046,20 +1066,11 @@
         // File card interaction
         document.querySelectorAll('.file-card').forEach(card => {
             card.addEventListener('click', () => {
-                card.style.animation = 'none';
+                card.style.animation = 'pulse 0.5s ease';
                 setTimeout(() => {
-                    card.style.animation = 'pulse 0.5s ease';
-                }, 10);
+                    card.style.animation = '';
+                }, 500);
             });
-        });
-
-        // Close emoji picker when clicking outside
-        document.addEventListener('click', (e) => {
-            const emojiBtn = document.getElementById('emoji-btn');
-            const emojiPicker = document.getElementById('emoji-picker');
-            if (emojiBtn && emojiPicker && !emojiBtn.contains(e.target) && !emojiPicker.contains(e.target)) {
-                emojiPicker.classList.remove('active');
-            }
         });
 
         // Re-setup chat when switching back to dashboard
@@ -1072,17 +1083,6 @@
                 alert('Demo: Form submitted!');
             });
         });
-        
-        // Add simple pulse animation
-        document.head.insertAdjacentHTML('beforeend', `
-            <style>
-                @keyframes pulse {
-                    0% { transform: scale(1); }
-                    50% { transform: scale(1.05); }
-                    100% { transform: scale(1); }
-                }
-            </style>
-        `);
     </script>
 </body>
 </html>
