@@ -1,17 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relapse Timer</title>
-    <link rel="stylesheet" href="relapse.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Relapse Timer</title>
+  <link rel="stylesheet" href="relapse.css"/>
 </head>
 <body>
-    <div class="container">
-        <h1>Relapse Timer</h1>
-        <div id="timer">00:00:00</div>
-        <button id="relapseBtn">Relapse</button>
-    </div>
-    <script src="relapse.js"></script>
+  <div class="container">
+    <header>
+      <h1>Relapse Timer</h1>
+      <h2 id="streak">Current Streak: <span id="days">0</span> days</h2>
+    </header>
+    <main>
+      <div class="timer-box">
+        <span id="timer">00:00:00:00</span>
+      </div>
+      <button id="relapseBtn" class="relapse">Relapse</button>
+      <div class="motivation">
+        <blockquote id="quote"></blockquote>
+        <button id="newQuoteBtn">New Motivation</button>
+      </div>
+      <div class="history">
+        <h3>Relapse History</h3>
+        <ul id="historyList"></ul>
+      </div>
+    </main>
+  </div>
+  <script src="relapse.js"></script>
 </body>
 </html>
