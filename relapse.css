@@ -3,56 +3,74 @@
     --blue-glow: #00baff88;
     --blue-dark: #005b8f;
     --black: #0a101a;
-    --black-glass: rgba(10,16,26,0.85);
+    --black-glass: rgba(10, 16, 26, 0.85);
     --white: #eaf6ff;
     --gray: #b0c7e6;
     --danger: #ff3366;
-  }
-  
-  html, body {
+}
+
+html,
+body {
     height: 100%;
     margin: 0;
     padding: 0;
     background: var(--black);
     font-family: 'Segoe UI', Arial, sans-serif;
     color: var(--white);
-  }
-  
-  .background-glow {
+}
+
+.background-glow {
     position: fixed;
-    top: -100px; left: -100px;
-    width: 600px; height: 600px;
-    background: radial-gradient(circle, var(--blue-glow) 0%, transparent 80%);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at 30% 40%, var(--blue-glow) 0%, transparent 70%);
     filter: blur(60px);
     z-index: 0;
     pointer-events: none;
-  }
-  
-  .main-card {
+}
+
+
+.main-card {
     position: relative;
     z-index: 1;
-    max-width: 420px;
-    margin: 48px auto 32px auto;
+    width: 100vw;
+    height: 100vh;
+    min-height: 100vh;
+    min-width: 100vw;
     background: var(--black-glass);
-    border-radius: 28px;
-    box-shadow: 0 8px 48px #00baff33, 0 2px 8px #000c;
-    padding: 36px 28px 22px 28px;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     backdrop-filter: blur(10px);
-    border: 2px solid #00baff33;
-    animation: cardFadeIn 1s cubic-bezier(.39,.575,.56,1.000);
-  }
-  
-  @keyframes cardFadeIn {
-    from { opacity: 0; transform: translateY(40px);}
-    to { opacity: 1; transform: translateY(0);}
-  }
-  
-  header {
+    border: none;
+    animation: none;
+}
+
+
+@keyframes cardFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+header {
     text-align: center;
     margin-bottom: 18px;
-  }
-  
-  .logo-circle {
+}
+
+.logo-circle {
     margin: 0 auto 8px auto;
     width: 56px;
     height: 56px;
@@ -64,55 +82,55 @@
     justify-content: center;
     font-size: 2rem;
     color: #fff;
-  }
-  
-  h1 {
+}
+
+h1 {
     font-size: 2.2rem;
     font-weight: 700;
     letter-spacing: 2px;
     color: var(--blue);
     margin: 0 0 4px 0;
     text-shadow: 0 2px 12px var(--blue-glow);
-  }
-  
-  .subtitle {
+}
+
+.subtitle {
     color: var(--gray);
     font-size: 1.08rem;
     margin-bottom: 0;
     letter-spacing: 0.5px;
-  }
-  
-  .timer-section {
+}
+
+.timer-section {
     text-align: center;
     margin: 28px 0 18px 0;
-  }
-  
-  .streak-label {
+}
+
+.streak-label {
     font-size: 1.04rem;
     color: var(--gray);
     margin-bottom: 6px;
     letter-spacing: 1px;
-  }
-  
-  .streak-days {
+}
+
+.streak-days {
     font-size: 2.3rem;
     font-weight: 600;
     color: var(--blue);
     margin-bottom: 8px;
     text-shadow: 0 0 16px var(--blue-glow);
-  }
-  
-  .streak-days .unit {
+}
+
+.streak-days .unit {
     font-size: 1.1rem;
     font-weight: 400;
     color: var(--gray);
     margin-left: 3px;
-  }
-  
-  .timer-box {
+}
+
+.timer-box {
     font-size: 1.6rem;
     font-family: 'Roboto Mono', 'Consolas', monospace;
-    background: rgba(0,186,255,0.10);
+    background: rgba(0, 186, 255, 0.10);
     border-radius: 12px;
     padding: 13px 0;
     margin: 0 auto 18px auto;
@@ -122,9 +140,9 @@
     box-shadow: 0 0 12px var(--blue-glow);
     border: 1.5px solid var(--blue);
     text-shadow: 0 0 8px var(--blue-glow);
-  }
-  
-  .relapse-btn {
+}
+
+.relapse-btn {
     background: linear-gradient(90deg, var(--danger) 60%, #ff6f91 100%);
     color: #fff;
     border: none;
@@ -137,36 +155,39 @@
     box-shadow: 0 2px 12px #ff336633;
     margin: 0 auto 0 auto;
     display: block;
-  }
-  
-  .relapse-btn:hover {
+}
+
+.relapse-btn:hover {
     background: linear-gradient(90deg, #ff1744 60%, #ff6f91 100%);
     box-shadow: 0 4px 24px #ff336655;
     transform: scale(1.04);
-  }
-  
-  .motivation-section {
+}
+
+.motivation-section {
     position: relative;
     margin: 36px 0 18px 0;
-    background: rgba(0,186,255,0.09);
+    background: rgba(0, 186, 255, 0.09);
     border-radius: 18px;
     padding: 22px 16px 18px 16px;
     text-align: center;
     border-left: 4px solid var(--blue);
     box-shadow: 0 2px 24px var(--blue-glow);
     overflow: hidden;
-  }
-  
-  .motivation-glow {
+}
+
+.motivation-glow {
     position: absolute;
-    left: 0; top: 0; width: 100%; height: 100%;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
     background: radial-gradient(circle at 60% 60%, var(--blue-glow) 0%, transparent 80%);
     filter: blur(18px);
     z-index: 0;
-  }
-  
-  .motivation-section blockquote {
+}
+
+.motivation-section blockquote {
     position: relative;
     font-style: italic;
     color: var(--gray);
@@ -174,9 +195,9 @@
     font-size: 1.08rem;
     min-height: 48px;
     z-index: 1;
-  }
-  
-  .motivation-btn {
+}
+
+.motivation-btn {
     position: relative;
     background: var(--blue);
     color: #fff;
@@ -188,67 +209,90 @@
     transition: background 0.2s, box-shadow 0.2s;
     box-shadow: 0 2px 8px var(--blue-glow);
     z-index: 1;
-  }
-  
-  .motivation-btn:hover {
+}
+
+.motivation-btn:hover {
     background: var(--blue-dark);
     box-shadow: 0 4px 16px var(--blue-glow);
-  }
-  
-  .history-section {
-    background: rgba(0,186,255,0.06);
+}
+
+.history-section {
+    background: rgba(0, 186, 255, 0.06);
     border-radius: 12px;
     padding: 14px 12px 8px 12px;
     margin-top: 1.5em;
     box-shadow: 0 2px 8px var(--blue-glow);
-  }
-  
-  .history-section h2 {
+}
+
+.history-section h2 {
     color: var(--blue);
     margin: 0 0 0.5em 0;
     font-size: 1.08rem;
     font-weight: 500;
     letter-spacing: 1px;
-  }
-  
-  #historyList {
+}
+
+#historyList {
     list-style: none;
     padding: 0;
     margin: 0;
     color: var(--gray);
     font-size: 0.98rem;
-  }
-  
-  #historyList li {
+}
+
+#historyList li {
     border-bottom: 1px solid #00baff22;
     padding: 6px 0;
-  }
-  
-  footer {
+}
+
+footer {
     text-align: center;
     color: #6ad6ff;
     font-size: 0.95rem;
     margin-top: 28px;
     opacity: 0.7;
     letter-spacing: 0.5px;
-  }
-  
-  @media (max-width: 600px) {
+}
+
+@media (max-width: 600px) {
     .main-card {
-      margin: 0;
-      border-radius: 0;
-      min-height: 100vh;
-      padding: 20px 3vw 16px 3vw;
+        margin: 0;
+        border-radius: 0;
+        min-height: 100vh;
+        padding: 20px 3vw 16px 3vw;
     }
+
     h1 {
-      font-size: 1.5rem;
+        font-size: 1.5rem;
     }
+
     .timer-box {
-      font-size: 1.1rem;
-      padding: 10px 0;
+        font-size: 1.1rem;
+        padding: 10px 0;
     }
+
     .streak-days {
-      font-size: 1.4rem;
+        font-size: 1.4rem;
     }
-  }
-  
+}
+
+header,
+.timer-section,
+.motivation-section,
+.history-section,
+footer {
+    width: 100%;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+header {
+    margin-top: 32px;
+    margin-bottom: 18px;
+}
+
+footer {
+    margin-bottom: 24px;
+    margin-top: 32px;
+}
