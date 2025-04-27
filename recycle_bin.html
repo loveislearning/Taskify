@@ -5,56 +5,112 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Recycle Bin</title>
   <style>
+    :root {
+      --primary-bg: #1a1a1a;
+      --secondary-bg: #232323;
+      --card-bg: rgba(30, 30, 30, 0.9);
+      --text-primary: #f0f0f0;
+      --text-secondary: #b0b0b0;
+      --success: #4caf50;
+      --success-light: #e8f5e9;
+      --danger: #f44336;
+      --danger-light: #ffebee;
+      --warning: #ff9800;
+      --accent: #2196f3;
+      --border-radius: 12px;
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #232526 0%, #1e1e1e 100%);
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      background: var(--primary-bg);
       min-height: 100vh;
       margin: 0;
       padding: 0;
-      color: #e0e0e0;
+      color: var(--text-primary);
       display: flex;
       flex-direction: column;
       align-items: center;
+      line-height: 1.5;
     }
 
     .container {
-      max-width: 600px;
-      width: 95vw;
-      margin: 3rem auto 2rem;
-      background: #181818cc;
-      border-radius: 18px;
-      box-shadow: 0 6px 32px #0006, 0 2px 8px #0003;
-      padding: 2.5rem 2rem 2rem;
+      width: min(95%, 680px);
+      margin: 2rem auto;
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      padding: 2rem;
       display: flex;
       flex-direction: column;
-      align-items: stretch;
       gap: 1.5rem;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     h2 {
       text-align: center;
-      font-size: 2.2rem;
-      margin-bottom: 1.5rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      color: #fff;
+      font-size: 1.8rem;
+      margin: 0;
+      font-weight: 600;
+      background: linear-gradient(90deg, #fff, #aaa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .search-container {
+      position: relative;
+      margin-bottom: 0.5rem;
     }
 
     #search {
       width: 100%;
-      padding: 0.9rem 1.1rem;
-      margin-bottom: 0.5rem;
-      border-radius: 10px;
-      border: none;
-      background-color: #262626;
-      color: #fff;
-      font-size: 1.05rem;
-      box-shadow: 0 1px 4px #0002;
-      transition: box-shadow 0.2s;
+      padding: 0.9rem 1.1rem 0.9rem 2.8rem;
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background-color: var(--secondary-bg);
+      color: var(--text-primary);
+      font-size: 1rem;
+      transition: var(--transition);
       outline: none;
     }
+
     #search:focus {
-      box-shadow: 0 2px 12px #388e3c33;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-secondary);
+      display: none;
+    }
+
+    .empty-state.show {
+      display: block;
+    }
+
+    .empty-state svg {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 1rem;
+      opacity: 0.6;
     }
 
     ul.recycle-list {
@@ -63,124 +119,160 @@
       margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 1.1rem;
+      gap: 0.75rem;
     }
 
     li.recycle-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      background: #232323;
-      border-radius: 12px;
+      background: var(--secondary-bg);
+      border-radius: var(--border-radius);
       padding: 1rem 1.2rem;
-      box-shadow: 0 2px 8px #0002;
-      border-bottom: none;
-      transition: background 0.2s, opacity 0.3s, transform 0.3s;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      transition: var(--transition);
       position: relative;
-    }
-    li.recycle-item:hover {
-      background: #262b2e;
+      overflow: hidden;
     }
 
-    .fade-out {
-      opacity: 0;
-      transform: translateX(100px);
+    li.recycle-item:hover {
+      background: rgba(50, 50, 50, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
-    .fade-in {
-      animation: fadeIn 0.3s ease forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateX(-50px);}
-      to { opacity: 1; transform: translateX(0);}
+
+    li.recycle-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent);
+      border-radius: var(--border-radius) 0 0 var(--border-radius);
     }
 
     .item-content {
       flex-grow: 1;
-      font-size: 1.13rem;
-      color: #fff;
-      letter-spacing: 0.02em;
+      font-size: 1.05rem;
+      color: var(--text-primary);
       padding-right: 0.5rem;
       word-break: break-word;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .item-icon {
+      font-size: 1.2rem;
+      opacity: 0.8;
+    }
+
+    .item-meta {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
     }
 
     .actions {
       display: flex;
-      gap: 0.7rem;
-      margin-left: 1rem;
+      gap: 0.5rem;
+      margin-left: 0.5rem;
     }
 
     .actions button {
       border: none;
       background: none;
       cursor: pointer;
-      font-size: 1rem;
-      padding: 0.43rem 1.1rem;
+      font-size: 0.9rem;
+      padding: 0.5rem 1rem;
       border-radius: 8px;
-      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-      color: #e0e0e0;
+      transition: var(--transition);
       font-weight: 500;
-      box-shadow: 0 1px 2px #0002;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
     }
 
     .restore-btn {
-      color: #388e3c;
-      border: 1.5px solid #388e3c;
-      background: #e8f5e90a;
+      background: rgba(76, 175, 80, 0.1);
+      color: var(--success);
     }
     .restore-btn:hover {
-      background: #e8f5e9;
-      color: #1b5e20;
-      box-shadow: 0 2px 8px #388e3c33;
+      background: rgba(76, 175, 80, 0.2);
     }
 
     .delete-btn {
-      color: #d32f2f;
-      border: 1.5px solid #d32f2f;
-      background: #fdecea0a;
+      background: rgba(244, 67, 54, 0.1);
+      color: var(--danger);
     }
     .delete-btn:hover {
-      background: #fdecea;
-      color: #b71c1c;
-      box-shadow: 0 2px 8px #d32f2f33;
+      background: rgba(244, 67, 54, 0.2);
+    }
+
+    .fade-out {
+      animation: fadeOut 0.3s ease forwards;
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease forwards;
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateX(100px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(-50px); }
+      to { opacity: 1; transform: translateX(0); }
     }
 
     .clear-all {
-      display: block;
-      margin: 2.5rem auto 0.5rem;
-      background: linear-gradient(90deg, #ff7043 70%, #f4511e 100%);
+      margin-top: 1rem;
+      background: linear-gradient(90deg, var(--danger), #e53935);
       color: white;
-      padding: 1rem 2.2rem;
+      padding: 0.9rem 1.8rem;
       border: none;
-      border-radius: 32px;
-      font-size: 1.08rem;
-      font-weight: 600;
-      letter-spacing: 0.03em;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
       cursor: pointer;
-      box-shadow: 0 2px 12px #f4511e33;
-      transition: background 0.25s, box-shadow 0.2s;
+      transition: var(--transition);
+      align-self: center;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
+
     .clear-all:hover {
-      background: linear-gradient(90deg, #f4511e 70%, #ff7043 100%);
-      box-shadow: 0 4px 24px #ff704344;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(244, 67, 54, 0.3);
+    }
+
+    .clear-all:active {
+      transform: translateY(0);
     }
 
     .history {
-      max-width: 600px;
-      margin: 2.5rem auto 2rem;
-      background: #222;
-      padding: 1.2rem 1.2rem 0.7rem;
-      border-radius: 14px;
-      box-shadow: 0 2px 12px #0003;
+      width: min(95%, 680px);
+      margin: 1rem auto 3rem;
+      background: var(--card-bg);
+      padding: 1.5rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .history h3 {
-      margin: 0 0 0.8rem;
-      font-size: 1.15rem;
-      color: #fff;
-      font-weight: 600;
-      letter-spacing: 0.03em;
-      border-bottom: 1px solid #333;
-      padding-bottom: 0.5rem;
+      margin: 0 0 1rem;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .history ul {
@@ -195,39 +287,94 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.45rem 0.1rem;
-      border-bottom: 1px solid #333;
-      color: #e0e0e0;
-      font-size: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      font-size: 0.95rem;
       gap: 0.5rem;
     }
 
-    .history button {
-      font-size: 0.85rem;
-      background: #232323;
-      border: 1px solid #444;
-      border-radius: 7px;
-      cursor: pointer;
-      padding: 0.2rem 0.7rem;
-      color: #e0e0e0;
-      transition: background 0.2s, color 0.2s;
-    }
-    .history button:hover {
-      background: #e8f5e9;
-      color: #388e3c;
+    .history li:last-child {
+      border-bottom: none;
     }
 
-    @media (max-width: 700px) {
+    .history-action {
+      flex-grow: 1;
+    }
+
+    .history-action.restored {
+      color: var(--success);
+    }
+
+    .history-action.deleted {
+      color: var(--danger);
+    }
+
+    .history button {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      cursor: pointer;
+      padding: 0.35rem 0.8rem;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      transition: var(--transition);
+    }
+
+    .history button:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--secondary-bg);
+      color: var(--text-primary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      z-index: 100;
+      opacity: 0;
+      transition: var(--transition);
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+      pointer-events: auto;
+    }
+
+    .toast.success {
+      border-left: 4px solid var(--success);
+    }
+
+    .toast.error {
+      border-left: 4px solid var(--danger);
+    }
+
+    @media (max-width: 768px) {
       .container, .history {
-        max-width: 97vw;
-        padding: 1.1rem 0.7rem;
+        padding: 1.5rem;
+        width: 98%;
       }
+
       h2 {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
       }
-      .clear-all {
-        padding: 0.7rem 1.2rem;
+
+      .item-content {
         font-size: 1rem;
+      }
+
+      .actions button {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
       }
     }
   </style>
@@ -235,51 +382,164 @@
 <body>
   <div class="container">
     <h2>Recycle Bin</h2>
-    <input type="text" id="search" placeholder="Search items..." />
+    
+    <div class="search-container">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" id="search" placeholder="Search deleted items..." />
+    </div>
+    
+    <div class="empty-state" id="emptyState">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 6h18"></path>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        <line x1="10" y1="11" x2="10" y2="17"></line>
+        <line x1="14" y1="11" x2="14" y2="17"></line>
+      </svg>
+      <h3>Recycle Bin is Empty</h3>
+      <p>Deleted items will appear here</p>
+    </div>
+    
     <ul class="recycle-list" id="recycleList">
       <li class="recycle-item">
-        <span class="item-content">🗒 Task: Buy groceries</span>
+        <span class="item-content">
+          <span class="item-icon">🗒</span>
+          <span>
+            Task: Buy groceries
+            <span class="item-meta">Deleted 2 hours ago</span>
+          </span>
+        </span>
         <div class="actions">
-          <button class="restore-btn">Restore</button>
-          <button class="delete-btn">Delete</button>
+          <button class="restore-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Restore
+          </button>
+          <button class="delete-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+            Delete
+          </button>
         </div>
       </li>
       <li class="recycle-item">
-        <span class="item-content">📄 File: report.docx</span>
+        <span class="item-content">
+          <span class="item-icon">📄</span>
+          <span>
+            File: report.docx
+            <span class="item-meta">Deleted yesterday</span>
+          </span>
+        </span>
         <div class="actions">
-          <button class="restore-btn">Restore</button>
-          <button class="delete-btn">Delete</button>
+          <button class="restore-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Restore
+          </button>
+          <button class="delete-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+            Delete
+          </button>
         </div>
       </li>
       <li class="recycle-item">
-        <span class="item-content">📌 Note: Meeting at 3PM</span>
+        <span class="item-content">
+          <span class="item-icon">📌</span>
+          <span>
+            Note: Meeting at 3PM
+            <span class="item-meta">Deleted 3 days ago</span>
+          </span>
+        </span>
         <div class="actions">
-          <button class="restore-btn">Restore</button>
-          <button class="delete-btn">Delete</button>
+          <button class="restore-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Restore
+          </button>
+          <button class="delete-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+            Delete
+          </button>
         </div>
       </li>
     </ul>
-    <button class="clear-all" id="clearAllBtn">Clear All</button>
+    
+    <button class="clear-all" id="clearAllBtn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        <line x1="10" y1="11" x2="10" y2="17"></line>
+        <line x1="14" y1="11" x2="14" y2="17"></line>
+      </svg>
+      Empty Recycle Bin
+    </button>
   </div>
 
   <div class="history" id="history">
-    <h3>History</h3>
+    <h3>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      History
+    </h3>
     <ul id="historyList"></ul>
   </div>
+
+  <div class="toast" id="toast"></div>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       const recycleList = document.getElementById('recycleList');
       const searchInput = document.getElementById('search');
       const historyList = document.getElementById('historyList');
+      const emptyState = document.getElementById('emptyState');
+      const toast = document.getElementById('toast');
+
+      // Show toast notification
+      function showToast(message, type = 'success') {
+        toast.textContent = message;
+        toast.className = `toast ${type} show`;
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 3000);
+      }
 
       // Filter items
       searchInput.addEventListener('input', function () {
         const query = this.value.toLowerCase();
+        let visibleItems = 0;
+        
         document.querySelectorAll('.recycle-item').forEach(item => {
           const content = item.querySelector('.item-content').textContent.toLowerCase();
-          item.style.display = content.includes(query) ? 'flex' : 'none';
+          const isVisible = content.includes(query);
+          item.style.display = isVisible ? 'flex' : 'none';
+          if (isVisible) visibleItems++;
         });
+        
+        emptyState.classList.toggle('show', visibleItems === 0);
       });
 
       function animateAndRemove(element, callback) {
@@ -287,12 +547,29 @@
         setTimeout(() => {
           element.remove();
           if (callback) callback();
+          
+          // Show empty state if no items left
+          if (recycleList.children.length === 0) {
+            emptyState.classList.add('show');
+          }
         }, 300);
       }
 
       function addToHistory(action, content, elementHTML) {
         const li = document.createElement('li');
-        li.innerHTML = `<span>${action}: ${content}</span> <button>Undo</button>`;
+        li.innerHTML = `
+          <span class="history-action ${action.toLowerCase()}">
+            ${action}: ${content}
+          </span>
+          <button>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+              <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Undo
+          </button>
+        `;
+        
         const undoBtn = li.querySelector('button');
 
         undoBtn.addEventListener('click', () => {
@@ -303,6 +580,8 @@
           recycleList.appendChild(restoredItem);
           attachListeners();
           li.remove();
+          emptyState.classList.remove('show');
+          showToast('Item restored', 'success');
         });
 
         historyList.prepend(li);
@@ -315,6 +594,7 @@
             const content = item.querySelector('.item-content').textContent;
             addToHistory('Deleted', content, item.outerHTML);
             animateAndRemove(item);
+            showToast('Item permanently deleted', 'error');
           };
         });
 
@@ -324,20 +604,26 @@
             const content = item.querySelector('.item-content').textContent;
             const clone = item.cloneNode(true);
             clone.classList.add('fade-in');
-            alert(`Restored: ${content}`);
             addToHistory('Restored', content, clone.outerHTML);
             animateAndRemove(item);
+            showToast('Item restored to original location', 'success');
           };
         });
       }
 
       document.getElementById('clearAllBtn').addEventListener('click', function () {
-        if (confirm('Are you sure you want to clear all items?')) {
+        if (recycleList.children.length === 0) {
+          showToast('Recycle bin is already empty', 'error');
+          return;
+        }
+        
+        if (confirm('Are you sure you want to permanently delete all items?')) {
           document.querySelectorAll('.recycle-item').forEach(item => {
             const content = item.querySelector('.item-content').textContent;
             addToHistory('Cleared', content, item.outerHTML);
             animateAndRemove(item);
           });
+          showToast('All items permanently deleted', 'error');
         }
       });
 
