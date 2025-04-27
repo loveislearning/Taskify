@@ -19,6 +19,7 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      transition: margin-left 0.3s ease;
     }
     .top-layer {
       position: fixed;
@@ -56,40 +57,151 @@
       height: calc(100vh - 100px);
       width: 100%;
     }
+
+    /* New Sidebar Styles */
     .sidebar {
-      width: 260px;
-      background: linear-gradient(180deg, #111111, #1a1a1a);
-      padding: 20px;
-      height: 100%;
-      overflow-y: auto;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
-      transition: transform 0.3s ease;
-    }
-    .sidebar h2 {
-      margin-bottom: 18px;
-      font-size: 18px;
-      font-weight: 500;
-    }
-    .sidebar ul {
-      list-style: none;
-    }
-    .sidebar ul li a {
+      position: fixed;
+      top: 100px;
+      left: 0;
+      height: calc(100vh - 100px);
+      background-color: #111;
       display: flex;
+      flex-direction: column;
+      padding: 10px 0;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #333 #111;
+      box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
+      transition: width 0.3s ease-in-out;
+      z-index: 1000;
+    }
+    .sidebar.compact {
+      width: 70px;
       align-items: center;
-      gap: 10px;
-      padding: 12px;
-      font-size: 14px;
-      border-radius: 6px;
-      text-decoration: none;
-      color: #fff;
+    }
+    .sidebar.expanded {
+      width: 250px;
+    }
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .sidebar::-webkit-scrollbar-track {
+      background: #111;
+    }
+    .sidebar::-webkit-scrollbar-thumb {
+      background-color: #333;
+      border-radius: 10px;
+    }
+    .icon-compact {
+      width: 55px;
+      height: 55px;
+      aspect-ratio: 1 / 1; 
+      border-radius: 50%;
+      margin: 8px 0;
+      background-color: #222;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       transition: all 0.3s ease;
       cursor: pointer;
     }
-    .sidebar ul li a:hover {
-      background: #2d2d2d;
-      box-shadow: 0 0 10px #00b89444;
-      transform: translateX(5px);
+    .icon-compact:hover {
+      border-radius: 25%;
+      background-color: #333;
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
     }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 20px;
+      color: white;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+      cursor: pointer;
+    }
+    .nav-item:hover {
+      background-color: #333;
+    }
+    .nav-icon {
+      width: 30px;
+      height: 30px;
+      margin-right: 15px;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .nav-text {
+      font-size: 14px;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .expanded .nav-text {
+      opacity: 1;
+    }
+    .logo-item {
+      display: none;
+      align-items: center;
+      padding: 15px 20px;
+      margin-bottom: 10px;
+    }
+    .logo-icon-img {
+      max-height: 50px;
+      width: auto;
+      margin-right: 15px;
+    }
+    .logo-text {
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .expanded .logo-text {
+      opacity: 1;
+    }
+    .divider {
+      width: 80%;
+      height: 1px;
+      background-color: #444;
+      margin: 14px auto;
+    }
+    .toggle-btn {
+      position: absolute;
+      top: 75px; 
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 30px;
+      background-color: #333;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .toggle-btn:hover {
+      background-color: #444;
+      transform: scale(1.1) translateX(-50%);
+    }
+    .toggle-arrow {
+      width: 12px;
+      height: 12px;
+      border-right: 2px solid white;
+      border-bottom: 2px solid white;
+      transition: all 0.3s ease;
+    }
+    .compact .toggle-arrow {
+      transform: rotate(-45deg);
+    }
+    .expanded .toggle-arrow {
+      transform: rotate(135deg);
+    }
+
     .main-content {
       flex: 1;
       padding: 20px;
@@ -97,6 +209,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin-left: 70px;
+      transition: margin-left 0.3s ease;
+    }
+    .expanded ~ .container .main-content {
+      margin-left: 250px;
     }
     .content-box {
       background: linear-gradient(135deg, #1a1a1a, #2c3e50);
@@ -685,6 +802,12 @@
       .grade-form {
         grid-template-columns: 1fr;
       }
+      .main-content {
+        margin-left: 0 !important;
+      }
+      .expanded ~ .container .main-content {
+        margin-left: 0 !important;
+      }
     }
   </style>
 </head>
@@ -695,26 +818,52 @@
     <a href="settingsdemo.html" class="settings-icon">⚙</a>
   </div>
 
-  <div class="container">
-    <div class="sidebar">
-      
-      <ul>
-        <li><a onclick="showSection('grades')">📊 Grade Calculator</a></li>
-        <li><a href="search.html">🔍 Search</a></li>
-        <li><a href="inbox.html">📥 Inbox</a></li>
-        <li><a href="subject_notes.html">📚 Subject Notes</a></li>
-        <li><a href="Task-Manager.html">📝 Task Manager</a></li>
-        <li><a href="Project_Management.htm">📂 Project Manager</a></li>
-        <li><a href="spin_the_wheel.html">🎡 Spin The Wheel</a></li>
-        <li><a onclick="showSection('pomodoro')">⏱ Pomodoro Timer</a></li>
-        <li><a href="Collaborative_project_workspace.html">🤝 Collaboration</a></li>
-        <li><a href="subscription_model.html">💳 Subscription</a></li>
-        <li><a onclick="showSection('assistant')">🤖 AI Study Assistant</a></li>
-        <li><a onclick="showSection('journal')">📔 Journal</a></li>
-        <li><a href="/recycle_bin.html">🗑 Trash</a></li>
-      </ul>
+  <div class="sidebar compact" id="sidebar">
+    <div class="icon-compact" style="background-image: url('logo.png');" title="Logo"></div>
+
+    <div class="divider"></div>
+
+    <div class="toggle-btn compact" id="toggleBtn">
+      <div class="toggle-arrow"></div>
     </div>
 
+    <div class="icon-compact" onclick="showSection('dashboard')" style="background-image: url('Dashboard.png');" title="Dashboard"></div>
+    <div class="icon-compact" onclick="showSection('grades')" style="background-image: url('Grade.png');" title="Grade Calculator"></div>
+    <div class="icon-compact" onclick="window.location.href='subject_notes.html'" style="background-image: url('SubjectNaotes.png');" title="Subject Notes"></div>
+    <div class="icon-compact" onclick="window.location.href='Task-Manager.html'" style="background-image: url('TaskManager.png');" title="Task Manager"></div>
+    <div class="icon-compact" onclick="window.location.href='Project_Management.htm'" style="background-image: url('ProjectManagement.png');" title="Project Manager"></div>
+    <div class="icon-compact" onclick="window.location.href='spin_the_wheel.html'" style="background-image: url('SpinTheWheel.png');" title="Spin The Task"></div>
+    <div class="icon-compact" onclick="window.location.href='motivational_quotes.html'" style="background-image: url('Motivational.png');" title="Inspirational Quotes"></div>
+    <div class="icon-compact" onclick="showSection('pomodoro')" style="background-image: url('Timer.png');" title="Focus Timer"></div>
+    <div class="icon-compact" onclick="window.location.href='subscription_model.html'" style="background-image: url('Subscription.png');" title="Subscriptions"></div>
+    <div class="icon-compact" onclick="window.location.href='Collaborative_project_workspace.html'" style="background-image: url('Collaborative.png');" title="Collaboration"></div>
+    <div class="icon-compact" onclick="showSection('assistant')" style="background-image: url('Ai.png');" title="AI Assistant"></div>
+    <div class="icon-compact" onclick="showSection('journal')" style="background-image: url('Journal.png');" title="Daily Journal"></div>
+    <div class="icon-compact" onclick="window.location.href='/recycle_bin.html'" style="background-image: url('Trash.png');" title="Trash Bin"></div>
+
+    <div class="logo-item" id="logoItem">
+      <img src="logo1.png" class="logo-icon-img" alt="My App Logo">
+    </div>
+
+    <div class="divider" style="display: none;"></div>
+
+    <!-- Expanded nav items -->
+    <div class="nav-item" onclick="showSection('dashboard')" style="display: none;"><div class="nav-icon" style="background-image: url('Dashboard.png');"></div><div class="nav-text">Dashboard</div></div>
+    <div class="nav-item" onclick="showSection('grades')" style="display: none;"><div class="nav-icon" style="background-image: url('Grade.png');"></div><div class="nav-text">Grade Calculator</div></div>
+    <div class="nav-item" onclick="window.location.href='subject_notes.html'" style="display: none;"><div class="nav-icon" style="background-image: url('SubjectNaotes.png');"></div><div class="nav-text">Subject Notes</div></div>
+    <div class="nav-item" onclick="window.location.href='Task-Manager.html'" style="display: none;"><div class="nav-icon" style="background-image: url('TaskManager.png');"></div><div class="nav-text">Task Manager</div></div>
+    <div class="nav-item" onclick="window.location.href='Project_Management.htm'" style="display: none;"><div class="nav-icon" style="background-image: url('ProjectManagement.png');"></div><div class="nav-text">Project Manager</div></div>
+    <div class="nav-item" onclick="window.location.href='spin_the_wheel.html'" style="display: none;"><div class="nav-icon" style="background-image: url('SpinTheWheel.png');"></div><div class="nav-text">Spin The Task</div></div>
+    <div class="nav-item" onclick="window.location.href='motivational_quotes.html'" style="display: none;"><div class="nav-icon" style="background-image: url('Motivational.png');"></div><div class="nav-text">Inspirational Quotes</div></div>
+    <div class="nav-item" onclick="showSection('pomodoro')" style="display: none;"><div class="nav-icon" style="background-image: url('Timer.png');"></div><div class="nav-text">Focus Timer</div></div>
+    <div class="nav-item" onclick="window.location.href='subscription_model.html'" style="display: none;"><div class="nav-icon" style="background-image: url('Subscription.png');"></div><div class="nav-text">Subscriptions</div></div>
+    <div class="nav-item" onclick="window.location.href='Collaborative_project_workspace.html'" style="display: none;"><div class="nav-icon" style="background-image: url('Collaborative.png');"></div><div class="nav-text">Collaboration</div></div>
+    <div class="nav-item" onclick="showSection('assistant')" style="display: none;"><div class="nav-icon" style="background-image: url('Ai.png');"></div><div class="nav-text">AI Assistant</div></div>
+    <div class="nav-item" onclick="showSection('journal')" style="display: none;"><div class="nav-icon" style="background-image: url('Journal.png');"></div><div class="nav-text">Daily Journal</div></div>
+    <div class="nav-item" onclick="window.location.href='/recycle_bin.html'" style="display: none;"><div class="nav-icon" style="background-image: url('Trash.png');"></div><div class="nav-text">Trash Bin</div></div>
+  </div>
+
+  <div class="container">
     <div class="main-content">
       <div id="dashboardSection" class="content-box">
         <h2>📈 Task Completion Tracker</h2>
@@ -952,23 +1101,68 @@
   </div>
 
   <script>
-  function loadPage(page) {
-  const contentDiv = document.querySelector('.main-content');
-  
-  contentDiv.innerHTML = '<div style="text-align:center;padding:2em;">Loading...</div>';
-  fetch(page)
-    .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok');
-      return response.text();
-    })
-    .then(html => {
-      contentDiv.innerHTML = html;
-    })
-    .catch(error => {
-      contentDiv.innerHTML = '<div style="color:red;">Failed to load content.</div>';
-      console.error('Error loading page:', error);
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggleBtn = document.getElementById('toggleBtn');
+      const sidebar = document.getElementById('sidebar');
+      const body = document.body;
+      const compactIcons = document.querySelectorAll('.icon-compact');
+      const navItems = document.querySelectorAll('.nav-item');
+      const dividers = document.querySelectorAll('.divider');
+      const logoItem = document.getElementById('logoItem');
+      const mainContent = document.querySelector('.main-content');
+
+      function toggleSidebar() {
+        sidebar.classList.toggle('compact');
+        sidebar.classList.toggle('expanded');
+
+        if (sidebar.classList.contains('expanded')) {
+          mainContent.style.marginLeft = '250px';
+          navItems.forEach(item => item.style.display = 'flex');
+          dividers.forEach(div => div.style.display = 'block');
+          logoItem.style.display = 'flex';
+          compactIcons.forEach(icon => icon.style.display = 'none');
+        } else {
+          mainContent.style.marginLeft = '70px';
+          navItems.forEach(item => item.style.display = 'none');
+          dividers.forEach(div => div.style.display = 'none');
+          logoItem.style.display = 'none';
+          compactIcons.forEach(icon => icon.style.display = 'block');
+        }
+
+        localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
+      }
+
+      if (localStorage.getItem('sidebarExpanded') === 'true') {
+        toggleSidebar();
+      } else {
+        mainContent.style.marginLeft = '70px';
+        navItems.forEach(item => item.style.display = 'none');
+        logoItem.style.display = 'none';
+        dividers.forEach((div, index) => {
+          div.style.display = index === 0 ? 'block' : 'none';
+        });
+      }
+
+      toggleBtn.addEventListener('click', toggleSidebar);
     });
-  }
+
+    function loadPage(page) {
+      const contentDiv = document.querySelector('.main-content');
+      
+      contentDiv.innerHTML = '<div style="text-align:center;padding:2em;">Loading...</div>';
+      fetch(page)
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.text();
+        })
+        .then(html => {
+          contentDiv.innerHTML = html;
+        })
+        .catch(error => {
+          contentDiv.innerHTML = '<div style="color:red;">Failed to load content.</div>';
+          console.error('Error loading page:', error);
+        });
+    }
 
     function initChart() {
       const ctx = document.getElementById('progressChart').getContext('2d');
