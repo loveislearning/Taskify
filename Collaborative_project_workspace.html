@@ -1,647 +1,889 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taskify - Collaborative Project</title>
+    <title>IDEA FORGE - Collaboration Nexus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-bg: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            --card-bg: rgba(255, 255, 255, 0.08);
-            --glass-blur: blur(12px);
-            --accent-color: #00e1ff;
-            --accent-gradient: linear-gradient(135deg, #00b4d8 0%, #00e1ff 100%);
-            --text-primary: rgba(255, 255, 255, 0.95);
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            --border-color: rgba(255, 255, 255, 0.12);
-            --success-color: #4caf50;
-            --online-color: #00ff88;
-            --offline-color: #ff4444;
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-color: #101014;
+            --text-color: #f3f3f3;
+            --card-bg: #18181c;
+            --accent-color: #28282f;
+            --hover-color: #23232b;
+            --danger-color: #ff2d75;
+            --success-color: #00e676;
+            --border-radius: 16px;
+            --transition-speed: 0.4s;
+            --sidebar-width: 280px;
+            --header-height: 90px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.7);
+            --neon-glow: 0 0 10px #23232b, 0 0 20px rgba(34,34,47,0.3);
+            --glass-effect: rgba(20, 20, 28, 0.7);
         }
-        * {
+
+        body {
+            font-family: 'Segoe UI', 'Orbitron', sans-serif;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            background: var(--primary-bg);
-            color: var(--text-primary);
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all var(--transition-speed);
             line-height: 1.6;
-            min-height: 100vh;
+            overflow-x: hidden;
         }
-        .collaborative-workspace {
-            max-width: 1400px;
-            margin: 2rem auto;
-            background: var(--card-bg);
-            border-radius: 1.5rem;
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow);
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
             overflow: hidden;
-            transition: var(--transition);
         }
-        .project-header {
-            padding: 1.5rem 2rem;
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+        .stars::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0) 40%, 
+                rgba(255,255,255,0.06) 70%, 
+                rgba(255,255,255,0) 100%);
+            background-size: 200% 200%;
+            animation: twinkle 20s infinite linear;
+        }
+        @keyframes twinkle {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: blink 5s infinite ease-in-out;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.1;
+        }
+        .nebula-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #23232b, transparent 70%);
+            top: 20%;
+            left: 10%;
+            animation: float 25s infinite linear;
+        }
+        .nebula-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #18181c, transparent 70%);
+            bottom: 10%;
+            right: 15%;
+            animation: float 30s infinite linear reverse;
+        }
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 30px) rotate(5deg); }
+            50% { transform: translate(0, 50px) rotate(0deg); }
+            75% { transform: translate(-30px, 20px) rotate(-5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .dashboard-header {
+            background: var(--glass-effect);
+            backdrop-filter: blur(12px);
+            color: var(--text-color);
+            padding: 0 2rem;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid #23232b;
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            width: 100%;
+        }
+        .dashboard-header .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-color);
+            letter-spacing: 2px;
+            transition: all 0.6s ease;
+        }
+        .dashboard-header .logo:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 20px var(--accent-color);
+        }
+        .dashboard-container {
+            display: flex;
+            min-height: calc(100vh - var(--header-height));
+            position: relative;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--glass-effect);
+            backdrop-filter: blur(12px);
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 10;
+            transition: all var(--transition-speed);
+            border-right: 1px solid #23232b;
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 0 1rem;
+        }
+        .sidebar button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            padding: 1rem 1.5rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-weight: 500;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        .sidebar button.active, 
+        .sidebar button:hover {
+            background: var(--hover-color);
+            color: #fff;
+            transform: translateX(10px);
+            box-shadow: 0 0 15px #14141a;
+        }
+        .sidebar button.active {
+            font-weight: 600;
+            border-left: 3px solid #fff;
+        }
+        .sidebar button.active i {
+            color: #fff;
+            transform: scale(1.2);
+        }
+        .sidebar button i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: all var(--transition-speed);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            display: block;
+        }
+        .content-section {
+            display: none;
+            gap: 2rem;
+            align-content: start;
+        }
+        .content-section.active {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+        .right-panel {
+            display: grid;
+            gap: 2rem;
+            align-content: start;
+        }
+        .widget {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid #23232b;
+            position: relative;
+            overflow: hidden;
+        }
+        .widget-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(0, 0, 0, 0.2);
-            border-bottom: 1px solid var(--border-color);
-        }
-        .project-header h2 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        #invite-btn {
-            background: var(--accent-gradient);
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.75rem;
-            font-weight: 500;
-            transition: var(--transition);
-            border: none;
-            color: #fff;
-            cursor: pointer;
-        }
-        #invite-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0, 225, 255, 0.3);
-        }
-        .workspace-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 0;
-            min-height: 80vh;
-        }
-        @media (max-width: 1024px) {
-            .workspace-container {
-                grid-template-columns: 1fr;
-            }
-        }
-        .tasks-section {
-            padding: 2rem;
-            border-right: 1px solid var(--border-color);
-        }
-        .section-header {
             margin-bottom: 1.5rem;
         }
-        .task-count {
-            color: var(--text-secondary);
-            font-size: 0.9em;
+        .widget h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+            position: relative;
+            display: inline-block;
         }
-        .task-list {
+        .widget h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: #fff;
+            box-shadow: 0 0 8px #fff;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .stat-card {
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            background: linear-gradient(135deg, #23232b 0%, var(--card-bg) 100%);
+            text-align: center;
+            transition: all var(--transition-speed);
+        }
+        .stat-card h3 {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .timeline {
             display: grid;
             gap: 1rem;
         }
-        .task-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 1.25rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: var(--transition);
+        .milestone {
+            padding: 1.2rem;
+            border-left: 3px solid #23232b;
+            background: #18181c;
+            position: relative;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            transition: all var(--transition-speed);
         }
-        .task-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            transform: translateY(-2px);
+        .milestone:hover {
+            background: #23232b;
+            transform: translateX(5px);
         }
-        .task-item.completed {
-            opacity: 0.6;
-            background: rgba(0, 255, 136, 0.05);
+        .milestone::before {
+            content: "";
+            position: absolute;
+            left: -8px;
+            top: 50%;
+            width: 14px;
+            height: 14px;
+            background: #23232b;
+            border-radius: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 10px #23232b;
         }
-        .task-actions {
-            display: flex;
-            gap: 0.5rem;
+        .milestone h4 {
+            margin: 0 0 0.3rem 0;
+            font-size: 1rem;
         }
-        .task-actions button {
-            background: none;
-            border: none;
-            padding: 0.5rem;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 1.1em;
+        .milestone p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
-        .task-actions button:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        .right-sidebar {
-            padding: 2rem;
-            background: rgba(0, 0, 0, 0.15);
-        }
-        .team-members ul {
+        .member-list {
             display: grid;
             gap: 1rem;
         }
         .member {
             display: flex;
             align-items: center;
+            gap: 1rem;
             padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 0.75rem;
-            transition: var(--transition);
+            border-radius: var(--border-radius);
+            background: #18181c;
+            transition: all var(--transition-speed);
         }
         .member:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: #23232b;
+            transform: translateX(5px);
         }
         .member-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: var(--accent-gradient);
-            display: grid;
-            place-items: center;
-            font-weight: 600;
-            margin-right: 1rem;
-            color: #fff;
-        }
-        .member-status {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-left: auto;
-        }
-        .member-status.online {
-            background: var(--online-color);
-        }
-        .member-status.offline {
-            background: var(--offline-color);
-        }
-        .team-chat {
+            background: #23232b;
             display: flex;
-            flex-direction: column;
-            height: 60vh;
-            margin-top: 2rem;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        .member-info h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+        .member-info p {
+            margin: 0;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        .chat-container {
+            height: 400px;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
         }
         .chat-messages {
-            flex: 1;
             overflow-y: auto;
-            padding-right: 0.5rem;
+            padding: 1rem 0;
             display: grid;
             gap: 1rem;
+            align-content: start;
         }
-        .chat-message {
+        .message {
             max-width: 80%;
             padding: 1rem;
-            border-radius: 1rem;
+            border-radius: var(--border-radius);
             position: relative;
-            animation: messageAppear 0.3s ease-out;
-            word-break: break-word;
+            transition: all var(--transition-speed);
         }
-        @keyframes messageAppear {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: none; }
+        .message.outgoing {
+            background: #23232b;
+            justify-self: end;
+            color: white;
+            border-bottom-right-radius: 0;
         }
-        .chat-message.outgoing {
-            background: var(--accent-gradient);
-            margin-left: auto;
-            border-bottom-right-radius: 4px;
-            color: #fff;
-        }
-        .chat-message.incoming {
-            background: rgba(255, 255, 255, 0.08);
-            border-bottom-left-radius: 4px;
-            color: var(--text-primary);
+        .message.incoming {
+            background: #18181c;
+            justify-self: start;
+            border-bottom-left-radius: 0;
         }
         .message-time {
-            font-size: 0.8em;
-            color: var(--text-secondary);
-            margin-top: 0.5rem;
-            display: block;
-            text-align: right;
-        }
-        .add-task {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-        .add-task input,
-        .chat-input input {
-            flex: 1;
-            padding: 0.875rem;
-            border: 1px solid var(--border-color);
-            border-radius: 0.75rem;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-primary);
-            transition: var(--transition);
-        }
-        .add-task input:focus,
-        .chat-input input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(0, 225, 255, 0.1);
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 0.3rem;
         }
         .chat-input {
             display: flex;
             gap: 0.5rem;
-            align-items: center;
             margin-top: 1rem;
         }
-        #attach-btn,
-        #emoji-btn,
-        #send-message-btn {
-            background: none;
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #23232b;
+            border-radius: var(--border-radius);
+            background: #18181c;
+            color: var(--text-color);
+            transition: all var(--transition-speed);
+        }
+        .chat-input input:focus {
+            outline: none;
+            border-color: #fff;
+            box-shadow: 0 0 10px #23232b;
+        }
+        .chat-input button {
+            padding: 0 1.2rem;
             border: none;
-            font-size: 1.2em;
+            border-radius: var(--border-radius);
+            background: #23232b;
+            color: white;
             cursor: pointer;
-            color: var(--accent-color);
-            transition: var(--transition);
-            border-radius: 0.5rem;
-            padding: 0.5rem;
+            transition: all var(--transition-speed);
         }
-        #attach-btn:hover,
-        #emoji-btn:hover,
-        #send-message-btn:hover {
-            background: rgba(255,255,255,0.1);
+        .chat-input button:hover {
+            background: #28282f;
+            transform: translateY(-2px);
         }
-        #emoji-picker {
-            display: none;
-            position: absolute;
-            bottom: 50px;
-            right: 80px;
-            background: #222;
-            border-radius: 6px;
-            padding: 10px;
-            z-index: 10;
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
         }
-        .emoji-option {
-            font-size: 1.4em;
+        .file-card {
+            padding: 1rem;
+            text-align: center;
+            border-radius: var(--border-radius);
+            background: #18181c;
+            transition: all var(--transition-speed);
             cursor: pointer;
-            margin: 0 4px;
         }
-        .emoji-option:hover {
-            filter: brightness(1.5);
+        .file-card:hover {
+            background: #23232b;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px #18181c;
         }
-        @media (max-width: 768px) {
-            .workspace-container {
+        .file-card i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+        .file-card p {
+            margin: 0;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-speed);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: 'Segoe UI', 'Orbitron', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary {
+            background: #23232b;
+            color: white;
+            box-shadow: 0 0 15px #18181c;
+        }
+        .btn-primary:hover {
+            background: #28282f;
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px #23232b;
+        }
+        @media (max-width: 1200px) {
+            .content-section.active {
                 grid-template-columns: 1fr;
             }
-            .tasks-section {
-                border-right: none;
-                border-bottom: 1px solid var(--border-color);
-            }
-            .right-sidebar {
-                border-left: none;
-            }
-            .task-item {
+        }
+        @media (max-width: 768px) {
+            .dashboard-container {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
             }
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-4px); }
-        }
-        .collaborative-notification {
-            animation: slideIn 0.3s ease-out;
-        }
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
+            .sidebar {
+                width: 100%;
+                padding: 1rem 0;
+            }
+            .sidebar-menu {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 0 1rem;
+            }
+            .sidebar button {
+                white-space: nowrap;
+                transform: none !important;
+            }
+            .sidebar button:hover {
+                transform: translateY(-3px) !important;
+            }
+            .sidebar button.active {
+                border-left: none;
+                border-bottom: 3px solid #fff;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="collaborative-workspace">
-        <div class="project-header">
-            <h2>📋 Collaborative Project: Team Study</h2>
-            <button id="invite-btn">Invite Members</button>
+    <!-- Space Background Animation -->
+    <div class="space-background">
+        <div class="stars"></div>
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="logo">IDEA FORGE</div>
+            <div class="header-actions">
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i> NEW INITIATIVE
+                </button>
+            </div>
         </div>
-        <div class="workspace-container">
-            <div class="tasks-section">
-                <div class="section-header">
-                    <h3>Team Tasks</h3>
-                    <span class="task-count">0 completed / 0 total</span>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-menu">
+                <button class="active" data-section="dashboard"><i class="fas fa-home"></i> DASHBOARD</button>
+                <button data-section="team"><i class="fas fa-users"></i> TEAM HUB</button>
+                <button data-section="analytics"><i class="fas fa-chart-line"></i> ANALYTICS</button>
+                <button data-section="projects"><i class="fas fa-project-diagram"></i> PROJECTS</button>
+                <button data-section="documents"><i class="fas fa-file-alt"></i> DOCUMENTS</button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section active">
+                <div>
+                    <div class="stats-grid">
+                        <div class="widget stat-card">
+                            <h3>ACTIVE MEMBERS</h3>
+                            <div class="stat-value">42</div>
+                        </div>
+                        <div class="widget stat-card">
+                            <h3>ONGOING PROJECTS</h3>
+                            <div class="stat-value">15</div>
+                        </div>
+                        <div class="widget stat-card">
+                            <h3>COMPLETION RATE</h3>
+                            <div class="stat-value">84%</div>
+                        </div>
+                    </div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>PROJECT TIMELINE</h2>
+                        </div>
+                        <div class="timeline">
+                            <div class="milestone">
+                                <h4>PHASE 1: IDEATION</h4>
+                                <p>DEADLINE: 15 AUG 2025</p>
+                            </div>
+                            <div class="milestone">
+                                <h4>PHASE 2: PROTOTYPING</h4>
+                                <p>DEADLINE: 30 SEP 2025</p>
+                            </div>
+                            <div class="milestone">
+                                <h4>PHASE 3: IMPLEMENTATION</h4>
+                                <p>DEADLINE: 15 NOV 2025</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="task-list" id="task-list"></div>
-                <div class="add-task">
-                    <input type="text" id="new-task-input" placeholder="Add a new task...">
-                    <button id="add-task-btn">Add Task</button>
+                <div class="right-panel">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>ACTIVE COLLABORATORS</h2>
+                        </div>
+                        <div class="member-list">
+                            <div class="member">
+                                <div class="member-avatar">AJ</div>
+                                <div class="member-info">
+                                    <h4>ALEX JOHNSON</h4>
+                                    <p>LEAD DEVELOPER</p>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-avatar">SM</div>
+                                <div class="member-info">
+                                    <h4>SAMANTHA MILES</h4>
+                                    <p>UX DESIGNER</p>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-avatar">RK</div>
+                                <div class="member-info">
+                                    <h4>RAJ KUMAR</h4>
+                                    <p>DATA SCIENTIST</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget chat-container">
+                        <div class="widget-header">
+                            <h2>TEAM CHAT</h2>
+                        </div>
+                        <div class="chat-messages">
+                            <div class="message outgoing">
+                                Let's finalize the prototype today!
+                                <div class="message-time">10:24 AM</div>
+                            </div>
+                            <div class="message incoming">
+                                Working on the final adjustments now
+                                <div class="message-time">10:26 AM</div>
+                            </div>
+                            <div class="message incoming">
+                                Should have it ready for review by EOD
+                                <div class="message-time">10:27 AM</div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" placeholder="Type message...">
+                            <button><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>SHARED FILES</h2>
+                        </div>
+                        <div class="file-grid">
+                            <div class="file-card">
+                                <i class="fas fa-file-code"></i>
+                                <p>prototype_v2.zip</p>
+                            </div>
+                            <div class="file-card">
+                                <i class="fas fa-file-image"></i>
+                                <p>design_mockup.png</p>
+                            </div>
+                            <div class="file-card">
+                                <i class="fas fa-file-pdf"></i>
+                                <p>requirements.pdf</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="right-sidebar">
-                <div class="team-members">
-                    <h3>Team Members</h3>
-                    <ul id="member-list"></ul>
-                </div>
-                <div class="team-chat">
-                    <h3>Team Chat</h3>
-                    <div class="chat-messages" id="chat-messages"></div>
-                    <div class="chat-input" style="position:relative;">
-                        <input type="file" id="chat-file-input" style="display:none;"
-                            accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar">
-                        <button id="attach-btn" title="Attach file">📎</button>
-                        <button id="emoji-btn" title="Add emoji">😊</button>
-                        <div id="emoji-picker" style="display:none; position:absolute; bottom:50px; right:80px; background:#222; border-radius:6px; padding:10px; z-index:10;">
-                            <span class="emoji-option">😀</span>
-                            <span class="emoji-option">😂</span>
-                            <span class="emoji-option">😍</span>
-                            <span class="emoji-option">👍</span>
-                            <span class="emoji-option">🎉</span>
-                            <span class="emoji-option">😎</span>
-                            <span class="emoji-option">🙏</span>
+            <!-- Team Section -->
+            <div id="team-section" class="content-section">
+                <div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>TEAM DIRECTORY</h2>
                         </div>
-                        <input type="text" id="chat-input" placeholder="Type a message...">
-                        <button id="send-message-btn">Send</button>
+                        <div class="member-list">
+                            <div class="member">
+                                <div class="member-avatar">AJ</div>
+                                <div class="member-info">
+                                    <h4>ALEX JOHNSON</h4>
+                                    <p>LEAD DEVELOPER</p>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-avatar">SM</div>
+                                <div class="member-info">
+                                    <h4>SAMANTHA MILES</h4>
+                                    <p>UX DESIGNER</p>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-avatar">RK</div>
+                                <div class="member-info">
+                                    <h4>RAJ KUMAR</h4>
+                                    <p>DATA SCIENTIST</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>INVITE MEMBER</h2>
+                        </div>
+                        <form>
+                            <input type="text" placeholder="Name" style="width:100%;margin-bottom:1rem;">
+                            <input type="email" placeholder="Email" style="width:100%;margin-bottom:1rem;">
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-user-plus"></i> Invite</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Analytics Section -->
+            <div id="analytics-section" class="content-section">
+                <div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>ANALYTICS OVERVIEW</h2>
+                        </div>
+                        <div style="height:200px;display:flex;align-items:center;justify-content:center;">
+                            <span style="opacity:0.7;">[Analytics Chart Placeholder]</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>RECENT ACTIVITY</h2>
+                        </div>
+                        <ul style="list-style:none;padding:0;margin:0;">
+                            <li>• Alex updated the project timeline</li>
+                            <li>• Samantha added new designs</li>
+                            <li>• Raj uploaded data set</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Projects Section -->
+            <div id="projects-section" class="content-section">
+                <div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>PROJECTS BOARD</h2>
+                        </div>
+                        <ul style="list-style:none;padding:0;margin:0;">
+                            <li>🚀 New Website Launch <span style="opacity:0.7;">(In Progress)</span></li>
+                            <li>🤖 AI Chatbot Integration <span style="opacity:0.7;">(Planning)</span></li>
+                            <li>📱 Mobile App Redesign <span style="opacity:0.7;">(Completed)</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>CREATE PROJECT</h2>
+                        </div>
+                        <form>
+                            <input type="text" placeholder="Project Name" style="width:100%;margin-bottom:1rem;">
+                            <textarea placeholder="Description" style="width:100%;margin-bottom:1rem;"></textarea>
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-plus"></i> Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Documents Section -->
+            <div id="documents-section" class="content-section">
+                <div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>DOCUMENTS</h2>
+                        </div>
+                        <div class="file-grid">
+                            <div class="file-card">
+                                <i class="fas fa-file-pdf"></i>
+                                <p>specification.pdf</p>
+                            </div>
+                            <div class="file-card">
+                                <i class="fas fa-file-word"></i>
+                                <p>project_plan.docx</p>
+                            </div>
+                            <div class="file-card">
+                                <i class="fas fa-file-excel"></i>
+                                <p>budget.xlsx</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>UPLOAD DOCUMENT</h2>
+                        </div>
+                        <form>
+                            <input type="file" style="margin-bottom:1rem;">
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-upload"></i> Upload</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Sample data
-            const members = [
-                { id: 1, name: 'Alice Johnson', online: true },
-                { id: 2, name: 'Bob Smith', online: false },
-                { id: 3, name: 'Charlie Davis', online: true },
-                { id: 4, name: 'Dana Wilson', online: true }
-            ];
-            const tasks = [
-                { id: 1, text: 'Prepare research outline', assignedTo: 1, completed: false },
-                { id: 2, text: 'Collect references for literature review', assignedTo: 2, completed: true },
-                { id: 3, text: 'Create presentation slides', assignedTo: 3, completed: false },
-                { id: 4, text: 'Schedule team meeting', assignedTo: 4, completed: false }
-            ];
-            const messages = [
-                { sender: 'Alice Johnson', text: 'Has everyone started on their assigned tasks?', time: '9:30 AM', outgoing: false },
-                { sender: 'Charlie Davis', text: "I've begun working on the slides. Will share a draft by tomorrow.", time: '9:32 AM', outgoing: false },
-                { sender: 'You', text: "I've completed the reference list. Will upload it to our shared folder.", time: '9:35 AM', outgoing: true }
-            ];
-            // DOM Elements
-            const taskList = document.getElementById('task-list');
-            const memberList = document.getElementById('member-list');
-            const chatMessages = document.getElementById('chat-messages');
-            const newTaskInput = document.getElementById('new-task-input');
-            const addTaskBtn = document.getElementById('add-task-btn');
-            const chatInput = document.getElementById('chat-input');
-            const sendMessageBtn = document.getElementById('send-message-btn');
-            const taskCount = document.querySelector('.task-count');
-            const inviteBtn = document.getElementById('invite-btn');
-            const attachBtn = document.getElementById('attach-btn');
-            const fileInput = document.getElementById('chat-file-input');
-            attachBtn.addEventListener('click', () => fileInput.click());
-            fileInput.addEventListener('change', function () {
-                if (this.files && this.files[0]) {
-                    const file = this.files[0];
+        // Space background stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const starCount = 200;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                const duration = Math.random() * 5 + 3;
+                const delay = Math.random() * 5;
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${delay}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+        createStars();
+
+        // Sidebar navigation logic
+        document.querySelectorAll('.sidebar-menu button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active from all
+                document.querySelectorAll('.sidebar-menu button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+                // Show the selected
+                const section = button.getAttribute('data-section');
+                document.getElementById(section + '-section').classList.add('active');
+            });
+        });
+
+        // Chat functionality (only in dashboard section)
+        function setupChat() {
+            const chatInput = document.querySelector('#dashboard-section .chat-input input');
+            const chatMessages = document.querySelector('#dashboard-section .chat-messages');
+            if (!chatInput) return;
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && chatInput.value.trim() !== '') {
+                    const message = document.createElement('div');
+                    message.classList.add('message', 'outgoing');
                     const now = new Date();
-                    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    let fileMessage = {
-                        sender: 'You',
-                        time: timeStr,
-                        outgoing: true,
-                        isAttachment: true,
-                        fileName: file.name,
-                        fileType: file.type,
-                        fileURL: URL.createObjectURL(file)
-                    };
-                    messages.push(fileMessage);
-                    renderMessages();
-                    fileInput.value = '';
-                }
-            });
-            // Emoji Picker Logic
-            const emojiBtn = document.getElementById('emoji-btn');
-            const emojiPicker = document.getElementById('emoji-picker');
-            emojiBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                emojiPicker.style.display = emojiPicker.style.display === 'none' ? 'block' : 'none';
-            });
-            document.addEventListener('click', () => emojiPicker.style.display = 'none');
-            emojiPicker.querySelectorAll('.emoji-option').forEach(emoji => {
-                emoji.addEventListener('click', () => {
-                    chatInput.value += emoji.textContent;
-                    emojiPicker.style.display = 'none';
-                    chatInput.focus();
-                });
-            });
-            // Render initial data
-            renderTasks();
-            renderMembers();
-            renderMessages();
-            // Update task count
-            updateTaskCount();
-            // Event Listeners
-            addTaskBtn.addEventListener('click', addNewTask);
-            sendMessageBtn.addEventListener('click', sendMessage);
-            inviteBtn.addEventListener('click', inviteMembers);
-            newTaskInput.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') addNewTask();
-            });
-            chatInput.addEventListener('keypress', function (e) {
-                if (e.key === 'Enter') sendMessage();
-            });
-            // Functions
-            function renderTasks() {
-                taskList.innerHTML = '';
-                tasks.forEach(task => {
-                    const assignedMember = members.find(m => m.id === task.assignedTo);
-                    const taskElement = document.createElement('div');
-                    taskElement.className = `task-item ${task.completed ? 'completed' : ''}`;
-                    taskElement.dataset.id = task.id;
-                    taskElement.innerHTML = `
-                        <div class="task-content">
-                            <div class="task-text">${task.text}</div>
-                            <div class="task-assigned">Assigned to: ${assignedMember ? assignedMember.name : 'Unassigned'}</div>
-                        </div>
-                        <div class="task-actions">
-                            <button class="complete-btn" onclick="toggleTaskCompletion(${task.id})">${task.completed ? '↩️' : '✓'}</button>
-                            <button class="edit-btn" onclick="editTask(${task.id})">✏️</button>
-                            <button class="delete-btn" onclick="deleteTask(${task.id})">🗑️</button>
-                        </div>
+                    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    message.innerHTML = `
+                        ${chatInput.value}
+                        <div class="message-time">${timeString}</div>
                     `;
-                    taskList.appendChild(taskElement);
-                });
-            }
-            function renderMembers() {
-                memberList.innerHTML = '';
-                members.forEach(member => {
-                    const memberElement = document.createElement('li');
-                    memberElement.className = 'member';
-                    const initials = member.name.split(' ').map(n => n[0]).join('');
-                    memberElement.innerHTML = `
-                        <div class="member-avatar">${initials}</div>
-                        <div class="member-name">${member.name}</div>
-                        <div class="member-status ${member.online ? 'online' : 'offline'}"></div>
-                    `;
-                    memberList.appendChild(memberElement);
-                });
-            }
-            function renderMessages() {
-                chatMessages.innerHTML = '';
-                messages.forEach(message => {
-                    const member = members.find(m => m.name === message.sender) || { name: message.sender };
-                    const initials = member.name.split(' ').map(n => n[0]).join('');
-                    const avatarHtml = `<div class="member-avatar" style="width:28px;height:28px;font-size:0.9em;margin-bottom:3px;">${initials}</div>`;
-                    const messageElement = document.createElement('div');
-                    messageElement.className = `chat-message ${message.outgoing ? 'outgoing' : 'incoming'}`;
-                    let content = `
-                        <div style="display:flex;align-items:center;gap:8px;">
-                            ${!message.outgoing ? avatarHtml : ''}
-                            <div>
-                                <div class="message-sender">${message.sender}</div>
-                                <div class="message-text">`;
-                    if (message.isAttachment) {
-                        if (message.fileType && message.fileType.startsWith('image/')) {
-                            content += `<img src="${message.fileURL}" alt="${message.fileName}" style="max-width:120px;max-height:80px;border-radius:4px;display:block;margin-bottom:5px;"><br>`;
-                        }
-                        content += `<a href="${message.fileURL}" download="${message.fileName}" style="color:var(--accent-color);">${message.fileName}</a>`;
-                    } else {
-                        content += message.text;
-                    }
-                    content += `</div>
-                                <div class="message-time">${message.time}</div>
-                            </div>
-                        </div>
-                    `;
-                    messageElement.innerHTML = content;
-                    chatMessages.appendChild(messageElement);
-                });
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }
-            function addNewTask() {
-                const taskText = newTaskInput.value.trim();
-                if (taskText) {
-                    const newTask = {
-                        id: tasks.length + 1,
-                        text: taskText,
-                        assignedTo: members[Math.floor(Math.random() * members.length)].id,
-                        completed: false
-                    };
-                    tasks.push(newTask);
-                    renderTasks();
-                    updateTaskCount();
-                    newTaskInput.value = '';
-                    simulateCollaborativeUpdate(`New task added: "${taskText}"`);
-                }
-            }
-            function sendMessage() {
-                const messageText = chatInput.value.trim();
-                if (messageText) {
-                    const now = new Date();
-                    const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    const newMessage = {
-                        sender: 'You',
-                        text: messageText,
-                        time: timeStr,
-                        outgoing: true
-                    };
-                    messages.push(newMessage);
-                    renderMessages();
+                    chatMessages.appendChild(message);
                     chatInput.value = '';
-                }
-            }
-            function updateTaskCount() {
-                const completedCount = tasks.filter(task => task.completed).length;
-                taskCount.textContent = `${completedCount} completed / ${tasks.length} total`;
-            }
-            function inviteMembers() {
-                const email = prompt('Enter email address to invite:');
-                if (email && validateEmail(email)) {
-                    alert(`Invitation sent to ${email}`);
-                } else if (email) {
-                    alert('Please enter a valid email address');
-                }
-            }
-            function validateEmail(email) {
-                const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                return re.test(email);
-            }
-            function simulateCollaborativeUpdate(message) {
-                const notification = document.createElement('div');
-                notification.className = 'collaborative-notification';
-                notification.textContent = message;
-                notification.style = `
-                    position: fixed;
-                    bottom: 20px;
-                    right: 20px;
-                    background-color: var(--accent-color);
-                    color: white;
-                    padding: 10px 15px;
-                    border-radius: 4px;
-                    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-                    opacity: 0;
-                    transition: opacity 0.3s;
-                    z-index: 1000;
-                `;
-                document.body.appendChild(notification);
-                setTimeout(() => notification.style.opacity = '1', 100);
-                setTimeout(() => {
-                    notification.style.opacity = '0';
-                    setTimeout(() => notification.remove(), 300);
-                }, 3000);
-            }
-            window.toggleTaskCompletion = function (taskId) {
-                const task = tasks.find(t => t.id === taskId);
-                if (task) {
-                    task.completed = !task.completed;
-                    renderTasks();
-                    updateTaskCount();
-                    simulateCollaborativeUpdate(`Task "${task.text}" marked as ${task.completed ? 'completed' : 'incomplete'}`);
-                }
-            };
-            window.editTask = function (taskId) {
-                const task = tasks.find(t => t.id === taskId);
-                if (task) {
-                    const newText = prompt('Edit task:', task.text);
-                    if (newText && newText.trim()) {
-                        task.text = newText.trim();
-                        renderTasks();
-                        simulateCollaborativeUpdate(`Task edited to: "${newText}"`);
-                    }
-                }
-            };
-            window.deleteTask = function (taskId) {
-                const taskIndex = tasks.findIndex(t => t.id === taskId);
-                if (taskIndex !== -1) {
-                    const deletedTask = tasks[taskIndex];
-                    if (confirm(`Are you sure you want to delete task: "${deletedTask.text}"?`)) {
-                        tasks.splice(taskIndex, 1);
-                        renderTasks();
-                        updateTaskCount();
-                        simulateCollaborativeUpdate(`Task deleted: "${deletedTask.text}"`);
-                    }
-                }
-            };
-            setInterval(() => {
-                if (Math.random() > 0.7) {
-                    const randomMemberIndex = Math.floor(Math.random() * members.length);
-                    members[randomMemberIndex].online = !members[randomMemberIndex].online;
-                    renderMembers();
-                }
-                if (Math.random() > 0.85) {
-                    const onlineMembers = members.filter(m => m.online && m.name !== 'You');
-                    if (onlineMembers.length > 0) {
-                        const randomMember = onlineMembers[Math.floor(Math.random() * onlineMembers.length)];
-                        const now = new Date();
-                        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                        const messageOptions = [
-                            "How's everyone's progress so far?",
-                            "I just finished my part of the project.",
-                            "Can someone help me with this section?",
-                            "When is our next meeting?",
-                            "I've shared some resources in our folder."
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    setTimeout(() => {
+                        const replies = [
+                            "Got it! Working on that now.",
+                            "I'll review and get back to you.",
+                            "Thanks for the update!",
+                            "Let's discuss this in our next meeting."
                         ];
-                        const randomMessage = messageOptions[Math.floor(Math.random() * messageOptions.length)];
-                        messages.push({
-                            sender: randomMember.name,
-                            text: randomMessage,
-                            time: timeStr,
-                            outgoing: false
-                        });
-                        renderMessages();
-                    }
+                        const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                        const replyMessage = document.createElement('div');
+                        replyMessage.classList.add('message', 'incoming');
+                        replyMessage.innerHTML = `
+                            ${randomReply}
+                            <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                        `;
+                        chatMessages.appendChild(replyMessage);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000 + Math.random() * 2000);
                 }
-            }, 10000);
+            });
+        }
+        setupChat();
+
+        // File card interaction
+        document.querySelectorAll('.file-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.style.animation = 'none';
+                setTimeout(() => {
+                    card.style.animation = 'pulse 0.5s ease';
+                }, 10);
+            });
+        });
+
+        // Re-setup chat when switching back to dashboard
+        document.querySelector('[data-section="dashboard"]').addEventListener('click', setupChat);
+
+        // Prevent form submissions (for demo)
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                alert('Demo: Form submitted!');
+            });
         });
     </script>
 </body>
