@@ -5,67 +5,121 @@
   <meta charset="UTF-8">
   <title>Taskify Subscription Plans</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #181c20;
-      --card-bg: #23272b;
-      --accent: #00b4d8;
-      --text: #fff;
-      --text-secondary: #b3b3b3;
-      --border: #222;
-      --pro: #38b6ff;
-      --teams: #4caf50;
+      --bg: #0d0101;
+      --card-bg: #1e293b;
+      --card-hover: #334155;
+      --accent: #38bdf8;
+      --accent-light: #7dd3fc;
+      --text: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-tertiary: #64748b;
+      --border: #1e293b;
+      --pro: #818cf8;
+      --teams: #34d399;
+      --free: #94a3b8;
+      --success: #10b981;
+      --error: #ef4444;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       background: var(--bg);
       color: var(--text);
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       margin: 0;
       padding: 0;
       min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
     .subscription-container {
-      max-width: 1100px;
-      margin: 48px auto 0 auto;
-      padding: 24px;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 48px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .title {
-      text-align: center;
       font-size: 2.5rem;
-      font-weight: bold;
-      margin-bottom: 8px;
-      letter-spacing: 1px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(to right, var(--accent), var(--pro));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      line-height: 1.2;
     }
 
     .subtitle {
-      text-align: center;
       color: var(--text-secondary);
-      margin-bottom: 36px;
-      font-size: 1.2rem;
+      margin-bottom: 0;
+      font-size: 1.125rem;
+      font-weight: 400;
+    }
+
+    .toggle-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 48px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-wrapper {
+      display: flex;
+      align-items: center;
+      background: var(--card-bg);
+      padding: 8px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
     }
 
     .toggle-row {
       display: flex;
-      justify-content: center;
       align-items: center;
-      margin-bottom: 40px;
       gap: 12px;
+      position: relative;
     }
 
     .toggle-row label {
-      font-size: 1.1rem;
+      font-size: 1rem;
+      font-weight: 500;
       color: var(--text-secondary);
       cursor: pointer;
+      transition: var(--transition);
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    .toggle-row label.active {
+      color: var(--text);
+      background: rgba(56, 189, 248, 0.1);
     }
 
     .toggle-switch {
       position: relative;
       display: inline-block;
-      width: 56px;
-      height: 28px;
+      width: 60px;
+      height: 32px;
     }
 
     .toggle-switch input {
@@ -82,55 +136,85 @@
       right: 0;
       bottom: 0;
       background: var(--card-bg);
+      border: 1px solid var(--border);
       border-radius: 34px;
-      transition: .4s;
+      transition: var(--transition);
     }
 
     .slider:before {
       position: absolute;
       content: "";
-      height: 20px;
-      width: 20px;
+      height: 24px;
+      width: 24px;
       left: 4px;
-      bottom: 4px;
+      bottom: 3px;
       background: var(--accent);
       border-radius: 50%;
-      transition: .4s;
+      transition: var(--transition);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     }
 
     input:checked+.slider {
-      background: var(--accent);
+      background: rgba(56, 189, 248, 0.2);
+      border-color: var(--accent);
     }
 
     input:checked+.slider:before {
-      transform: translateX(28px);
-      background: #fff;
+      transform: translateX(26px);
+      background: var(--accent);
+    }
+
+    .savings-badge {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .savings-badge svg {
+      width: 16px;
+      height: 16px;
     }
 
     .plans-row {
       display: flex;
-      gap: 32px;
+      gap: 24px;
       justify-content: center;
       flex-wrap: wrap;
     }
 
     .plan-card {
       background: var(--card-bg);
-      border-radius: 18px;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
-      padding: 32px 28px 28px 28px;
-      min-width: 300px;
-      max-width: 340px;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 32px;
+      width: 100%;
+      max-width: 360px;
       flex: 1;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      border: 2px solid var(--border);
+      align-items: flex-start;
+      border: 1px solid var(--border);
       position: relative;
-      margin-bottom: 32px;
+      transition: var(--transition);
+    }
+
+    .plan-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-light);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
 
     .plan-card.pro {
+      border-color: var(--pro);
+    }
+
+    .plan-card.pro:hover {
       border-color: var(--pro);
     }
 
@@ -138,11 +222,25 @@
       border-color: var(--teams);
     }
 
+    .plan-card.teams:hover {
+      border-color: var(--teams);
+    }
+
+    .plan-card.free {
+      border-color: var(--free);
+    }
+
+    .plan-card.free:hover {
+      border-color: var(--free);
+    }
+
     .plan-name {
-      font-size: 1.3rem;
-      font-weight: bold;
-      margin-bottom: 6px;
-      letter-spacing: 1px;
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .plan-name.pro {
@@ -153,105 +251,244 @@
       color: var(--teams);
     }
 
+    .plan-name.free {
+      color: var(--free);
+    }
+
+    .plan-description {
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin-bottom: 24px;
+    }
+
+    .plan-price-container {
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
     .plan-price {
-      font-size: 2.2rem;
-      font-weight: bold;
-      margin: 16px 0 8px 0;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0;
+      line-height: 1;
     }
 
     .plan-period {
       color: var(--text-secondary);
+      font-size: 0.9375rem;
+      margin: 8px 0 0 0;
+    }
+
+    .monthly-equivalent {
       font-size: 1rem;
-      margin-bottom: 18px;
+      color: var(--text-secondary);
+      font-weight: 400;
+      display: block;
+      margin-top: 4px;
     }
 
     .plan-features {
       list-style: none;
       padding: 0;
-      margin: 0 0 24px 0;
+      margin: 0 0 32px 0;
       width: 100%;
     }
 
     .plan-features li {
       margin-bottom: 12px;
       display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 1.05rem;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 0.9375rem;
       color: var(--text-secondary);
+      position: relative;
+      padding-left: 28px;
     }
 
     .plan-features li strong {
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .plan-features li.included {
       color: var(--text);
+      font-weight: 500;
     }
 
     .plan-features li.included::before {
-      content: "✔";
-      color: var(--accent);
-      font-size: 1.2em;
-      margin-right: 8px;
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 18px;
+      height: 18px;
+      background-color: var(--success);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      background-size: contain;
     }
 
     .plan-features li.not-included::before {
-      content: "✖";
-      color: #444;
-      font-size: 1.2em;
-      margin-right: 8px;
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 2px;
+      width: 18px;
+      height: 18px;
+      background-color: var(--text-tertiary);
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'%3E%3C/line%3E%3Cline x1='6' y1='6' x2='18' y2='18'%3E%3C/line%3E%3C/svg%3E");
+      mask-repeat: no-repeat;
+      mask-position: center;
+      background-size: contain;
     }
 
     .cta-btn {
       background: var(--accent);
-      color: #fff;
+      color: var(--bg);
       border: none;
-      border-radius: 7px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 12px 24px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: var(--transition);
       margin-top: auto;
-      letter-spacing: 1px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .cta-btn:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+
+    .cta-btn:active {
+      transform: translateY(0);
     }
 
     .plan-card.pro .cta-btn {
       background: var(--pro);
-      color: #181c20;
+      color: var(--bg);
+    }
+
+    .plan-card.pro .cta-btn:hover {
+      background: #a5b4fc;
     }
 
     .plan-card.teams .cta-btn {
       background: var(--teams);
-      color: #181c20;
+      color: var(--bg);
+    }
+
+    .plan-card.teams .cta-btn:hover {
+      background: #6ee7b7;
+    }
+
+    .plan-card.free .cta-btn {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--text-secondary);
+    }
+
+    .plan-card.free .cta-btn:hover {
+      background: var(--card-hover);
+      border-color: var(--text);
     }
 
     .most-popular {
       position: absolute;
-      top: -18px;
-      left: 50%;
-      transform: translateX(-50%);
+      top: -12px;
+      right: 24px;
       background: var(--pro);
-      color: #181c20;
-      font-size: 0.98rem;
-      font-weight: bold;
-      padding: 5px 18px;
-      border-radius: 12px;
+      color: var(--bg);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      padding: 4px 16px;
+      border-radius: 20px;
       letter-spacing: 0.5px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.13);
+      box-shadow: var(--shadow);
     }
 
-    @media (max-width: 1020px) {
+    .plan-badge {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+    }
+
+    .feature-highlight {
+      background: rgba(56, 189, 248, 0.1);
+      padding: 16px;
+      border-radius: 8px;
+      margin-top: 24px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .feature-highlight-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .feature-highlight-text {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    @media (max-width: 1024px) {
       .plans-row {
-        flex-direction: column;
-        align-items: center;
+        gap: 32px;
       }
 
       .plan-card {
-        max-width: 400px;
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .subscription-container {
+        padding: 32px 16px;
+      }
+
+      .title {
+        font-size: 2rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .toggle-wrapper {
         width: 100%;
+        justify-content: center;
+      }
+
+      .toggle-row label {
+        padding: 6px 12px;
+        font-size: 0.9375rem;
+      }
+
+      .plan-card {
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .title {
+        font-size: 1.75rem;
+      }
+
+      .plan-price {
+        font-size: 2rem;
+      }
+
+      .plan-features li {
+        font-size: 0.875rem;
       }
     }
   </style>
@@ -259,75 +496,102 @@
 
 <body>
   <div class="subscription-container">
-    <div class="title">Taskify Subscription Plans</div>
-    <div class="subtitle">Choose the plan that fits your productivity needs. Upgrade anytime!</div>
-    <div class="toggle-row">
-      <label for="billing-toggle">Monthly</label>
-      <div class="toggle-switch">
-        <input type="checkbox" id="billing-toggle">
-        <span class="slider"></span>
-      </div>
-      <label for="billing-toggle">Annual</label>
-      <span class="promo-text" style="color:var(--accent);font-weight:bold;">(2 months free!)</span>
+    <div class="header">
+      <h1 class="title">Find Your Perfect Taskify Plan</h1>
+      <p class="subtitle">Boost your productivity with the right plan. Switch or cancel anytime.</p>
     </div>
+
+    <div class="toggle-container">
+      <div class="toggle-wrapper">
+        <div class="toggle-row">
+          <label for="billing-toggle" class="active" id="monthly-label">Monthly</label>
+          <div class="toggle-switch">
+            <input type="checkbox" id="billing-toggle">
+            <span class="slider"></span>
+          </div>
+          <label for="billing-toggle" id="annual-label">Annual</label>
+        </div>
+      </div>
+      <div class="savings-badge" id="savings-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+        </svg>
+        <span>Save 16% with annual billing</span>
+      </div>
+    </div>
+
     <div class="plans-row" id="plans-row">
       <!-- Plans will be injected here -->
     </div>
   </div>
+
   <script>
     // Plan data
     const plans = [
       {
         name: "Free",
-        class: "",
+        class: "free",
+        description: "Perfect for individuals getting started with task management",
         price: { monthly: 0, annual: 0 },
-        period: "Forever",
+        period: "Forever free",
         features: [
-          { text: "Basic Task Manager", included: true },
-          { text: "Limited Project Manager", included: true },
-          { text: "Subject Notes", included: true },
-          { text: "Spin The Wheel", included: true },
-          { text: "Pomodoro Timer", included: true },
-          { text: "AI Study Assistant (limited)", included: true },
-          { text: "Team Collaboration", included: false },
-          { text: "Advanced Analytics", included: false },
-          { text: "File Attachments", included: false },
-          { text: "Priority Support", included: false },
-          { text: "Ad-free", included: false }
+          { text: "Basic task management", included: true },
+          { text: "Up to 3 active projects", included: true },
+          { text: "Subject notes with basic formatting", included: true },
+          { text: "Spin The Wheel feature", included: true },
+          { text: "Pomodoro timer", included: true },
+          { text: "AI Study Assistant (5 requests/day)", included: true },
+          { text: "Team collaboration", included: false },
+          { text: "Advanced analytics dashboard", included: false },
+          { text: "File attachments (up to 5MB)", included: false },
+          { text: "Priority email support", included: false },
+          { text: "Ad-free experience", included: false }
         ],
-        cta: "Get Started"
+        cta: "Start with Free",
+        badge: "Great for starters"
       },
       {
         name: "Pro",
         class: "pro",
-        price: { monthly: 5, annual: 50 }, // 2 months free on annual
-        period: "/user/mo",
+        description: "For power users who need advanced features",
+        price: { monthly: 8, annual: 80 }, // 2 months free on annual
+        period: "per user per month",
         features: [
           { text: "All Free features", included: true },
-          { text: "Unlimited Projects & Notes", included: true },
-          { text: "Full AI Study Assistant", included: true },
-          { text: "Team Collaboration", included: true },
-          { text: "Advanced Analytics", included: true },
-          { text: "File Attachments", included: true },
-          { text: "Ad-free", included: true },
-          { text: "Priority Support", included: true }
+          { text: "Unlimited projects & notes", included: true },
+          { text: "Full AI Study Assistant (50 requests/day)", included: true },
+          { text: "Team collaboration (up to 5 members)", included: true },
+          { text: "Advanced analytics & reports", included: true },
+          { text: "File attachments (up to 100MB)", included: true },
+          { text: "Ad-free experience", included: true },
+          { text: "Priority email & chat support", included: true },
+          { text: "Custom themes & layouts", included: true },
+          { text: "Weekly progress reports", included: true }
         ],
-        cta: "Upgrade to Pro",
-        popular: true
+        cta: "Get Pro Plan",
+        popular: true,
+        badge: "Most popular"
       },
       {
         name: "Teams",
         class: "teams",
-        price: { monthly: 12, annual: 120 }, // 2 months free on annual
-        period: "/team/mo",
+        description: "Collaborative features for groups and organizations",
+        price: { monthly: 15, annual: 150 }, // 2 months free on annual
+        period: "per team per month",
         features: [
           { text: "All Pro features", included: true },
-          { text: "Up to 10 users", included: true },
-          { text: "Admin Controls", included: true },
-          { text: "Custom Workflows", included: true },
-          { text: "Dedicated Support", included: true }
+          { text: "Up to 10 team members", included: true },
+          { text: "Admin controls & permissions", included: true },
+          { text: "Custom workflows & templates", included: true },
+          { text: "Dedicated account manager", included: true },
+          { text: "Single sign-on (SSO)", included: true },
+          { text: "Team performance analytics", included: true },
+          { text: "Priority 24/7 support", included: true },
+          { text: "API access", included: true },
+          { text: "Onboarding training", included: true }
         ],
-        cta: "Start Teams Plan"
+        cta: "Start Team Plan",
+        badge: "Best for teams"
       }
     ];
 
@@ -335,28 +599,48 @@
     function renderPlans(annual) {
       const row = document.getElementById('plans-row');
       row.innerHTML = '';
+      
       plans.forEach(plan => {
         let price = annual ? plan.price.annual : plan.price.monthly;
-        let period = plan.name === "Free" ? "Forever" : (annual ? "/year" : plan.period);
+        let period = plan.name === "Free" ? plan.period : (annual ? "per year" : plan.period);
         let priceDisplay = plan.name === "Free"
           ? "Free"
           : annual
-            ? `$${price}/year <span class="monthly-equivalent">($${(price / 12).toFixed(2)}/mo)</span>`
-            : `$${price}/mo`;
+            ? `$${price}<span class="monthly-equivalent">($${(price / 12).toFixed(2)}/mo)</span>`
+            : `$${price}<span class="monthly-equivalent">($${price}/mo)</span>`;
 
         let card = document.createElement('div');
-        card.className = `plan-card${plan.class ? ' ' + plan.class : ''}`;
+        card.className = `plan-card ${plan.class}`;
         card.innerHTML = `
-          ${plan.popular ? `<div class="most-popular">Most Popular</div>` : ""}
-          <div class="plan-name${plan.class ? ' ' + plan.class : ''}">${plan.name}</div>
-          <div class="plan-price">${priceDisplay}</div>
-          <div class="plan-period">${period}</div>
+          ${plan.popular ? `<div class="most-popular">${plan.badge}</div>` : ""}
+          <div class="plan-name ${plan.class}">
+            ${plan.name}
+            ${!plan.popular ? `<span class="plan-badge">${plan.badge}</span>` : ""}
+          </div>
+          <p class="plan-description">${plan.description}</p>
+          <div class="plan-price-container">
+            <div class="plan-price">${priceDisplay}</div>
+            <div class="plan-period">${period}</div>
+          </div>
           <ul class="plan-features">
             ${plan.features.map(f =>
-          `<li class="${f.included ? 'included' : 'not-included'}">${f.text}</li>`
-        ).join('')}
+              `<li class="${f.included ? 'included' : 'not-included'}">${f.text}</li>`
+            ).join('')}
           </ul>
-          <button class="cta-btn">${plan.cta}</button>
+          ${plan.class !== 'free' ? `
+          <div class="feature-highlight">
+            <div class="feature-highlight-title">Premium Feature</div>
+            <p class="feature-highlight-text">${plan.class === 'pro' 
+              ? 'Advanced analytics to track your productivity trends' 
+              : 'Custom workflows tailored to your team processes'}</p>
+          </div>
+          ` : ''}
+          <button class="cta-btn">
+            ${plan.cta}
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"></path>
+            </svg>
+          </button>
         `;
         row.appendChild(card);
       });
@@ -364,12 +648,40 @@
 
     // Toggle billing
     const billingToggle = document.getElementById('billing-toggle');
-    billingToggle.addEventListener('change', function () {
-      renderPlans(this.checked);
+    const monthlyLabel = document.getElementById('monthly-label');
+    const annualLabel = document.getElementById('annual-label');
+    const savingsBadge = document.getElementById('savings-badge');
+    
+    billingToggle.addEventListener('change', function() {
+      const isAnnual = this.checked;
+      renderPlans(isAnnual);
+      
+      if (isAnnual) {
+        monthlyLabel.classList.remove('active');
+        annualLabel.classList.add('active');
+        savingsBadge.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
+          </svg>
+          <span>Save 16% with annual billing</span>
+        `;
+      } else {
+        monthlyLabel.classList.add('active');
+        annualLabel.classList.remove('active');
+        savingsBadge.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+          <span>Switch to annual to save</span>
+        `;
+      }
     });
 
     // Initial render (monthly by default)
     renderPlans(false);
+    monthlyLabel.classList.add('active');
   </script>
 </body>
 
