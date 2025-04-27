@@ -3,30 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Relapse Timer</title>
-  <link rel="stylesheet" href="relapse.css"/>
+  <title>Relapse Timer – Stay Productive</title>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <div class="container">
+  <div class="background-glow"></div>
+  <div class="main-card">
     <header>
+      <div class="logo-circle">
+        <span>⏱️</span>
+      </div>
       <h1>Relapse Timer</h1>
-      <h2 id="streak">Current Streak: <span id="days">0</span> days</h2>
+      <p class="subtitle">Keep your productivity streak alive!</p>
     </header>
-    <main>
-      <div class="timer-box">
-        <span id="timer">00:00:00:00</span>
-      </div>
-      <button id="relapseBtn" class="relapse">Relapse</button>
-      <div class="motivation">
-        <blockquote id="quote"></blockquote>
-        <button id="newQuoteBtn">New Motivation</button>
-      </div>
-      <div class="history">
-        <h3>Relapse History</h3>
-        <ul id="historyList"></ul>
-      </div>
-    </main>
+    <section class="timer-section">
+      <div class="streak-label">Current Streak</div>
+      <div class="streak-days"><span id="days">0</span> <span class="unit">days</span></div>
+      <div class="timer-box" id="timer">00:00:00:00</div>
+      <button id="relapseBtn" class="relapse-btn">Relapse</button>
+    </section>
+    <section class="motivation-section">
+      <div class="motivation-glow"></div>
+      <blockquote id="quote"></blockquote>
+      <button id="newQuoteBtn" class="motivation-btn">New Motivation</button>
+    </section>
+    <section class="history-section">
+      <h2>Relapse History</h2>
+      <ul id="historyList"></ul>
+    </section>
+    <footer>
+      <small>Made with 💙 to help you stay on track</small>
+    </footer>
   </div>
-  <script src="relapse.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
