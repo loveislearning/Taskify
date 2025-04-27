@@ -1,75 +1,1088 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taskify - Collaborative Project</title>
-    <link rel="stylesheet" href="collab.css">
-</head>
+    <title>IDEA FORGE - Collaboration Nexus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0c1221;
+            --text-color: #f3f3f3;
+            --card-bg: #0f1a2c;
+            --card-dark: #081019;
+            --accent-color: #0d2b4a;
+            --accent-light: #1a4a80;
+            --hover-color: #162842;
+            --border-color: #1c3050;
+            --danger-color: #ff2d75;
+            --success-color: #00e676;
+            --border-radius: 16px;
+            --transition-speed: 0.4s;
+            --sidebar-width: 280px;
+            --header-height: 90px;
+            --shadow: 0 8px 32px rgba(0,0,0,0.7);
+            --neon-glow: 0 0 10px #23232b, 0 0 20px rgba(34,34,47,0.3);
+            --glass-effect: rgba(10, 17, 33, 0.7);
+            --input-bg: #101c2e;
+            --input-border: #1c3050;
+            --button-bg: #1a3050;
+            --button-hover: #224872;
+        }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Orbitron', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all var(--transition-speed);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+        }
+        .stars::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at center, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0) 40%, 
+                rgba(255,255,255,0.06) 70%, 
+                rgba(255,255,255,0) 100%);
+            background-size: 200% 200%;
+            animation: twinkle 20s infinite linear;
+        }
+        @keyframes twinkle {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 100% 100%; }
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: blink 5s infinite ease-in-out;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 1; }
+        }
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.1;
+        }
+        .nebula-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #1a4a80, transparent 70%);
+            top: 20%;
+            left: 10%;
+            animation: float 25s infinite linear;
+        }
+        .nebula-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #0d2b4a, transparent 70%);
+            bottom: 10%;
+            right: 15%;
+            animation: float 30s infinite linear reverse;
+        }
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 30px) rotate(5deg); }
+            50% { transform: translate(0, 50px) rotate(0deg); }
+            75% { transform: translate(-30px, 20px) rotate(-5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .dashboard-header {
+            background: var(--glass-effect);
+            backdrop-filter: blur(12px);
+            color: var(--text-color);
+            padding: 0 2rem;
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.5rem;
+            width: 100%;
+        }
+        .dashboard-header .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            letter-spacing: 2px;
+            transition: all 0.6s ease;
+            background: linear-gradient(90deg, #0d2b4a, #1a4a80, #2d6eba);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(26, 74, 128, 0.3);
+        }
+        .dashboard-header .logo:hover {
+            transform: scale(1.05);
+        }
+        .dashboard-container {
+            display: flex;
+            min-height: calc(100vh - var(--header-height));
+            position: relative;
+        }
+
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--glass-effect);
+            backdrop-filter: blur(12px);
+            padding: 2rem 0;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 10;
+            transition: all var(--transition-speed);
+            border-right: 1px solid var(--border-color);
+        }
+
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            padding: 0 1rem;
+        }
+        .sidebar button {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            padding: 1rem 1.5rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            font-weight: 500;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+        .sidebar button.active, 
+        .sidebar button:hover {
+            background: var(--hover-color);
+            color: #fff;
+            transform: translateX(10px);
+            box-shadow: 0 0 15px var(--card-dark);
+        }
+        .sidebar button.active {
+            font-weight: 600;
+            border-left: 3px solid #fff;
+        }
+        .sidebar button.active i {
+            color: #fff;
+            transform: scale(1.2);
+        }
+        .sidebar button i {
+            width: 24px;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: all var(--transition-speed);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem;
+            display: block;
+        }
+        .content-section {
+            display: none;
+            gap: 2rem;
+            align-content: start;
+        }
+        .content-section.active {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+        .content-section > div,
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .widget {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+        .widget-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        .widget-header::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-light);
+            box-shadow: 0 0 8px var(--accent-light);
+        }
+        .widget h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent-light);
+            position: relative;
+            display: inline-block;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+        .stat-card {
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            background: var(--card-dark);
+            text-align: center;
+            transition: all var(--transition-speed);
+            border: 1px solid var(--border-color);
+        }
+        .stat-card h3 {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+            text-transform: uppercase;
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+        }
+        .timeline {
+            display: grid;
+            gap: 0;
+            position: relative;
+            padding-left: 2rem;
+        }
+        .timeline::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 3px;
+            background: var(--accent-light);
+            box-shadow: 0 0 8px var(--accent-light);
+        }
+        .milestone {
+            padding: 1.5rem 0;
+            position: relative;
+            transition: all var(--transition-speed);
+        }
+        .milestone::before {
+            content: "";
+            position: absolute;
+            left: -2rem;
+            top: 2rem;
+            width: 14px;
+            height: 14px;
+            background: var(--accent-light);
+            border-radius: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 10px var(--accent-light);
+        }
+        .milestone h4 {
+            margin: 0 0 0.3rem 0;
+            font-size: 1.1rem;
+            color: var(--accent-light);
+        }
+        .milestone p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .member-list {
+            display: grid;
+            gap: 1rem;
+        }
+        .member {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            background: var(--card-dark);
+            transition: all var(--transition-speed);
+        }
+        .member:hover {
+            background: var(--hover-color);
+            transform: translateX(5px);
+        }
+        .member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+        .member-info h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+        .member-info p {
+            margin: 0;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        .chat-container {
+            height: 400px;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+        }
+        .chat-messages {
+            overflow-y: auto;
+            padding: 1rem 0;
+            display: grid;
+            gap: 1rem;
+            align-content: start;
+        }
+        .message {
+            max-width: 80%;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            position: relative;
+            transition: all var(--transition-speed);
+        }
+        .message.outgoing {
+            background: var(--accent-color);
+            justify-self: end;
+            color: white;
+            border-bottom-right-radius: 0;
+        }
+        .message.incoming {
+            background: var(--card-dark);
+            justify-self: start;
+            border-bottom-left-radius: 0;
+        }
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 0.3rem;
+        }
+        .chat-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            position: relative;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            background: var(--input-bg);
+            color: var(--text-color);
+            transition: all var(--transition-speed);
+        }
+        .chat-input input:focus {
+            outline: none;
+            border-color: var(--accent-light);
+            box-shadow: 0 0 10px rgba(26, 74, 128, 0.3);
+        }
+        .chat-input button {
+            padding: 0 1.2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            background: var(--button-bg);
+            color: white;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+        .chat-input button:hover {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+        }
+        .emoji-button {
+            padding: 0 0.8rem;
+            border: none;
+            border-radius: var(--border-radius);
+            background: var(--input-bg);
+            color: var(--text-color);
+            cursor: pointer;
+        }
+        .emoji-picker {
+            position: absolute;
+            bottom: 60px;
+            right: 0;
+            z-index: 10;
+            display: none;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+        }
+        .emoji-picker.active {
+            display: block;
+        }
+        .emoji-selector {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            padding: 15px;
+            background: var(--card-dark);
+            border-radius: var(--border-radius);
+        }
+        .emoji-selector button {
+            font-size: 20px;
+            padding: 8px;
+            background: var(--card-bg);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .emoji-selector button:hover {
+            transform: scale(1.2);
+            background: var(--hover-color);
+        }
+        
+        .file-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 1rem;
+        }
+        .file-card {
+            padding: 1rem;
+            text-align: center;
+            border-radius: var(--border-radius);
+            background: var(--card-dark);
+            transition: all var(--transition-speed);
+            cursor: pointer;
+        }
+        .file-card:hover {
+            background: var(--hover-color);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px var(--card-dark);
+        }
+        .file-card i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-light);
+        }
+        .file-card p {
+            margin: 0;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all var(--transition-speed);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-family: 'Segoe UI', 'Orbitron', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary {
+            background: var(--button-bg);
+            color: white;
+            box-shadow: 0 0 15px rgba(13, 43, 74, 0.4);
+        }
+        .btn-primary:hover {
+            background: var(--button-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(13, 43, 74, 0.6);
+        }
+        
+        /* Form inputs styling */
+        input[type="text"], 
+        input[type="email"],
+        input[type="file"],
+        textarea {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--input-border);
+            border-radius: var(--border-radius);
+            background: var(--input-bg);
+            color: var(--text-color);
+            font-family: 'Segoe UI', sans-serif;
+            transition: all var(--transition-speed);
+        }
+        
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent-light);
+            box-shadow: 0 0 10px rgba(26, 74, 128, 0.3);
+        }
+        
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @media (max-width: 1200px) {
+            .content-section.active {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                padding: 1rem 0;
+            }
+            .sidebar-menu {
+                flex-direction: row;
+                overflow-x: auto;
+                padding: 0 1rem;
+            }
+            .sidebar button {
+                white-space: nowrap;
+                transform: none !important;
+            }
+            .sidebar button:hover {
+                transform: translateY(-3px) !important;
+            }
+            .sidebar button.active {
+                border-left: none;
+                border-bottom: 3px solid #fff;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
 <body>
-    <div class="collaborative-workspace">
-        <div class="project-header">
-            <h2>📋 Collaborative Project: Team Study</h2>
-            <button id="invite-btn">Invite Members</button>
+    <!-- Space Background Animation -->
+    <div class="space-background">
+        <div class="stars"></div>
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="dashboard-header">
+        <div class="header-content">
+            <div class="logo">IDEA FORGE</div>
+            <div class="header-actions">
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i> NEW INITIATIVE
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-menu">
+                <button class="active" data-section="dashboard"><i class="fas fa-home"></i> DASHBOARD</button>
+                <button data-section="team"><i class="fas fa-users"></i> TEAM HUB</button>
+                <button data-section="analytics"><i class="fas fa-chart-line"></i> ANALYTICS</button>
+                <button data-section="projects"><i class="fas fa-project-diagram"></i> PROJECTS</button>
+                <button data-section="documents"><i class="fas fa-file-alt"></i> DOCUMENTS</button>
+            </div>
         </div>
 
-        <div class="workspace-container">
-            <div class="tasks-section">
-                <div class="section-header">
-                    <h3>Team Tasks</h3>
-                    <span class="task-count">0 completed / 0 total</span>
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="content-section active">
+                <div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3>ACTIVE MEMBERS</h3>
+                            <div class="stat-value">42</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>ONGOING PROJECTS</h3>
+                            <div class="stat-value">15</div>
+                        </div>
+                        <div class="stat-card">
+                            <h3>COMPLETION RATE</h3>
+                            <div class="stat-value">84%</div>
+                        </div>
+                    </div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>PROJECT TIMELINE</h2>
+                        </div>
+                        <div class="timeline">
+                            <div class="milestone">
+                                <h4>PHASE 1: IDEATION</h4>
+                                <p>DEADLINE: 15 AUG 2025</p>
+                            </div>
+                            <div class="milestone">
+                                <h4>PHASE 2: PROTOTYPING</h4>
+                                <p>DEADLINE: 30 SEP 2025</p>
+                            </div>
+                            <div class="milestone">
+                                <h4>PHASE 3: IMPLEMENTATION</h4>
+                                <p>DEADLINE: 15 NOV 2025</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>SHARED FILES</h2>
+                        </div>
+                        <div class="file-grid">
+                            <div class="file-card">
+                                <i class="fas fa-file-code"></i>
+                                <p>prototype_v2.zip</p>
+                            </div>
+                            <div class="file-card">
+                                <i class="fas fa-file-image"></i>
+                                <p>design_mockup.png</p>
+                            </div>
+                            <div class="file-card">
+                                <i class="fas fa-file-pdf"></i>
+                                <p>requirements.pdf</p>
+                            </div>
+                            <div class="file-card">
+                                <i class="fas fa-file-word"></i>
+                                <p>spec_doc.docx</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="task-list" id="task-list">
-                </div>
-
-                <div class="add-task">
-                    <input type="text" id="new-task-input" placeholder="Add a new task...">
-                    <button id="add-task-btn">Add Task</button>
+                <div class="right-panel">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>ACTIVE COLLABORATORS</h2>
+                        </div>
+                        <div class="member-list">
+                            <div class="member">
+                                <div class="member-avatar">AJ</div>
+                                <div class="member-info">
+                                    <h4>ALEX JOHNSON</h4>
+                                    <p>LEAD DEVELOPER</p>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-avatar">SM</div>
+                                <div class="member-info">
+                                    <h4>SAMANTHA MILES</h4>
+                                    <p>UX DESIGNER</p>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-avatar">RK</div>
+                                <div class="member-info">
+                                    <h4>RAJ KUMAR</h4>
+                                    <p>DATA SCIENTIST</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="widget chat-container">
+                        <div class="widget-header">
+                            <h2>TEAM CHAT</h2>
+                        </div>
+                        <div class="chat-messages">
+                            <div class="message outgoing">
+                                Let's finalize the prototype today! 🚀
+                                <div class="message-time">10:24 AM</div>
+                            </div>
+                            <div class="message incoming">
+                                Working on the final adjustments now 👨‍💻
+                                <div class="message-time">10:26 AM</div>
+                            </div>
+                            <div class="message incoming">
+                                Should have it ready for review by EOD ✅
+                                <div class="message-time">10:27 AM</div>
+                            </div>
+                        </div>
+                        <div class="chat-input">
+                            <input type="text" id="chat-input-field" placeholder="Type message...">
+                            <button id="emoji-btn" class="emoji-button"><i class="far fa-smile"></i></button>
+                            <div class="emoji-picker" id="emoji-picker">
+                                <div class="emoji-selector">
+                                    <button data-emoji="😊">😊</button>
+                                    <button data-emoji="👍">👍</button>
+                                    <button data-emoji="🚀">🚀</button>
+                                    <button data-emoji="✅">✅</button>
+                                    <button data-emoji="⭐">⭐</button>
+                                    <button data-emoji="🔥">🔥</button>
+                                    <button data-emoji="💯">💯</button>
+                                    <button data-emoji="👨‍💻">👨‍💻</button>
+                                    <button data-emoji="🎉">🎉</button>
+                                    <button data-emoji="👏">👏</button>
+                                </div>
+                            </div>
+                            <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="right-sidebar">
-                <div class="team-members">
-                    <h3>Team Members</h3>
-                    <ul id="member-list">
-                    </ul>
-                </div>
-
-                <div class="team-chat">
-                    <h3>Team Chat</h3>
-                    <div class="chat-messages" id="chat-messages">
-                    </div>
-                    <div class="chat-input">
-                        <input type="file" id="chat-file-input" style="display:none;"
-                            accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,.rar">
-                        <button id="attach-btn" title="Attach file">📎</button>
-
-
-                        <button id="emoji-btn" title="Add emoji">😊</button>
-                        <div id="emoji-picker"
-                            style="display:none; position:absolute; bottom:50px; right:80px; background:#222; border-radius:6px; padding:10px; z-index:10;">
-                            <span class="emoji-option">😀</span>
-                            <span class="emoji-option">😂</span>
-                            <span class="emoji-option">😍</span>
-                            <span class="emoji-option">👍</span>
-                            <span class="emoji-option">🎉</span>
-                            <span class="emoji-option">😎</span>
-                            <span class="emoji-option">🙏</span>
-
+            <!-- Team Section -->
+            <div id="team-section" class="content-section">
+                <div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>TEAM DIRECTORY</h2>
                         </div>
-
-                        <input type="text" id="chat-input" placeholder="Type a message...">
-                        <button id="send-message-btn">Send</button>
+                        <div class="member-list">
+                            <div class="member">
+                                <div class="member-avatar">AJ</div>
+                                <div class="member-info">
+                                    <h4>ALEX JOHNSON</h4>
+                                    <p>LEAD DEVELOPER</p>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-avatar">SM</div>
+                                <div class="member-info">
+                                    <h4>SAMANTHA MILES</h4>
+                                    <p>UX DESIGNER</p>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-avatar">RK</div>
+                                <div class="member-info">
+                                    <h4>RAJ KUMAR</h4>
+                                    <p>DATA SCIENTIST</p>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-avatar">JD</div>
+                                <div class="member-info">
+                                    <h4>JOHN DOE</h4>
+                                    <p>BACKEND DEVELOPER</p>
+                                </div>
+                            </div>
+                            <div class="member">
+                                <div class="member-avatar">AT</div>
+                                <div class="member-info">
+                                    <h4>ANGELA THOMPSON</h4>
+                                    <p>PROJECT MANAGER</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>INVITE MEMBER</h2>
+                        </div>
+                        <form>
+                            <input type="text" placeholder="Name">
+                            <input type="email" placeholder="Email">
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-user-plus"></i> Invite</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Analytics Section -->
+            <div id="analytics-section" class="content-section">
+                <div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>ANALYTICS OVERVIEW</h2>
+                        </div>
+                        <div style="height:200px;display:flex;align-items:center;justify-content:center;">
+                            <span style="opacity:0.7;">[Analytics Chart Placeholder]</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>RECENT ACTIVITY</h2>
+                        </div>
+                        <ul style="list-style:none;padding:0;margin:0;">
+                            <li>• Alex updated the project timeline</li>
+                            <li>• Samantha added new designs</li>
+                            <li>• Raj uploaded data set</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Projects Section -->
+            <div id="projects-section" class="content-section">
+                <div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>PROJECTS BOARD</h2>
+                        </div>
+                        <ul style="list-style:none;padding:0;margin:0;">
+                            <li>🚀 New Website Launch <span style="opacity:0.7;">(In Progress)</span></li>
+                            <li>🤖 AI Chatbot Integration <span style="opacity:0.7;">(Planning)</span></li>
+                            <li>📱 Mobile App Redesign <span style="opacity:0.7;">(Completed)</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>CREATE PROJECT</h2>
+                        </div>
+                        <form>
+                            <input type="text" placeholder="Project Name">
+                            <textarea placeholder="Description"></textarea>
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-plus"></i> Create</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Documents Section -->
+            <div id="documents-section" class="content-section">
+                <div>
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>DOCUMENTS</h2>
+                        </div>
+                        <div class="file-grid">
+                            <div class="file-card">
+                                <i class="fas fa-file-pdf"></i>
+                                <p>specification.pdf</p>
+                            </div>
+                            <div class="file-card">
+                                <i class="fas fa-file-word"></i>
+                                <p>project_plan.docx</p>
+                            </div>
+                            <div class="file-card">
+                                <i class="fas fa-file-excel"></i>
+                                <p>budget.xlsx</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="right-panel">
+                    <div class="widget">
+                        <div class="widget-header">
+                            <h2>UPLOAD DOCUMENT</h2>
+                        </div>
+                        <form>
+                            <input type="file">
+                            <button class="btn btn-primary" type="submit"><i class="fas fa-upload"></i> Upload</button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        // Space background stars
+        function createStars() {
+            const starsContainer = document.querySelector('.stars');
+            const starCount = 200;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                const duration = Math.random() * 5 + 3;
+                const delay = Math.random() * 5;
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${delay}s`;
+                starsContainer.appendChild(star);
+            }
+        }
+        createStars();
 
-    <script src="collab.js"></script>
+        // Sidebar navigation logic
+        document.querySelectorAll('.sidebar-menu button').forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active from all
+                document.querySelectorAll('.sidebar-menu button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                // Hide all sections
+                document.querySelectorAll('.content-section').forEach(sec => sec.classList.remove('active'));
+                // Show the selected
+                const section = button.getAttribute('data-section');
+                document.getElementById(section + '-section').classList.add('active');
+            });
+        });
+
+        // Fixed emoji picker functionality that properly closes
+        const emojiBtn = document.getElementById('emoji-btn');
+        const emojiPicker = document.getElementById('emoji-picker');
+        
+        function closeEmojiPicker(e) {
+            // If picker is not visible, do nothing
+            if (!emojiPicker.classList.contains('active')) return;
+            // If click is inside picker or emoji button, do nothing
+            if (
+                emojiPicker.contains(e.target) ||
+                emojiBtn.contains(e.target)
+            ) return;
+            // Otherwise, close picker
+            emojiPicker.classList.remove('active');
+            document.removeEventListener('mousedown', closeEmojiPicker);
+        }
+        
+        // Open picker and add listener
+        emojiBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            emojiPicker.classList.toggle('active');
+            if (emojiPicker.classList.contains('active')) {
+                setTimeout(() => {
+                    document.addEventListener('mousedown', closeEmojiPicker);
+                }, 0);
+            } else {
+                document.removeEventListener('mousedown', closeEmojiPicker);
+            }
+        });
+
+        // Handle emoji selection
+        document.querySelectorAll('.emoji-selector button').forEach(button => {
+            button.addEventListener('click', function() {
+                const emoji = this.getAttribute('data-emoji');
+                const input = document.getElementById('chat-input-field');
+                input.value += emoji;
+                emojiPicker.classList.remove('active');
+                document.removeEventListener('mousedown', closeEmojiPicker);
+                input.focus();
+            });
+        });
+
+        // Chat functionality 
+        function setupChat() {
+            const chatInput = document.getElementById('chat-input-field');
+            const sendBtn = document.getElementById('send-btn');
+            const chatMessages = document.querySelector('.chat-messages');
+            
+            if (!chatInput || !sendBtn) return;
+            
+            const sendMessage = () => {
+                if (chatInput.value.trim() !== '') {
+                    const message = document.createElement('div');
+                    message.classList.add('message', 'outgoing');
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    message.innerHTML = `
+                        ${chatInput.value}
+                        <div class="message-time">${timeString}</div>
+                    `;
+                    chatMessages.appendChild(message);
+                    chatInput.value = '';
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                    
+                    // Simulate reply
+                    setTimeout(() => {
+                        const replies = [
+                            "Got it! Working on that now. 👍",
+                            "I'll review and get back to you. 🔍",
+                            "Thanks for the update! 🙏",
+                            "Let's discuss this in our next meeting. 📅"
+                        ];
+                        const randomReply = replies[Math.floor(Math.random() * replies.length)];
+                        const replyMessage = document.createElement('div');
+                        replyMessage.classList.add('message', 'incoming');
+                        replyMessage.innerHTML = `
+                            ${randomReply}
+                            <div class="message-time">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                        `;
+                        chatMessages.appendChild(replyMessage);
+                        chatMessages.scrollTop = chatMessages.scrollHeight;
+                    }, 1000 + Math.random() * 2000);
+                }
+            };
+            
+            // Send on Enter key
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            // Send on button click
+            sendBtn.addEventListener('click', sendMessage);
+        }
+        setupChat();
+
+        // File card interaction
+        document.querySelectorAll('.file-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.style.animation = 'pulse 0.5s ease';
+                setTimeout(() => {
+                    card.style.animation = '';
+                }, 500);
+            });
+        });
+
+        // Re-setup chat when switching back to dashboard
+        document.querySelector('[data-section="dashboard"]').addEventListener('click', setupChat);
+
+        // Prevent form submissions (for demo)
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+                alert('Demo: Form submitted!');
+            });
+        });
+    </script>
 </body>
-
 </html>
