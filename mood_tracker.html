@@ -8,6 +8,7 @@
     <!-- Emoji Picker Element -->
     <script type="module" src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js"></script>
     <style>
+        /* Navbar Styles */
         body {
             margin: 0;
             font-family: 'Poppins', Arial, sans-serif;
@@ -19,7 +20,201 @@
             min-height: 100vh;
             padding: 20px;
             position: relative;
+            transition: margin-left 0.3s ease;
         }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            background-color: #111;
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #333 #111;
+            box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.5);
+            transition: width 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+        .sidebar.compact {
+            width: 70px;
+            align-items: center;
+        }
+
+        .sidebar.expanded {
+            width: 250px;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #333;
+            border-radius: 10px;
+        }
+
+        .icon-compact {
+            width: 55px;
+            height: 55px;
+            aspect-ratio: 1 / 1; 
+            border-radius: 50%;
+            margin: 8px 0;
+            background-color: #222;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .icon-compact:hover {
+            border-radius: 25%;
+            background-color: #333;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            color: white;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-item:hover {
+            background-color: #333;
+        }
+
+        .nav-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 15px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .nav-text {
+            font-size: 14px;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .expanded .nav-text {
+            opacity: 1;
+        }
+
+        .logo-item {
+            display: none;
+            align-items: center;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+        }
+
+        .logo-icon-img {
+            max-height: 50px;
+            width: auto;
+            margin-right: 15px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .expanded .logo-text {
+            opacity: 1;
+        }
+
+        .divider {
+            width: 80%;
+            height: 1px;
+            background-color: #444;
+            margin: 14px auto;
+        }
+
+        .toggle-btn {
+            position: absolute;
+            top: 75px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 30px;
+            background-color: #333;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-btn:hover {
+            background-color: #444;
+            transform: scale(1.1);
+        }
+
+        .toggle-arrow {
+            width: 12px;
+            height: 12px;
+            border-right: 2px solid white;
+            border-bottom: 2px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .compact .toggle-arrow {
+            transform: rotate(-45deg);
+        }
+
+        .expanded .toggle-arrow {
+            transform: rotate(135deg);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar.compact {
+                width: 60px;
+            }
+            .icon-compact {
+                width: 50px;
+                height: 50px;
+            }
+            .sidebar.expanded {
+                width: 220px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar.compact {
+                width: 50px;
+            }
+            .icon-compact {
+                width: 45px;
+                height: 45px;
+            }
+            .sidebar.expanded {
+                width: 200px;
+            }
+        }
+
+        /* Original Mood Tracker Styles */
         .back-link {
             position: absolute;
             top: 24px;
@@ -39,6 +234,7 @@
             transition: background 0.2s, box-shadow 0.2s, transform 0.13s;
             z-index: 100;
         }
+
         .back-link:hover, .back-link:focus {
             background: linear-gradient(90deg, #2575fc 60%, #1e90ff 100%);
             transform: translateY(-2px) scale(1.04);
@@ -46,6 +242,7 @@
             color: #fff;
             text-decoration: none;
         }
+
         .main-heading {
             text-align: center;
             margin-top: 80px;
@@ -55,12 +252,14 @@
             letter-spacing: -2px;
             line-height: 1.1;
         }
+
         .main-heading .blue {
             color: #1e90ff;
             font-size: 7vw;
             display: block;
             font-weight: 700;
         }
+
         .desc {
             text-align: center;
             color: #aaa;
@@ -68,6 +267,7 @@
             margin-bottom: 32px;
             margin-top: 24px;
         }
+
         .custom-mood-form {
             margin-bottom: 24px;
             max-width: 800px;
@@ -77,6 +277,7 @@
             align-items: center;
             position: relative;
         }
+
         #openEmojiPicker {
             font-size:1.5rem;
             background:#181818;
@@ -87,16 +288,19 @@
             cursor:pointer;
             transition: background 0.2s, transform 0.2s;
         }
+
         #openEmojiPicker:hover {
             background:#222;
             transform: scale(1.06);
         }
+
         #selectedEmoji {
             font-size:1.7rem;
             min-width: 2.2em;
             text-align:center;
             display:inline-block;
         }
+
         #customMoodName {
             flex:1;
             font-size: 1.1rem;
@@ -106,6 +310,7 @@
             color:#fff;
             padding:10px;
         }
+
         #addMoodBtn {
             background:#1e90ff;
             color:#fff;
@@ -116,10 +321,12 @@
             cursor:pointer;
             transition: background 0.2s, transform 0.2s;
         }
+
         #addMoodBtn:hover {
             background:#2575fc;
             transform: scale(1.06);
         }
+
         #emojiPickerPopover {
             display:none;
             position:absolute;
@@ -128,6 +335,7 @@
             z-index:2000;
             box-shadow: 0 4px 24px #2228;
         }
+
         .tracker {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
@@ -136,6 +344,7 @@
             max-width: 800px;
             margin-top: 20px;
         }
+
         .mood {
             background: #181818;
             border-radius: 15px;
@@ -147,20 +356,24 @@
             font-size: 1.3rem;
             border: 2px solid transparent;
         }
+
         .mood:hover {
             transform: scale(1.06);
             background: #222;
             box-shadow: 0 2px 12px #1e90ff33;
         }
+
         .selected {
             border: 2px solid #1e90ff;
             background: #111c2b;
         }
+
         .note-input {
             margin-top: 24px;
             width: 100%;
             max-width: 800px;
         }
+
         #moodNote {
             width: 100%;
             padding: 14px;
@@ -173,6 +386,7 @@
             color: #fff;
             outline: none;
         }
+
         .save-btn, .clear-btn {
             margin-top: 20px;
             padding: 13px 34px;
@@ -186,10 +400,12 @@
             transition: background 0.2s, transform 0.2s;
             margin-right: 12px;
         }
+
         .save-btn:hover, .clear-btn:hover {
             background-color: #2575fc;
             transform: scale(1.06);
         }
+
         .history {
             margin-top: 48px;
             width: 100%;
@@ -199,16 +415,19 @@
             padding: 24px;
             text-align: left;
         }
+
         .history h2 {
             margin-bottom: 10px;
             font-size: 1.4rem;
             color: #fff;
             font-weight: 700;
         }
+
         .history ul {
             list-style: none;
             padding: 0;
         }
+
         .history li {
             margin-bottom: 10px;
             padding: 12px;
@@ -217,6 +436,7 @@
             color: #eee;
             font-size: 1.05rem;
         }
+
         .stats {
             margin-top: 36px;
             width: 100%;
@@ -229,10 +449,12 @@
             color: #fff;
             font-weight: 500;
         }
+
         .stats strong {
             font-size: 1.15rem;
             color: #1e90ff;
         }
+
         #successPopup {
             display: none;
             position: fixed;
@@ -250,6 +472,7 @@
             transition: opacity 0.4s;
             pointer-events: none;
         }
+
         #emojiBurst {
             position: fixed;
             pointer-events: none;
@@ -259,6 +482,7 @@
             width: 0;
             height: 0;
         }
+
         @media (max-width: 600px) {
             .main-heading {
                 font-size: 2.1rem;
@@ -276,8 +500,32 @@
     </style>
 </head>
 <body>
-    <!-- Back button at top left -->
-    <a href="mainpage.html" class="back-link">← Back</a>
+    <!-- Navigation Sidebar -->
+    <div class="sidebar compact" id="sidebar">
+        <div class="icon-compact" style="background-image: url('/logo.png');" title="Logo"></div>
+
+        <div class="divider"></div>
+
+        <a href="/mainpage.html"><div class="icon-compact" style="background-image: url('/Home\ Page.png');" title="homepage"></div></a>
+        <a href="/subject_notes.html"><div class="icon-compact" style="background-image: url('/SubjectNaotes.png');" title="Subject Notes"></div></a>
+        <a href="/Task-Manager.html"><div class="icon-compact" style="background-image: url('/TaskManager.png');" title="Task Manager"></div></a>
+        <a href="/Project_Management.htm"><div class="icon-compact" style="background-image: url('/ProjectManagement.png');" title="Project Manager"></div></a>
+        <a href="/spin_the_wheel.html"><div class="icon-compact" style="background-image: url('/SpinTheWheel.png');" title="Spin The Task"></div></a>
+        <a href="/Task-Manager.html"><div class="icon-compact" style="background-image: url('/Motivational.png');" title="Inspirational Quotes"></div></a>
+        <a href="/subscription_model.html"><div class="icon-compact" style="background-image: url('/Subscription.png');" title="Subscriptions"></div></a>
+        <a href="/Collaborative_project_workspace.html"><div class="icon-compact" style="background-image: url('/Collaborative.png');" title="Collaboration"></div></a>
+        <a href="/recycle_bin.html"><div class="icon-compact" style="background-image: url('/Trash.png');" title="Trash Bin"></div></a>
+        
+        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/Home\ Page.png');"></div><div class="nav-text">Home</div></div>
+        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/SubjectNaotes.png');"></div><div class="nav-text">Subject Notes</div></div>
+        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/TaskManager.png');"></div><div class="nav-text">Task Manager</div></div>
+        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/ProjectManagement.png');"></div><div class="nav-text">Project Manager</div></div>
+        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/SpinTheWheel.png');"></div><div class="nav-text">Spin The Task</div></div>
+        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/Motivational.png');"></div><div class="nav-text">Inspirational Quotes</div></div>
+        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/Subscription.png');"></div><div class="nav-text">Subscriptions</div></div>
+        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/Collaborative.png');"></div><div class="nav-text">Collaboration</div></div>
+        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/Trash.png');"></div><div class="nav-text">Trash Bin</div></div>
+      </div>
 
     <h1 class="main-heading">
         Organize Moods <br>
@@ -327,6 +575,51 @@
     <div id="emojiBurst"></div>
 
     <script>
+        // Navbar Script
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleBtn = document.getElementById('toggleBtn');
+            const sidebar = document.getElementById('sidebar');
+            const body = document.body;
+            const compactIcons = document.querySelectorAll('.icon-compact');
+            const navItems = document.querySelectorAll('.nav-item');
+            const dividers = document.querySelectorAll('.divider');
+            const logoItem = document.getElementById('logoItem');
+
+            function toggleSidebar() {
+                sidebar.classList.toggle('compact');
+                sidebar.classList.toggle('expanded');
+
+                if (sidebar.classList.contains('expanded')) {
+                    body.style.marginLeft = '250px';
+                    navItems.forEach(item => item.style.display = 'flex');
+                    dividers.forEach(div => div.style.display = 'block');
+                    logoItem.style.display = 'flex';
+                    compactIcons.forEach(icon => icon.style.display = 'none');
+                } else {
+                    body.style.marginLeft = '70px';
+                    navItems.forEach(item => item.style.display = 'none');
+                    dividers.forEach(div => div.style.display = 'none');
+                    logoItem.style.display = 'none';
+                    compactIcons.forEach(icon => icon.style.display = 'block');
+                }
+
+                localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
+            }
+
+            if (localStorage.getItem('sidebarExpanded') === 'true') {
+                toggleSidebar();
+            } else {
+                body.style.marginLeft = '70px';
+                navItems.forEach(item => item.style.display = 'none');
+                logoItem.style.display = 'none';
+                dividers.forEach((div, index) => {
+                    div.style.display = index === 0 ? 'block' : 'none';
+                });
+            }
+
+            toggleBtn.addEventListener('click', toggleSidebar);
+        });
+
         // Emoji Picker Integration
         let currentEmoji = "😀"; // Default emoji
         const openEmojiBtn = document.getElementById('openEmojiPicker');
