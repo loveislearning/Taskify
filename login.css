@@ -218,3 +218,35 @@ transition: color 0.3s;
 .eye-icon:hover {
 color: white;
 }
+
+@keyframes blinkFast {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .eye-icon {
+    cursor: pointer;
+  }
+
+  .blink-once {
+    animation: blinkFast 0.2s linear 0s 10; 
+    animation-fill-mode: forwards;
+  }
+
+  .eye-icon:hover {
+    animation: blinkFast 0.2s linear 0s 10 !important;
+  }
+
+  .logo {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .logo img {
+    height: 50px;
+    width: auto;
+  }
