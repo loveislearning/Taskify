@@ -515,15 +515,6 @@
         <a href="/Collaborative_project_workspace.html"><div class="icon-compact" style="background-image: url('/Collaborative.png');" title="Collaboration"></div></a>
         <a href="/recycle_bin.html"><div class="icon-compact" style="background-image: url('/Trash.png');" title="Trash Bin"></div></a>
         
-        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/Home\ Page.png');"></div><div class="nav-text">Home</div></div>
-        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/SubjectNaotes.png');"></div><div class="nav-text">Subject Notes</div></div>
-        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/TaskManager.png');"></div><div class="nav-text">Task Manager</div></div>
-        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/ProjectManagement.png');"></div><div class="nav-text">Project Manager</div></div>
-        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/SpinTheWheel.png');"></div><div class="nav-text">Spin The Task</div></div>
-        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/Motivational.png');"></div><div class="nav-text">Inspirational Quotes</div></div>
-        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/Subscription.png');"></div><div class="nav-text">Subscriptions</div></div>
-        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/Collaborative.png');"></div><div class="nav-text">Collaboration</div></div>
-        <div class="nav-item" style="display: none;"><div class="nav-icon" style="background-image: url('/Trash.png');"></div><div class="nav-text">Trash Bin</div></div>
       </div>
   <div class="main-content">
     <h1 class="PM"><span class="gloss-text">Project Manager</span></h1>
@@ -553,7 +544,50 @@
   </div>
 
   <script>
-   
+   document.addEventListener('DOMContentLoaded', function () {
+      const toggleBtn = document.getElementById('toggleBtn');
+      const sidebar = document.getElementById('sidebar');
+      const body = document.body;
+      const compactIcons = document.querySelectorAll('.icon-compact');
+      const navItems = document.querySelectorAll('.nav-item');
+      const dividers = document.querySelectorAll('.divider');
+      const logoItem = document.getElementById('logoItem');
+
+      function toggleSidebar() {
+        sidebar.classList.toggle('compact');
+        sidebar.classList.toggle('expanded');
+
+        if (sidebar.classList.contains('expanded')) {
+          body.style.marginLeft = '250px';
+          navItems.forEach(item => item.style.display = 'flex');
+          dividers.forEach(div => div.style.display = 'block');
+          logoItem.style.display = 'flex';
+          compactIcons.forEach(icon => icon.style.display = 'none');
+        } else {
+          body.style.marginLeft = '70px';
+          navItems.forEach(item => item.style.display = 'none');
+          dividers.forEach(div => div.style.display = 'none');
+          logoItem.style.display = 'none';
+          compactIcons.forEach(icon => icon.style.display = 'block');
+        }
+
+        localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
+      }
+
+      if (localStorage.getItem('sidebarExpanded') === 'true') {
+        toggleSidebar();
+      } else {
+        body.style.marginLeft = '70px';
+        navItems.forEach(item => item.style.display = 'none');
+        logoItem.style.display = 'none';
+        dividers.forEach((div, index) => {
+          div.style.display = index === 0 ? 'block' : 'none';
+        });
+      }
+
+      toggleBtn.addEventListener('click', toggleSidebar);
+    });
+
     // Project Manager Script
     let projects = JSON.parse(localStorage.getItem('projects')) || [];
     let progressChart = null;
