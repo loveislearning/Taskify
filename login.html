@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>sign in & Sign Up</title>
+    <title>Sign In & Sign Up</title>
     <link rel="stylesheet" href="/login.css">
     <style>
         @keyframes blinkFast {
@@ -23,9 +23,30 @@
         .eye-icon:hover {
           animation: blinkFast 0.2s linear 0s 10 !important;
         }
-      </style>
+
+        /* New styles for logo */
+        .logo {
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+        }
+
+        .logo img {
+          height: 50px;
+          width: auto;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- Logo added here -->
+    <a href="#" class="logo">
+      <img src="/logo1.png" alt="Logo">
+    </a>
+
     <div class="container">
         <div class="left">
             <h2 class="tagline">Simplify Your Day, <span class="highlight">Everyday</span></h2>
@@ -46,6 +67,7 @@
                 <p class="forgot-password" onclick="toggleForgotPassword()">Forgot your password?</p>
                 <p class="toggle" onclick="toggleForm()">Don't have an account? Sign up</p>
             </div>
+
             <div class="form-container sign-up-form">
                 <h2>Sign Up</h2>
                 <div class="input-container">
@@ -71,6 +93,7 @@
             </div>
         </div>
     </div>
+
     <script src="/login.js"></script>
 </body>
 </html>
