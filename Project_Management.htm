@@ -553,50 +553,7 @@
   </div>
 
   <script>
-   document.addEventListener('DOMContentLoaded', function () {
-      const toggleBtn = document.getElementById('toggleBtn');
-      const sidebar = document.getElementById('sidebar');
-      const body = document.body;
-      const compactIcons = document.querySelectorAll('.icon-compact');
-      const navItems = document.querySelectorAll('.nav-item');
-      const dividers = document.querySelectorAll('.divider');
-      const logoItem = document.getElementById('logoItem');
-
-      function toggleSidebar() {
-        sidebar.classList.toggle('compact');
-        sidebar.classList.toggle('expanded');
-
-        if (sidebar.classList.contains('expanded')) {
-          body.style.marginLeft = '250px';
-          navItems.forEach(item => item.style.display = 'flex');
-          dividers.forEach(div => div.style.display = 'block');
-          logoItem.style.display = 'flex';
-          compactIcons.forEach(icon => icon.style.display = 'none');
-        } else {
-          body.style.marginLeft = '70px';
-          navItems.forEach(item => item.style.display = 'none');
-          dividers.forEach(div => div.style.display = 'none');
-          logoItem.style.display = 'none';
-          compactIcons.forEach(icon => icon.style.display = 'block');
-        }
-
-        localStorage.setItem('sidebarExpanded', sidebar.classList.contains('expanded'));
-      }
-
-      if (localStorage.getItem('sidebarExpanded') === 'true') {
-        toggleSidebar();
-      } else {
-        body.style.marginLeft = '70px';
-        navItems.forEach(item => item.style.display = 'none');
-        logoItem.style.display = 'none';
-        dividers.forEach((div, index) => {
-          div.style.display = index === 0 ? 'block' : 'none';
-        });
-      }
-
-      toggleBtn.addEventListener('click', toggleSidebar);
-    });
-
+   
     // Project Manager Script
     let projects = JSON.parse(localStorage.getItem('projects')) || [];
     let progressChart = null;
